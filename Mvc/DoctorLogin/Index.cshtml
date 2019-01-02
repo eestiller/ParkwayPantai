@@ -1,0 +1,136 @@
+@using System.Web.Optimization
+@using SitefinityWebApp.Custom.Configs
+@model SitefinityWebApp.Mvc.Models.DoctorLoginModel
+
+<section class="wrap-bg">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="fancybox-skin" id="popup-ep2">
+                    <div class="popup style-2">
+                        <h4>@Html.Raw(ViewBag.Resource.LoginLabel)</h4>
+                        @using (Html.BeginForm("Index", "DoctorLogin", FormMethod.Post))
+                        {
+                            <p>
+                                <span style="vertical-align: top">
+                                    @Html.LabelFor(c => c.DoctorMcr)
+                                </span>
+                                <span>
+                                    @Html.TextBoxFor(c => c.DoctorMcr, new { @maxlength = "50", @class = "form-control", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(c => c.DoctorMcr, null, new { @style = "color:red" })
+                                </span>
+                            </p>
+                            <p>
+                                <span style="vertical-align: top">
+                                    <label>@Html.LabelFor(c => c.Password)</label>
+                                </span>
+                                <span>
+                                    @Html.PasswordFor(c => c.Password, new { @maxlength = "50", @class = "form-control", autocomplete = "off" })
+                                    @Html.ValidationMessageFor(c => c.Password, null, new { @style = "color:red" })
+                                </span>
+                            </p>
+                            <p>@Html.ValidationSummary(true, null, new { @style = "color:red" })</p>
+                            <p class="text-center"><a id="show_popupforgot" href="#popup-forgotpassword" title="@Html.Raw(ViewBag.Resource.ForgotPasswordLabel)">@Html.Raw(ViewBag.Resource.ForgotPasswordLabel)</a> </p>
+                            <p class="text-center">
+                                <input type="submit" class="btn btn-primary" value="@Html.Raw(ViewBag.Resource.LoginSubmitLabel)" />
+                            </p>
+                        }
+                    </div>
+
+                    <div id="popup-forgotpassword" class="popup style-2 text-center" style="display: none;">
+                        <h4>Forgot Password</h4>
+                        <p class="text-center">
+                            We will send the reset password link<br>
+                            to the registered email address.
+                        </p>
+                        <p style="height: 40px">
+                            <input type="text" id="emailaddress" placeholder="Email Address" class="form-control" maxlength="255">
+                            <span class="text-left" id="emailvalidate" style="color: red; display: none; font-size: 14px; float: left; padding-left: 10px; width: 100%"></span>
+                        </p>
+                        <p class="text-center" style="clear: both">
+                            <a href="javascript:void(0);" id="sbforgotpassword" title="Submit" class="btn btn-primary">Submit</a>
+                        </p>
+                        <p class="text-left">
+                            If you have not previously registered your email address,
+                            <br>
+                            @{
+                                var email = Telerik.Sitefinity.Configuration.Config.Get<ParkwayConfig>().DPAdminEmail;
+                            }
+                            please contact us at <a href="mailto:@email">@email</a>
+                        </p>
+                    </div>
+
+                    <div id="popup-resetpassword" class="popup style-2" style="display: none;">
+                        <h4>Reset Password</h4>
+                        <p>To verify your new password, please enter it once in each  field below. </p>
+                        <p class="style-4">
+                            <span>
+                                <label for="">Enter new password</label>
+                            </span>
+                            <span>
+                                <input type="password" id="oldpwd" placeholder="" class="form-control" maxlength="255">
+                            </span>
+                        </p>
+                        <p class="style-4">
+                            <span>
+                                <label for="">Re-enter new password</label>
+                            </span>
+                            <span>
+                                <input type="password" id="newpwd" placeholder="" class="form-control" maxlength="255">
+                            </span>
+                        </p>
+                        <p class="style-4">
+                            <span></span>
+                            <span class="text-left" id="passwordvalidate" style="color: red; display: none; font-size: 14px; padding-left: 10px;"></span>
+                        </p>
+                        <p class="text-center">
+                            <a href="javascript:void(0);" id="sbresetpassword" title="Submit" class="btn btn-primary">Submit</a>
+                        </p>
+                    </div>
+                    <input type="hidden" id="hdDoctorId" value="@ViewBag.DoctorId" />
+                    <input type="hidden" id="hdSessionId" value="@ViewBag.SessionId" />
+
+                    <a href="#popup-resetpassword" id="show_popupreset" title="Popup" style="display: none">a</a>
+
+                    <div id="popup-forgotsuccess" class="popup style-1" style="display: none;">
+                        <h4>Email sent to your registered email address successfully</h4>
+                        <p class="style-2">Check your email to reset password</p>
+                    </div>
+                    <a href="#popup-forgotsuccess" id="show_popupforgotsuccess" title="Popup" style="display: none">a</a>
+
+                    <div id="popup-resetsuccess" class="popup style-1" style="display: none;">
+                        <h4>Change password successfully</h4>
+                        <p class="style-2">You can login with new password</p>
+                    </div>
+                    <a href="#popup-resetsuccess" id="show_popupresetsuccess" title="Popup" style="display: none">a</a>
+
+                    <script type="text/javascript">
+                        var doctorid = "";
+                        var sessionid = "";
+                        var lostsession = false;
+                        $(document).ready(function () {
+                            $("#DoctorMcr").focus();
+                        });
+                    </script>
+
+                    @if (ViewBag.LostSession != null)
+                    {
+                        <script type="text/javascript">
+                            lostsession = "@ViewBag.LostSession";
+                        </script>
+                    }
+
+                    @if (ViewBag.DoctorId != null && ViewBag.SessionId != null)
+                    {
+                        <script type="text/javascript">
+                            doctorid = "@ViewBag.DoctorId";
+                            sessionid = "@ViewBag.SessionId";
+                        </script>
+                    }
+                    
+                    @Scripts.Render("~/bundlescript/doctorlogin")
+                </div>
+            </div>
+        </div>
+    </section>
+</section>

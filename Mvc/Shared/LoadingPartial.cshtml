@@ -1,0 +1,45 @@
+﻿<style type="text/css">
+    .loading
+    {
+        text-align: center;
+        margin-top: -75px;
+        width: auto;
+        top: 50%;
+        height: auto;
+        position: absolute;
+        left: 50%;
+    }
+
+    .loading-fancybox-overlay
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden;
+        display: none;
+        z-index: 8010;
+        background: url('@Url.Content("/Sitefinity/WebSiteTemplates/DoctorPortalTemplate/App_Themes/DoctorPortalTheme/Images/ui/fancybox_overlay.png")');
+    }
+
+    .loading-fancybox-overlay-fixed
+    {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+    }
+</style>
+
+<div id="loadingContainer" class="loading-fancybox-overlay loading-fancybox-overlay-fixed" style="z-index: 100000;">
+    <div class="loading">
+        <img src="~/Mvc/Content/loading/loading.gif" id="loadingImage" alt="Loading" />
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ajaxStart(function () {
+        $('#loadingContainer').show();
+    });
+    $(document).ajaxComplete(function () {
+        $('#loadingContainer').hide();
+    });
+</script>

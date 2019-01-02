@@ -1,0 +1,42 @@
+@model SitefinityWebApp.Mvc.Models.HealthPlusMedicalReviewerListModel
+@using SitefinityWebApp.Custom.Code;
+
+<div class="medical-reviewers">
+    @foreach (var group in Model.GroupsByType)
+    {
+        <div class="reviewer-group">
+            <h2>@group.ReviewerType</h2>    
+            @{ 
+                string readMoreArticles = LocalizationHelper.GetResource("ReadMoreArticles", resourcesCulture: Model.CurrentCulture);
+                string readMoreLongDesc = LocalizationHelper.GetResource("HealthPlus_MedicalReviewers_ReadMoreLongDesc", resourcesCulture: Model.CurrentCulture);
+                string professionTitleFormat = LocalizationHelper.GetResource("HealthPlus_MedicalReviewers_ProfessionTitleFormat", resourcesCulture: Model.CurrentCulture);
+            }
+            @foreach (var reviewer in group.Reviewers)
+            {
+                <div id="@reviewer.Id" class="row">
+                    <div class="reviewer clearfix">
+                        <div class="col-md-2">
+                            <div class="thumb-wrap">
+                                <img src='@reviewer.ProfileImageUrl' width="60" height="60" alt='@reviewer.Name' class="img-circle" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-10 reviewerInfo">
+                            <h4>@reviewer.Name</h4>
+                            <h5>@Html.Raw(string.Format(professionTitleFormat, reviewer.ProfessionTitle, reviewer.HospitalsCsvDisplay))</h5>
+                            <p class="shortDesc">@reviewer.ShortDescription</p>
+                            <p class="seeMore"><a href='@reviewer.SeeArticlesUrl' target="_blank">@Html.Raw(readMoreArticles)</a></p>
+                            @if (!string.IsNullOrEmpty(reviewer.LongDescription))
+                            {
+                                <div class="readmoreWrap">
+                                    <a href="#" class="readMoreBtn">@Html.Raw(readMoreLongDesc) <span class="indicator"></span></a>
+                                    <div style="display:none" class="readmoreContent">@Html.Raw(reviewer.LongDescription)</div>
+                                </div>
+                            }
+                        </div>  
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

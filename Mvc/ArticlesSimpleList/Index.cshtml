@@ -1,0 +1,10 @@
+@model List<SitefinityWebApp.Mvc.Models.ArticleModel>
+
+<ul>
+    @foreach (var article in Model)
+    {
+        <li>
+            <a href="@article.FullUrl">@article.ArticleTitle</a>
+        </li>
+    }
+</ul>

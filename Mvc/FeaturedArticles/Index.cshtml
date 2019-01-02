@@ -1,0 +1,80 @@
+@using SitefinityWebApp.Custom.Code;
+
+@model List<SitefinityWebApp.Mvc.Models.ArticleModel>
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    if (Model.Count > 0)
+    {
+        <ul class="ban-slider" style="display:none;">
+            @foreach (var item in Model)
+            {
+                <li>
+                    <a href="@item.FullUrl">
+                        <section class="banner-section">
+                            <figure>
+                                <picture>
+                                    <source srcset="@item.FeaturedImageDesktop" media="(min-width: 1025px)">
+                                    <source srcset="@item.FeaturedImageTablet" media="(min-width: 768px)">
+                                    <source srcset="@item.FeaturedImageMobile" media="(min-width: 320px)">
+                                    <img src="@item.FeaturedImageDesktop" alt="@item.FeaturedImageDesktopAlt" title="@item.ArticleTitle" />
+                                </picture>
+                            </figure>
+                            <div class="banner">
+                                <h1>@item.ArticleTitle</h1>
+                                <div class="caption clearfix @(item.Doctor == null ? "no-doctor" : string.Empty)">  
+                                    <figure>
+                                        <small>
+                                            <img src="/images/default-source/Health-Common/featured-banners-arrow.png" alt="arrow">
+                                            @Html.Resource("ReadStory", resourcesCulture: (string)ViewBag.CurrentCulture)
+                                        </small>
+                                    </figure>
+                                    @if (item.Doctor != null)
+                                    {
+                                        <span>
+                                            @item.Doctor.DoctorName
+                                        <em>@item.Doctor.DoctorTitle</em>
+                                    </span>
+                                    }
+                                </div>
+                            </div>
+                        </section>
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <script type="text/javascript">
+            $(function () {
+                var custom_bxslider_autoRotate = @ViewBag.SliderAutoRotate;
+                var custom_bxslider_mode = '@ViewBag.SliderMode';
+                var custom_bxslider_speed = @ViewBag.SliderSpeed;
+
+                var bxslider_autoRotate = true;
+                if ('undefined' !== typeof custom_bxslider_autoRotate) {
+                    bxslider_autoRotate = custom_bxslider_autoRotate;
+                }
+
+                var bxslider_mode = "fade";
+                if ('undefined' !== typeof custom_bxslider_mode) {
+                    bxslider_mode = custom_bxslider_mode;
+                }
+
+                var bxslider_speed = 500;
+                if ('undefined' !== typeof custom_bxslider_speed) {
+                    bxslider_speed = custom_bxslider_speed;
+                }
+
+                $('.ban-slider').show().bxSlider({
+                    mode: bxslider_mode,
+                    auto: bxslider_autoRotate,
+                    speed: bxslider_speed
+                });
+            });
+        </script>
+    }
+}
+else
+{
+    <span>Featured Articles</span>
+}

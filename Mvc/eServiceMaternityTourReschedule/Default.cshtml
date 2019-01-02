@@ -1,0 +1,315 @@
+@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.eServiceMaternityTourRescheduleModel
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    <style type="text/css">
+        .p-title2 {
+            font-size: 1.5em; color: #000000; font-weight: 400; font-family: 'Lato',sans-serif;
+            line-height: 1.125em; margin: 10px 0 20px 0; padding: 0;
+        }
+        .padComboBox {
+            padding: 0 0 0 0;
+        }
+            .padComboBox > .k-input {
+                border-radius: 3px;
+            }
+        #txt_PreferredDoctor-list {
+            background-color: #ffffff !important; padding-left: 0px !important; padding-right: 0px !important;
+        }
+            #txt_PreferredDoctor-list li.k-state-focused {
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border-color: transparent !important; border-radius: 0px !important;
+            }
+            #txt_PreferredDoctor-list li.k-state-hover {
+                -webkit-box-shadow: none !important;
+                box-shadow: none !important;
+                border-color: #037ac8 !important; border-radius: 0px !important; background-color: #037ac8 !important;
+                color: #ffffff !important;
+            }
+            #txt_PreferredDoctor-list .doctorSpecialty {
+                font-size: 10px; color: #9a9a9a; line-height: normal;
+            }
+            #txt_PreferredDoctor-list li.k-state-hover .doctorSpecialty {
+                color: #ffffff;
+            }
+        .loadingSearch {
+            position: absolute; top: 7px; right: 5px;
+            background: #fff url(/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/images/icon-search.jpg) no-repeat top right;
+            background-size: 20px auto; width: 20px; height: 20px; background-image: none;
+        }
+        .k-combobox .k-icon.k-clear-value {
+            display: none !important;
+        }
+        .loadingWait {
+            position: absolute; top: 6px; right: 5px;
+            background: #fff url(/Mvc/Content/loading/loading.gif) no-repeat top right;
+            background-size: 20px auto; width: 20px; height: 20px;
+        }
+        .k-nodata-custom {
+            background-color: #fff !important; color: #000000; font-weight: bold;
+        }
+        .loadingGif {
+            width: 15px; height: auto; display: inline-block; margin-top: 7px;
+        }
+        #cal_PreferredDate_dateview .k-today, #cal_AlternativeDate_dateview .k-today {
+            -webkit-box-shadow: inset 0 0 0 0px #f35800;
+            box-shadow: inset 0 0 0 0px #f35800;
+            border: 0px;
+        }
+            #cal_PreferredDate_dateview .k-today .k-link, #cal_AlternativeDate_dateview .k-today .k-link {
+                color: #c3c3c3;
+            }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .eservice-checkbox {
+            position: relative;
+        }
+            .eservice-checkbox span.k-invalid-msg {
+                left: 0; right: auto;
+            }
+        .loadingText {
+            display: inline-block; width: 100%; padding-left: 30px; 
+            background: url(/Mvc/Content/loading/loading.gif) no-repeat center left;
+            background-size: 20px auto; min-height: 20px;
+        }
+        #btnSubmit_ViewBookings {
+            margin-top: 30px; margin-bottom: 0px;
+        }
+        .calendar-note {
+            font-size: 12px;
+        }
+
+        /* Maternity Tour */
+        section#formEService .maternityTour .multiField .mfWrap {
+            margin-left:-5px;
+            margin-right:-5px;
+        }
+        section#formEService .maternityTour .multiField .mfWrap > div {
+            padding-right:5px;
+            padding-left:5px;
+        }
+
+        .form-3 label {
+            padding-top:5px;
+        }
+
+        .nbm {
+            margin-bottom:0 !important;
+        }
+
+        #view_SelectionCalendar{
+            padding-top:15px !important;
+        }
+
+        .mt {
+            margin-top:35px;
+        }
+        .pHeaderSubtitle {
+            margin-bottom: 20px;
+        }
+
+    </style>
+
+    <section id="formEService" class="form-3">
+        <h1 class="title" style="margin-bottom: 10px;">@Html.Raw(Model.Resources.TitleLabel_MaternityTour_Reschedule)</h1>
+        @if (!Model.Resources.SubTitleLabel_MaternityTour_Reschedule.Equals("N/A", StringComparison.InvariantCultureIgnoreCase))
+        {
+            <p class="pHeaderSubtitle">@Html.Raw(Model.Resources.SubTitleLabel_MaternityTour_Reschedule.Replace("[Hospital]", Model.CurrentHospitalSite))</p>
+        }
+
+        <div id="formContainer" style="width: 100%; overflow: hidden;">
+            <div class="row">
+                <div class="col-md-12 col-xs-12">
+                    <h2>@Html.Raw(Model.Resources.MaternityReschedule_PersonalInformationTitle)</h2>
+                </div>
+            </div>
+
+            <div class="row maternityTour">
+                <div class="sectionShaded">
+                    <div class="formWrap m35 clearfix">
+                        <div class="row">
+                            <div class="col-md-4"><label>@Html.Raw(Model.Resources.NRICPassportNoLabel)</label></div>
+                            <div class="col-md-8 multiField">
+                                <div class="clearfix">
+                                    <div class="mfWrap">
+                                        <div class="col-xs-5 field">
+                                            <div id="con_NRICPassportOptions" class="dropdownKendo rel">
+                                                @(Html.Kendo().DropDownList()
+                                                    .Name("ddl_NRICPassportOptions")
+                                                    .DataTextField("Value")
+                                                    .DataValueField("Key")
+                                                    .DataSource(dataSource => dataSource
+                                                        .Custom()
+                                                        .Transport(transport => transport
+                                                            .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=nric-passport"))
+                                                        )
+                                                    )
+                                                    .Value(Model.DefaultID)
+                                                    .Events(events => events.Change("ChangeNRICPassportOption"))
+                                                    .HtmlAttributes(new
+                                                    {
+                                                        required = "required",
+                                                        validmsg = Model.Resources.CommonRequiredFieldText
+                                                    })
+                                                )
+                                                <span class="k-invalid-msg" data-for="ddl_NRICPassportOptions"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-xs-7">
+                                            <div class="rel field">
+                                                @(Html.Kendo().TextBox()
+                                                    .Name("txt_NRICPassportNo")
+                                                    .HtmlAttributes(new
+                                                    {
+                                                        required = "required",
+                                                        placeholder = "",
+                                                        placeholder1 = Model.Resources.NRICPlaceholder,
+                                                        placeholder2 = Model.Resources.PassportPlaceholder,
+                                                        placeholderdef = Model.Resources.NRICPassportDefaultPlaceholder,
+                                                        @maxlength = "20",
+                                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                                        invalidnric = Model.Resources.Validator_InvalidNRIC
+                                                    })
+                                                )
+                                                <span class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error"
+                                                      data-for="txt_NRICPassportNo" data-valmsg-for="txt_NRICPassportNo"
+                                                      id="txt_NRICPassportNo_validationMessage" role="alert"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <button type="button" class="btn btn-primary" id="btnSubmit_ViewBookings" commontext="@Html.Raw(Model.Resources.SubmitButtonText_MaternityReschedule)" loading="@Html.Raw(Model.Resources.SubmitButtonLoadingText)">@Html.Raw(Model.Resources.SubmitButtonText_MaternityReschedule)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="view_BookedSchedules1" style="display: none">
+                <div class="col-md-12 col-xs-12">
+                    <h2>@Html.Raw(Model.Resources.MaternityBookingsListTitle_Reschedule)</h2>
+                </div>
+            </div>
+
+            <div class="row maternityTour" id="view_BookedSchedules2" style="display: none">
+                <div class="sectionShaded">
+                    <div class="formWrap nbm clearfix">
+                        <div class="">
+                            <div class="" id="view_BookedSchedules3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- #region Preferred Tour Schedule -->
+
+            <div class="row" id="view_PreferredTourSchedule1" style="display: none">
+                <div class="col-md-12 col-xs-12">
+                    <h2>@Html.Raw(Model.Resources.PreferredTourScheduleLabel)</h2>
+                </div>
+            </div>
+
+            <div class="row maternityTour" id="view_PreferredTourSchedule2" style="display: none"></div>
+
+            <!-- #endregion -->
+
+            <div class="row" id="view_Confirmation1" style="display: none">
+                <div class="col-md-12 col-xs-12">
+                    <h2>@Html.Raw(Model.Resources.ConfirmationTitle)</h2>
+                </div>
+            </div>
+            <div class="row" id="view_Confirmation2" style="display: none">
+                <div class="sectionShaded bottom-notes">
+                    <div class="formWrap clearfix">
+                        <div class="col-md-12 clearfix">
+                            <div class="eservice-checkbox">
+                                <input id="chk_TermsAndConditionAgreement" name="chk_TermsAndConditionAgreement" type="checkbox" required="required"
+                                       validmsg="@Model.Resources.Validator_AgreeTermsAndCondition">
+                                <span style="font-weight: normal">&nbsp;@Html.Raw(Model.Resources.TermsAndConditionAgreementLabel)</span>
+                                <span class="k-invalid-msg" data-for="chk_TermsAndConditionAgreement"></span>
+                            </div>
+                            <br />
+                            <div class="subscribe-info-checkbox">
+                                <span style="font-weight: normal">&nbsp;@Html.Raw(Model.Resources.NewServicesAndEventsInformationLabel)</span>
+                                @Html.Raw("&nbsp;&nbsp;")
+                                <input id="chk_SubscribeFromHospital" name="chk_SubscribeInfo" type="checkbox" value="@Model.CurrentHospitalSiteCode" />
+                                <span style="font-weight: normal">@Html.Raw(Model.CurrentHospitalSite)</span>
+                                @*@Html.Raw("&nbsp;&nbsp;")
+                                    <input id="chk_SubscribeFromDumex" name="chk_SubscribeInfo" type="checkbox" value="@Model.DefaultSubscribeFromDumexLabel" />
+                                    <span style="font-weight: normal">@Html.Raw(Model.Resources.SubscribeFromDumexLabel)</span>*@
+                            </div>
+                        </div>
+                        <div>
+                            <div class="eservice-captcha clearfix field">
+                                <div><label>@Html.Raw(Model.Resources.CAPTCHALabel) <b id="ebcaptchatext"></b></label></div>
+                                <div>
+                                    <div class="rel">
+                                        @(Html.Kendo().TextBox()
+                                            .Name("txt_CaptchaAnswer")
+                                            .HtmlAttributes(new
+                                            {
+                                                required = "required",
+                                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                                wronganswer = Model.Resources.Validator_InvalidCaptcha,
+                                                @maxlength = "3"
+                                            })
+                                        )
+                                        <span class="k-invalid-msg" data-for="txt_CaptchaAnswer"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="btnSubmitContainer" class="row" style="display: none">
+            <div class="col-md-12 col-xs-12">
+                <div class="text-center">
+                    <p>
+                        <button type="button" class="btn btn-primary" id="btnSubmit" commontext="@Html.Raw(Model.Resources.SubmitButtonText)" loading="@Html.Raw(Model.Resources.SubmitButtonLoadingText)">@Html.Raw(Model.Resources.SubmitButtonText)</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @Html.Hidden("hid_FormMode", "maternity-tour-reschedule")
+    @Html.Hidden("hid_BasicErrorMessageRadio_MTB", Model.Resources.Validator_DefaultNoSelection_MaternityTourBookingList)
+    @Html.Hidden("hid_BasicErrorMessageRadio_MTC", Model.Resources.Validator_DefaultNoSelection_MaternityTourActiveCases)
+
+    @Html.Hidden("hid_AckEmailTemplateID_Maternity", Model.AcknowledgeEmailTemplateID)
+    @Html.Hidden("hid_AcknowledgeEmailSender_Maternity", Model.AcknowledgeEmailSender)
+    @Html.Hidden("hid_AdminEmailTemplateID_Maternity", Model.AdminEmailTemplateID)
+    @Html.Hidden("hid_AdminEmailRecipients_Maternity", Model.AdminEmailRecipients)
+    @Html.Hidden("hid_ConfirmationURL", Model.ConfirmationURL)
+    @Html.Hidden("hid_BasicErrorMessageLong", Model.Resources.Validator_BasicErrorMessageLong)
+    @Html.Hidden("hid_BasicErrorMessageShort", Model.Resources.Validator_BasicErrorMessageShort)
+    @Html.Hidden("hid_BasicErrorMessageRadio", Model.Resources.Validator_DefaultNoSelectionRadio)
+    @Html.Hidden("hid_BasicErrorMessage_NoActiveCaseSelected", Model.Resources.Validator_SubmitNoSelectedBookingSlots_Reschedule)
+
+    @Html.Hidden("hid_DateFormat", Model.CommonDateFormat)
+    @Html.Hidden("hid_GenDetails", Model.UserDetails)
+    @Html.Hidden("hid_CurrentSite", Model.CurrentSite)
+    @Html.Hidden("hid_CurrentCulture", Model.CurrentCulture)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("body").addClass("formMEP");
+            $("#form1").attr("novalidate", "novalidate");
+            ReloadMaternityTourFunctions_Reschedule();
+        });
+    </script>
+}
+else
+{
+    <p>eService Maternity Form (Rescheduling)</p>
+}

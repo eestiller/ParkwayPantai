@@ -1,0 +1,56 @@
+@using SitefinityWebApp.Custom.Code;
+
+<section class="mailing-section">
+    <h5><i class="fa fa-envelope" aria-hidden="true"></i>@Html.Resource("SubscribeToOurMailingList")</h5>
+    <div class="mailing-details">
+        <input class="field" type="email" value="@Html.Resource("EnterYourEmailAddress")" 
+               onkeyup="subscribeOnEnter(event)"
+               onclick="if(this.value=='@Html.Resource("EnterYourEmailAddress")'){this.value=''}" 
+               onblur="if(this.value==''){this.value='@Html.Resource("EnterYourEmailAddress")'}">
+        <span class="validation-error hidden">@Html.Resource("SubscribeErrorMessage")</span>
+        <input value="Submit" type="button" class="sub-but" onclick="subscribe(event)">
+    </div>
+</section>    
+
+<script>    
+    var thanks = '@HttpUtility.JavaScriptStringEncode(Html.Resource("SubscribeThankyouMessage"))';
+
+    function subscribe(e)
+    {
+        e.preventDefault();
+
+        var email = $("div.mailing-details input.field").val();
+        $(".validation-error").addClass("hidden");
+        if (isEmail(email)) {
+
+            //store in cookie            
+            saveValueToCookie('Em', email);
+
+            $(".mailing-details").html(thanks);
+
+            var data = { Email: email, SendConfirmation: @ViewBag.SendConfirmationMessage.ToString().ToLower(), MailTemplateName: '@ViewBag.MailMessageTemplateName' };
+
+            $.ajax({
+                url: "/api/visitordata/subscribevisitor",
+                type: "POST",
+                data: data
+            });
+        }
+        else{
+            $(".validation-error").removeClass("hidden");
+        }
+
+        return false;
+    }
+
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+
+    function subscribeOnEnter(e) {
+        if (e.keyCode == 13) {
+            subscribe(e);
+        }
+    }
+</script>

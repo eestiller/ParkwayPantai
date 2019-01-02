@@ -1,0 +1,39 @@
+@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.TermsAndConditionsModel
+
+<section class="wrap-bg">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="#popup-term" id="show_popuptermcondition" class="hide popup-term"></a>
+                <div id="popup-term" class="popup style-2 no-padd">
+                    <h3>@Html.Raw(ViewBag.Resource.TermsConditionsLabel)</h3>
+                    <div class="scrollTerm">
+                        @Html.Raw(Model.Content)
+                        <p>
+                            <input type="checkbox" name="" value="" id="chkTerm" />
+                            @Html.Raw(ViewBag.Resource.AgreementCheckboxLabel)
+                        </p>
+                        <p style="color: red; display: none" id="lblValidate">
+                            @Html.Raw(ViewBag.Resource.AgreementRequireLabel)
+                        </p>
+                        <p class="text-center">
+                            <a href="javascript:void(0);" id="btnSubmitTerm" title="Submit" class="btn btn-primary">@Html.Raw(ViewBag.Resource.AgreeLabel)</a>
+                            <a href="javascript:void(0);" id="btnCancel" title="Cancel" class="btn btn-primary">@Html.Raw(ViewBag.Resource.CancelLabel)</a>
+                        </p>
+                    </div>
+                </div>
+
+                @Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+                <style type="text/css">
+                    .override {
+                        z-index: 1000 !important;
+                    }
+                </style>
+
+                @Scripts.Render("~/bundlescript/termsandconditions")
+            </div>
+        </div>
+    </section>
+</section>

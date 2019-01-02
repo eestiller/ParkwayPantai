@@ -1,0 +1,23 @@
+@using Kendo.Mvc.UI
+
+@model SitefinityWebApp.Mvc.Models.DigitalLibraryImageSearchModel
+<div class="digital-library-image-filter">
+    <h3>Photo Search</h3>
+    <label class="search-keywords-label">Search Keyword</label>
+    <div>
+        <input type="text" name="txtSearchKeyword" id="txtSearchKeyword" placeholder="Type a keyword here" />
+    </div>
+    <label class="categories-label">Categories</label>
+    <div id="CategoryFilter">
+        @(Html.Kendo().DropDownList()
+        .Name("ddlDigitalLibraryCategories")
+        .DataTextField("Title")
+        .DataValueField("Id")
+        .BindTo(Model.DigitalLibraryCategories)
+        .Deferred()
+        )
+    </div>
+    <input type="button" name="btnSearch" id="btnSearch" value="Search" />
+</div>
+@Html.Hidden("hid_SearchResultsUrl", Model.SearchResultsUrl)
+<script src="@Url.Content("~/Mvc/Scripts/DigitalLibraryImageSearch.js")" type="text/javascript"></script>

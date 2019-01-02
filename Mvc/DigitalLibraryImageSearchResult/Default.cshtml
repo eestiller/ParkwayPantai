@@ -1,0 +1,47 @@
+@using Kendo.Mvc.UI
+@using SitefinityWebApp.Mvc.Models.DataModels
+
+@model SitefinityWebApp.Mvc.Models.DigitalLibraryImageSearchResultModel
+
+<h1>
+    "Search Results"
+</h1>
+
+<script type="text/x-kendo-tmpl" id="digital-library-search-results-template">
+    <div class="col-xs-12 col-md-4 vlist">
+
+        <div class="vlist-inner">
+            <div class="wrap-img">
+                @*  *@
+                <img src="#:ThumbnailImageUrl#" alt="#:Title#" class="img-responsive" />
+            </div>
+            <div class="wrap-content">
+                <h3 class="album-title" style="font-weight: bold;">#:Title#</h3>
+            </div>
+        </div>
+    </div>
+</script>
+<div id="divDigitalLibrarySearchResults">
+    @(Html.Kendo().ListView<DigitalLibraryImage>(Model.Images)
+        .Name("DigitalLibrarySearchResults")
+        .TagName("div")
+        .ClientTemplateId("digital-library-search-results-template")
+        .DataSource(dataSource =>
+        {
+            dataSource.PageSize(Model.ListSize);
+            dataSource.ServerOperation(false);
+        })
+        .Events(events => events.DataBound("DigitalLibrarySearchResultsOnDatabound"))
+        .Pageable()
+        .HtmlAttributes(new { @class = "row form-group" })
+        .Deferred()
+    )
+</div>
+
+<script>
+    function DigitalLibrarySearchResultsOnDatabound() {
+        if (this.dataSource.data().length == 0) {
+            $("#DigitalLibrarySearchResults").append("<h1>No Images Found.</h1>");
+        }
+    }
+</script>

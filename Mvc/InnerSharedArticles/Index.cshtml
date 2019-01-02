@@ -1,0 +1,72 @@
+﻿@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.InnerSharedArticlesModel
+<li class="panel panel-default">
+    <h2 class="panel-heading"><a title="@Html.Raw(Model.CommonResource.RelatedHealthArticles)" class="collapse" data-toggle="collapse" data-parent="#accordion" href="#collapseSharedArticle">@Html.Raw(Model.CommonResource.RelatedHealthArticles)</a></h2>
+    <div id="collapseSharedArticle" class="panel-collapse collapse">
+        <p class="text-right">
+            <span id="totalLabel" style="display: none;">@Html.Raw(Model.Resource.EmptyArticleLabel)</span>
+            <a href="javascript:void(0);" id="btnViewAllArticle" class="btn btn-primary" style="display: none;">@Html.Raw(Model.CommonResource.ViewAllButton)</a>
+        </p>
+
+        <article id="RepeaterArticles"></article>
+
+        <script id="sharedArticle" type="text/x-jquery-tmpl">
+            <ul>
+                <li>
+                    <div class="intro-article">
+                        <div class="clearfix">
+                            <div class="float-l">
+                                <a href="${DoctorUrl}" title="${DoctorName}">
+                                    <img src="${Photo}" alt="${DoctorName}">
+                                </a>
+                            </div>
+                            <div class="user">
+                                <h4>
+                                    <a href='${DoctorUrl}' style='text-decoration: none;'>${DoctorName}</a><br>
+                                    <span>${Link}</span>
+                                </h4>
+                                <p>${PostedDate}</p>
+                            </div>
+                        </div>
+                        <p>${Comments}</p>
+                    </div>
+                    <div class="content-article">
+                        <div class="float-l">
+                            <a href="${UpdateViewsUrl}" target="_blank" title="${ArticleTitle}">
+                                <img src="${ArticleImage}" alt="Article title" width="115" height="86">
+                            </a>
+                        </div>
+
+                        <div class="context-article">
+                            <h3><a href="${UpdateViewsUrl}" title="${ArticleTitle}">${ArticleTitle}</a></h3>
+                            <p>${ArticleShortContent}</p>
+                            <p><a target="_blank" href="${UpdateViewsUrl}" title="${ArticleTitle}">${ArticleUrl}</a></p>
+                            <div class="clearfix">
+                                <div class="rate" articleid="${ArticleId}" data-rating="${AverageRating}">
+                                </div>
+                                <div class="number" articleid="${ArticleId}">(${NumberUserRating})</div>
+                            </div>
+                            <ul class="action-group">
+                                <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                    <a href="#" class="addthis_button_compact" rel="nofollow" addthis:url="${ArticleUrl}" addthis:title="${ArticleTitle}" title="Share">
+                                        <span>Share This</span>
+                                        <img src="@Url.Content("/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/share-ico.png")" alt="Share">
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </script>
+
+
+        @Html.Hidden("editKey", Parkway.Core.Utilities.ConstUtil.SitefinityUrlEditKey)
+        @Html.Hidden("templateKey", Parkway.Core.Utilities.ConstUtil.SitefinityUrlTemplateKey)
+        @Html.Hidden("currentPageNode", Model.CurrentPageNode)
+        @Html.Hidden("currentCulture", Model.CurrentCulture)
+        @Html.Hidden("prefixLang", Model.PrefixLang)
+
+        @Scripts.Render("~/bundlescript/innerarticles")
+    </div>
+</li>

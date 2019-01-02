@@ -1,0 +1,398 @@
+@using Kendo.Mvc.UI
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers
+@using Telerik.Sitefinity.Configuration
+@using SitefinityWebApp.Custom.Configs
+
+@model SitefinityWebApp.Mvc.Models.eCardSubmissionJobModel
+
+@{
+    string requiredFieldMsg = "This field is required!";
+    string patternMsg = "This character is not allowed!";
+    eCardConfig config = Config.Get<eCardConfig>();
+    string viewInbrowserLink = "http://parkway_meh.local.com/ecard-portal/view-ecard?jid=#job-id#&rn=#recipient-name#";
+    if (config.GeneralConfig["eCardViewInbrowserLink"] != null && !config.GeneralConfig["eCardViewInbrowserLink"].Value.IsNullOrWhitespace())
+    {
+        viewInbrowserLink = config.GeneralConfig["eCardViewInbrowserLink"].Value;
+    }
+}
+
+<div class="container ecard-portal" id="eCardSubmissionForm">
+    <a href="@Html.Raw(Model.eCardListUrl)" class="back-btn">< Back</a>
+    <h1>@Html.Raw(Model.Title)</h1>
+    @Html.Hidden("hdTemplateMessage", "")
+    @Html.Hidden("hdFooter", Model.Footer)
+    @Html.Hidden("hdEmailSubject", Model.EmailSubject)
+    @Html.Hidden("hdMaxRecipient", Model.MaxRecipients)
+    @Html.Hidden("hdeCardListUrl", Model.eCardListUrl)
+
+    <div id="divMediaInfo">
+        @* this is for view ecard page *@
+        @* Design within this divVideoInfo tag. Do not apply the design to this divVideoInfo for view ecard page. *@
+        @if (Model.MediaType == 1)
+        {
+            <img src="@Model.MediaInfo" alt="@Model.EmailSubject" class="col-md-12">
+        }
+        else if (Model.MediaType == 2)
+        {
+            <video controls autoplay>
+                <source src="@Model.MediaInfo" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        }
+        else if (Model.MediaType == 3)
+        {
+            @Html.Raw(Model.MediaInfo)
+        }
+    </div>
+    <div id="divCoverInfo" style="display:none;">
+        @* Design within this divMediaInfo tag. Do not apply the design to this divMediaInfo for email body. *@
+        @* divCoverPhoto is to replace with video *@
+        <div id="divCoverPhoto">
+            @if (!Model.CoverPhoto.IsNullOrWhitespace())
+            {
+                <style>
+                    .preview-wrapper {
+                        max-width: 100%;
+                        margin: 45px 0px;
+                        padding: 0 30px;
+                    }
+
+                    .preview-wrapper img.col-md-12 {
+                        width: 100%;
+                        padding: 0;
+                        margin: 30px 0;
+                    }
+
+                    .preview-wrapper .x_x_MsoNormalTable p.x_x_MsoNormal {
+                        margin-bottom: 0;
+                    }
+                </style>
+                <a href="@viewInbrowserLink"><img src="@Model.CoverPhoto" alt="@Model.EmailSubject" class="col-md-12"></a>}
+        </div>
+    </div>
+    <strong>Sender:</strong>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @(Html.Kendo().TextBox()
+                .Name("txtSenderName")
+                .HtmlAttributes(new
+                {
+                    required = "required",
+                    data_required_msg = requiredFieldMsg,
+                    pattern = "[A-Za-z-0-9_@.,'()/#& -]{1,80}",
+                    data_pattern_msg = patternMsg,
+                    @class = "form-control",
+                    placeholder = "Name",
+                    style = "width:100%"
+                })
+                .Deferred())
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @(Html.Kendo().TextBox()
+                .Name("txtSenderEmail")
+                .HtmlAttributes(new
+                {
+                    type = "email",
+                    required = "required",
+                    data_required_msg = requiredFieldMsg,
+                    data_email_msg = "Invalid Email!",
+                    @class = "form-control",
+                    placeholder = "Email",
+                    style = "width:100%"
+                })
+                .Deferred())
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="cd-md-12">
+            <div class="form-group ecard-pad-left">
+                <strong>Number of recipients:</strong>
+                @(Html.Kendo().DropDownList()
+                .Name("ddlNumberOfRecipients")
+                .BindTo(Model.RecipientNumberList)
+                .Value(Model.NumberOfRecipient.ToString())
+                .Deferred()
+                )
+                <a href="#" id="hlImportCsv">Import From CSV File</a>
+            </div>
+        </div>
+    </div>
+    @* Recipient Section *@
+    @*  Recipient Name and Email boxes are created from javascript *@
+    <div id="divRecipients">
+        @*@Html.Partial("_Recipients", Model)*@
+    </div>
+    @* Recipient Section *@
+    <strong>Message: <i class="bg-info">Note: There is no need to edit recipient's name in the message below. Name(s) will be generated according to the inputs above.</i></strong>
+    <div class="row">
+        <div class="cd-md-12">
+            <div class="form-group ecard-pad-left">
+                @(Html.Kendo().Editor()
+            .Name("txtSenderMessage")
+            .HtmlAttributes(new { style = "height:240px", aria_label = "editor" })
+            .Tools(tools => tools.Clear()
+          .Bold().Italic().Underline().Strikethrough()
+          .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+          .InsertUnorderedList().InsertOrderedList()
+          .Outdent().Indent()
+          .CreateLink().Unlink()
+          .SubScript()
+          .SuperScript()
+          .TableEditing()
+          .CleanFormatting()
+          .FontName()
+          .FontSize()
+          .FontColor())
+          .Value(Model.TemplateMessage)
+            .Deferred())
+            </div>
+        </div>
+    </div>
+    <strong>Signature:</strong>
+    <div class="row">
+        <div class="cd-md-12">
+            <div class="form-group ecard-pad-left">
+                @(Html.Kendo().Editor()
+            .Name("txtSenderSignature")
+            .HtmlAttributes(new
+            {
+                style = "width: 100%;height:440px;",
+                aria_label = "editor"
+            })
+
+            .Tools(tools => tools.Clear()
+          .Bold().Italic().Underline().Strikethrough()
+          .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+          .InsertUnorderedList().InsertOrderedList()
+          .Outdent().Indent()
+          .CreateLink().Unlink()
+          .SubScript()
+          .SuperScript()
+          .TableEditing()
+          .CleanFormatting()
+          .FontName()
+          .FontSize()
+          .FontColor())
+          .Value(Model.SampleSignature)
+            .Deferred())
+
+            </div>
+        </div>
+    </div>
+    <div class="row submission-btn">
+        <div class="col-md-12">
+            <button class="btn btn-primary" id="btnPreview" type="button">Preview</button>
+            <button class="btn btn-primary" id="btnReset" type="reset">Reset</button>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div id="divPreview" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="email-body"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnDownloadHtml">Download as HTML</button>
+                <button type="button" class="btn btn-primary" id="btnEdit" data-dismiss="modal">Edit Message</button>
+                <button type="button" class="btn btn-primary" id="btnSendeCard">Send e-Card</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- upload modal -->
+<div id="divUpload" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                @(Html.Kendo().Upload()
+                        .Name("RecipientFile")
+                        .Async(a => a
+                            .SaveUrl("/api/eCardSubmissionJobApi/UploadRecipientCSV")
+                            .AutoUpload(true))
+                        .Events(events => events
+                            .Success("onUploadCsvSuccess"))
+                        .Validation(validation => validation.AllowedExtensions(new string[] { ".csv" }))
+                        .Multiple(false)
+                        .Deferred()
+                )
+                <a href="/custom/ecard/recipients.csv">Please download this CSV file template to input and upload your contacts' names and email addresses <u>(max. 40 contacts each time)</u>.</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divViewInBrowser" style="display:none;">If you cannot view this email, click <a href="@viewInbrowserLink">here</a> or paste this address in browser @Html.Raw(viewInbrowserLink) </div>
+<!-- Preloader -->
+<div class='loader' style="display:none;">
+    <div class='loader-container'>
+        <h3><b>Please wait a moment. System is preparing to send the email(s)!</b></h3>
+        <img src="~/Sitefinity/WebsiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/ui/fancybox_loading@2x.gif" alt="Loader">
+    </div>
+</div>
+
+<style>
+    /* #divMediaInfo iframe{
+    position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        }
+    div#divMediaInfo {
+            position: relative;
+        overflow: hidden;
+        max-width: 100%;
+        height: auto !important;
+    }*/
+    a.back-btn {
+        z-index: 1;
+        position: relative;
+        color: #000;
+        font-size: 20px;
+    }
+
+    .row.submission-btn {
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    a.back-btn:hover {
+        color: #f06b00;
+    }
+
+    div#divMediaInfo iframe {
+        max-width: 100% !important;
+        position: unset;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 640px;
+        padding: 0;
+        margin: 0;
+    }
+
+    #email-body p {
+        margin-bottom: 25px;
+    }
+
+    .x_x_MsoNormalTable p.x_x_MsoNormal {
+        margin-bottom: 0 !important;
+    }
+
+    .x_x_MsoNormal a span img {
+        margin: 0;
+    }
+
+    div#divMediaInfo video {
+        max-width: 100% !important;
+        position: unset;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 480px;
+        padding: 0;
+        margin: 0;
+    }
+
+    div#divMediaInfo {
+        text-align: center;
+        margin: 30px auto;
+        min-height: 290px;
+        display: block;
+    }
+
+        div#divMediaInfo img.col-md-12 {
+            /* width: auto !important;
+        height: 360px !important;*/
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            text-align: center;
+            float: none;
+            padding: 0;
+        }
+
+    #divMediaInfo p {
+        bottom: 0;
+        left: 0;
+        position: relative;
+        text-align: left;
+        padding-top: 30px;
+    }
+
+    button#btnPreview {
+        background: #FA8E15;
+        border: #FA8E15;
+        font-size: 18px;
+        padding: 10px 50px;
+        border-radius: 0;
+        /* margin: 0 7px; */
+    }
+
+    button#btnReset {
+        background: #E7E7E7;
+        border: #E7E7E7;
+        font-size: 18px;
+        padding: 10px 50px;
+        border-radius: 0;
+        margin: 0 7px;
+        color: #000;
+    }
+
+    #eCardSubmissionForm h1 {
+        margin-bottom: 0;
+    }
+
+    #divCoverPhoto img {
+        padding: 0;
+    }
+
+    #divCoverPhoto {
+        width: 100%;
+    }
+
+
+    #email-body p, #email-body {
+        font-size: 18px;
+    }
+
+    #divCoverPhoto {
+        margin-bottom: 30px !important;
+        display: inline-block;
+    }
+
+    #divPreview img.col-md-12 {
+        padding: 0;
+    }
+
+    .preview-wrapper {
+        max-width: 100%;
+        margin: 45px 0px;
+        padding: 0 30px;
+    }
+
+
+    body.preview-wrapper img.col-md-12 {
+        width: 100%;
+        padding: 0;
+        margin: 30px 0;
+    }
+
+    .x_preview-wrapper img.x_col-md-12 {
+        margin: 30px 0;
+        width: 100%;
+    }
+</style>
+
+<script src="@Url.Content("~/Mvc/Scripts/eCardSubmissionJob.js")" type="text/javascript"></script>

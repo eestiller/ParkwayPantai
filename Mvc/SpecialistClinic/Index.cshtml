@@ -1,0 +1,137 @@
+@using System.Web.Optimization
+@using Parkway.Core.Utilities
+<section class="container search-content">
+    <h1 class="title">@Html.Raw(ViewBag.Resource.ClinicSearchLabel)</h1>
+
+    <div class="row block-4">
+        <div class="col-md-4">
+            <label for="search-2">@Html.Raw(ViewBag.Resource.ClinicNameSearchLabel)</label>
+        </div>
+        <div class="col-md-8">
+            <input id="searchclinic" class="typeahead form-control" type="text" name="Search" value="">
+            <p class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.MaxLengthLabel)</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="is-desktop" style="@(ViewBag.CurrentCultural.Equals("zh-sg") ? "display: none" : "")">
+                <h3>@Html.Raw(ViewBag.Resource.AlphabeticalSearchLabel)</h3>
+                <ul id="alphale_select">
+                    @if (ViewBag.Alphabeticals != null)
+                    {
+                        foreach (var alphabetical in ViewBag.Alphabeticals)
+                        {
+                            <li><a href="@alphabetical.UrlName" title="@alphabetical.Name" onclick="SelectClinic('@alphabetical.Title'); return false;">@alphabetical.Title</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+            <div class="form-group is-mobile" style="@(ViewBag.CurrentCultural.Equals("zh-sg") ? "display: none" : "")">
+                <label for="alphale_select">@Html.Raw(ViewBag.Resource.AlphabeticalSearchLabel)</label>
+                <select class="form-control" id="alphale_select_mobile" name="alphale_select" onchange="SelectClinic(this.options[this.selectedIndex].value)">
+                    <option value="">Select Alphabetical</option>
+                    <option value="a">A</option>
+                    <option value="b">B</option>
+                    <option value="c">C</option>
+                    <option value="d">D</option>
+                    <option value="e">E</option>
+                    <option value="f">F</option>
+                    <option value="g">G</option>
+                    <option value="h">H</option>
+                    <option value="i">I</option>
+                    <option value="j">J</option>
+                    <option value="k">K</option>
+                    <option value="l">L</option>
+                    <option value="m">M</option>
+                    <option value="n">N</option>
+                    <option value="o">O</option>
+                    <option value="p">P</option>
+                    <option value="q">Q</option>
+                    <option value="r">R</option>
+                    <option value="s">S</option>
+                    <option value="t">T</option>
+                    <option value="u">U</option>
+                    <option value="v">V</option>
+                    <option value="w">W</option>
+                    <option value="x">X</option>
+                    <option value="y">Y</option>
+                    <option value="z">Z</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@Html.Raw(ViewBag.Resource.SelectHospitalLabel)</h3>
+            <ul class="list-6">
+                <li>
+                    <label for="all-hospital">
+                        <input type="checkbox" name="all-hospital" id="all-hospital" value="All Hospitals">
+                        @Html.Raw(ViewBag.Resource.AllHospitalsLabel)
+                    </label>
+                </li>
+
+                @if (ViewBag.Hospitals != null)
+                {
+                    foreach (var item in ViewBag.Hospitals)
+                    {
+                        <li>
+                            <label>
+                                <input type="checkbox" class="hospitals_Child" name="@item.Title" value="@item.Id" checked="@item.Checked">
+                                @item.Title
+                            </label>
+                        </li>
+                    }
+                }
+
+            </ul>
+            <p class="text-right"><a href="javascript:void(0)" title=" @Html.Raw(ViewBag.Resource.SearchLabel) " class=" btn btn-primary" onclick="SelectClinic(); return false;">@Html.Raw(ViewBag.Resource.SearchLabel)</a></p>
+        </div>
+    </div>
+</section>
+<section class="container list-15">
+    <div id="rowindex" class="row" style="display: none; margin-bottom: 40px; color: #333333; font-size: 1.75em; font-weight: bold; padding-bottom: 0; overflow: hidden;">
+        <div id="info_result" class="col-md-12"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="paging" style="display: none">
+                <li id="page-first"><a href="javascript:void(0)" title="@Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel)">|&lt;&lt;</a></li>
+                <li id="page-previous"><a href="javascript:void(0)" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                <li id="page-next"><a href="javascript:void(0)" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                <li id="page-last"><a href="javascript:void(0)" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script id="row_child" type="text/x-jquery-tmpl">
+    <div class="row lstClinic">
+        <div class="col-md-1">
+            <h3 style="@(ViewBag.CurrentCultural.Equals("zh-SG") ? "display: none" : "")">${FirstAlphabet}</h3>
+        </div>
+        <div class="col-md-11">
+            <ul firstchar="${FirstAlphabet}"></ul>
+        </div>
+    </div>
+</script>
+
+<script id="chdClinic" type="text/x-jquery-tmpl">
+    <li>
+        <h5>${Name}</h5>
+        <address>
+            {{html Address}}
+        </address>
+        <address>
+            <strong>@Html.Raw(ViewBag.Resource.ClinicHoursLabel):</strong><br>
+            {{html WorkingHours}}
+        </address>
+        <address>
+            <strong>@Html.Raw(ViewBag.Resource.ContactNumberLabel):</strong> ${ContactNumber}
+        </address>
+        <p><a href="${AppointmentUrl}" title="@Html.Raw(ViewBag.Resource.MakeAppointmentLabel)" class="btn btn-primary">@Html.Raw(ViewBag.Resource.MakeAppointmentLabel)</a></p>
+    </li>
+</script>
+@Scripts.Render("~/bundlescript/specialistclinic")

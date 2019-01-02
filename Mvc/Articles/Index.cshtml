@@ -1,0 +1,26 @@
+@model SitefinityWebApp.Mvc.Models.ArticlesListViewModel
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    @Html.Hidden("hid_HospitalType", Model.HospitalType)
+    @Html.Partial("ArticlesGridPartial", Model)
+
+    <script>
+        loaded_items = @Model.NumberOfInitialItemsToLoad.ToString() ; //initial number of items
+        take_items = loaded_items;
+        current_filter = '@Model.CurrentTab';
+        isHealthPlusHome = true;
+
+        $(function() {
+            var query = document.location.search;
+
+            if (query.indexOf('?tab=') > -1 && $(".banner .caption").length > 0) {
+                $(".banner .caption")[0].scrollIntoView(); 
+            }
+        });
+    </script>
+}
+else
+{
+    <span>Article Grid</span>
+}

@@ -1,0 +1,23 @@
+﻿@model SitefinityWebApp.Mvc.Models.NewsModel
+<h1 class="title">@Html.Raw(Model.Title)</h1>
+@if (!string.IsNullOrEmpty(Model.Photos))
+{
+    <img src="@Html.Raw(Model.Photos)" alt="@Html.Raw(Model.Title)">
+}
+<div class="article-1 fck">
+    <p>
+        <strong>@Html.Raw(Model.Summary)</strong>
+         @*<br>
+        @Html.Raw(Model.Lastmodified)*@
+    </p>
+    @Html.Raw(Model.Content)
+    @if (Model.documentUrls != null)
+    {
+        foreach (var item in Model.documentUrls)
+        {
+        <a href="@Html.Raw(item.UrlDocument)" title="@Html.Raw(item.TitleDocument)">@Html.Raw(item.TitleDocument)</a>
+        <br />
+        }
+    }
+</div>
+

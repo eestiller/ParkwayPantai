@@ -1,0 +1,34 @@
+﻿@using SitefinityWebApp.Mvc.Models
+@model DoctorProfileModel
+
+<h3>@Html.Raw(ViewBag.Resource.DoctorClinicPhotosLable)</h3>
+@if (Model.Clinics == null || Model.Clinics.Count == 0)
+{
+    <span>@ViewBag.Resource.NoClinicsFoundMessage</span>
+}
+<div class="wrap-slider">
+    <div id="clinicPhotoArea" class="list-17 flexslider-2">
+        @{
+            var clinicData = Model.Clinics;
+            var clinicImages = clinicData.SelectMany(s => s.Photos).ToList();
+
+            <div class="flex-viewport" style="overflow: hidden; position: relative;">
+                <ul class="slides">
+
+                    @for (int i = 0; i < clinicImages.Count; i++)
+                    {
+                        var clinic = clinicImages[i];
+                        <li>
+                            <a href="@clinic.RealImageUrl" title="Image" class="fancybox-gallery" data-fancybox-group="gallery">
+                                <img src="@clinic.ThumbnailUrl" alt="" style="width: 258px; height: 171px;">
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+            @Html.Hidden("hidTotalClinicPhoto", clinicImages.Count)
+        }
+    </div>
+    <input id="btnEditClinicInfo" type="button" value="Edit" class="sfEditButton" style="margin: 0px 0px 3px -2%" />
+</div>
+

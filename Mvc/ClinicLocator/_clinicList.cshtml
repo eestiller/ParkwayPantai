@@ -1,0 +1,9 @@
+﻿@model SitefinityWebApp.Mvc.Models.ClinicLocatorModel
+
+<div class="resultsWrap">
+    <h3>@Model.ResultMessage</h3>
+@if (Model.ShowResultList)
+{
+    @Html.Partial("SharedClinicResultList", Model.Clinics)
+}
+</div>

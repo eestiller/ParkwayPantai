@@ -1,0 +1,10 @@
+﻿@model IEnumerable<SitefinityWebApp.Mvc.Models.EventModel>
+@using Parkway.Core.Utilities
+<div class="col-md-4 events">
+    <ul>
+        @foreach (var item in Model)
+        {
+            <li><a href="@item.DetailUrl" title="@item.Title">@item.Title</a><a href="@item.DetailUrl" title="@Html.Raw(ViewBag.Resource.ReadMoreLabel)">@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></li>
+        }
+    </ul>
+</div>

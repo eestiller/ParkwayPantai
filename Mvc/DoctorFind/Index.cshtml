@@ -1,0 +1,478 @@
+﻿@using System.Web.Optimization
+@*@{
+        var cssMediaBundleUrl = BundleTable.Bundles.ResolveBundleUrl("~/bundlecss/finddoctor", true);
+    }
+    <link href="@cssMediaBundleUrl" rel="stylesheet" type="text/css" media="screen" />*@
+
+<section class="container search-content" id="finddoctorForm">
+    <h1 class="title" id="titlehead">@Html.Raw(ViewBag.AlPhabet)</h1>
+    <input type="hidden" id="lbFindDoctor" value="@Html.Raw(ViewBag.Resource.FindADoctorLabel)" />
+    <input type="hidden" id="lbDoctorAlpha" value="@Html.Raw(ViewBag.Resource.TitleFindDoctorAlPhaBet)" />
+    <div class="row block-3">
+        <div class="col-xs-12 col-md-6">
+            <h3>@Html.Raw(ViewBag.Resource.SearchDoctorLabel)*</h3>
+            <select class="form-control" id="SpecialtiesList" name="SpecialtiesList">
+                <option class="boldclass" value="">@Html.Raw(ViewBag.Resource.SelectAllLabel)</option>
+                @if (ViewBag.Specialties != null)
+                {
+                    foreach (var specialty in ViewBag.Specialties)
+                    {
+                        <option value="@specialty.Id" @specialty.SubSpecialtyClass>@specialty.Title @specialty.Description</option>
+                    }
+                }
+
+                @if (ViewBag.SubSpecialties != null)
+                {
+                    <option value="" class="boldclass">@ViewBag.Resource.SubspecialtyLabel</option>
+
+
+                    foreach (var subspecialty in ViewBag.SubSpecialties)
+                    {
+                        <option value="@subspecialty.Id" class="sub">@subspecialty.Title</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-xs-12 col-md-4">
+            <h3>@Html.Raw(ViewBag.Resource.SearchByDoctorNameLabel)</h3>
+            <input id="SearchDoctor" class="typeahead form-control" type="text" name="SearchDoctor" value="" maxlength="250">
+            <span class="ico ico-search search-doctor-ico"></span>
+            <p class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.MaxLengthLabel)</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (string.Compare(ViewBag.CurrentCultural, "zh-SG", true) != 0)
+            {
+                <div class="is-desktop">
+                    <h3>@Html.Raw(ViewBag.Resource.AlphabeticalSearchLabel)</h3>
+                    <ul id="alphale_select">
+                        @if (ViewBag.Alphabeticals != null)
+                        {
+                            foreach (var alphabetical in ViewBag.Alphabeticals)
+                            {
+                                <li><a href="@alphabetical.UrlName" title="@alphabetical.Name">@alphabetical.Title</a></li>
+                            }
+                        }
+                    </ul>
+                </div>
+                <div class="form-group is-mobile">
+                    <label for="alphale_select_mobile">@Html.Raw(ViewBag.Resource.AlphabeticalSearchLabel)</label>
+                    <select class="form-control" id="alphale_select_mobile" name="alphale_select">
+                        <option value="">@Html.Raw(ViewBag.ResourceCommon.SelectAlphabeticalLabel)</option>
+                        <option value="a">A</option>
+                        <option value="b">B</option>
+                        <option value="c">C</option>
+                        <option value="d">D</option>
+                        <option value="e">E</option>
+                        <option value="f">F</option>
+                        <option value="g">G</option>
+                        <option value="h">H</option>
+                        <option value="i">I</option>
+                        <option value="j">J</option>
+                        <option value="k">K</option>
+                        <option value="l">L</option>
+                        <option value="m">M</option>
+                        <option value="n">N</option>
+                        <option value="o">O</option>
+                        <option value="p">P</option>
+                        <option value="q">Q</option>
+                        <option value="r">R</option>
+                        <option value="s">S</option>
+                        <option value="t">T</option>
+                        <option value="u">U</option>
+                        <option value="v">V</option>
+                        <option value="w">W</option>
+                        <option value="x">X</option>
+                        <option value="y">Y</option>
+                        <option value="z">Z</option>
+                    </select>
+                </div>
+            }
+        </div>
+    </div>
+    <p class="text-right">
+        <a title="@Html.Raw(ViewBag.ResourceCommon.ViewAllDoctors)" href="@Html.Raw(ViewBag.ViewAllDoctorsUrl)">@Html.Raw(ViewBag.ResourceCommon.ViewAllDoctors)</a>
+    </p>
+
+    <div class="row">
+        <section class="col-md-12">
+            <div class="form-group style-1">
+                <h3>@Html.Raw(ViewBag.Resource.SelectHospitalLabel)</h3>
+                <div class="col-sm-12">
+                    <ul class="list-6">
+                        <li>
+                            <label for="all-hospital">
+                                @if (ViewBag.CheckAllHospitals)
+                                {
+                                    <input type="checkbox" name="all-hospital" id="all-hospital" value="All Hospitals" checked="checked" />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="all-hospital" id="all-hospital" value="All Hospitals" />
+                                }
+                                @Html.Raw(ViewBag.Resource.AllHospitalsLabel)
+                            </label>
+                        </li>
+                        @if (ViewBag.Hospitals != null)
+                        {
+                            foreach (var hopital in ViewBag.Hospitals)
+                            {
+                                <li>
+                                    <label>
+                                        <input type="checkbox" class="hospitalChild" name="@hopital.Title" value="@hopital.Id" checked="@hopital.Checked">
+                                        @hopital.Title
+                                    </label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <div class="text-center">
+                        <a title="@Html.Raw(ViewBag.Resource.SearchLabel)" class="btn btn-primary" id="bntsearch">@Html.Raw(ViewBag.Resource.SearchLabel)</a>
+                        <a title="@Html.Raw(ViewBag.ResourceCommon.ClearAllLabel)" class="btn btn-primary" id="bntClearAll">@Html.Raw(ViewBag.ResourceCommon.ClearAllLabel)</a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <div class="col-md-12 clear">
+            <div class="search-note">
+                <p>@ViewBag.ResourceCommon.BrowserMessage</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container">
+
+    <div class="row" id="RefineSearch" style="display: none">
+        <div class="col-md-4 result-control">
+            <h4 class="title">@Html.Raw(ViewBag.Resource.RefineSearchLabel)</h4>
+            <div class="col-sm-12">
+                <label>@Html.Raw(ViewBag.Resource.GenderLabel)</label>
+                <ul class="list-3">
+                    @if (ViewBag.Genders != null)
+                    {
+                        foreach (var item in ViewBag.Genders)
+                        {
+                            <li>
+                                <label>
+                                    <input type="radio" name="gender" value="@item.Id">
+                                    @item.Title
+                                </label>
+                            </li>
+                        }
+                    }
+                    <li>
+                        <label>
+                            <input type="radio" name="gender" id="genderall" value="" checked="checked">
+                            @Html.Raw(ViewBag.Resource.GenderAllLabel)
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-12">
+                <label for="language">@Html.Raw(ViewBag.Resource.LanguageLabel)</label>
+                <select class="form-control" id="language">
+                    <option value="">@Html.Raw(ViewBag.Resource.AllLanguagesLabel)</option>
+                    @if (ViewBag.Languages != null)
+                    {
+                        foreach (var item in ViewBag.Languages)
+                        {
+                            <option value="@item.Id">@item.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-md-8 result-list" style="display: none">
+            <h4 class="title clearfix" id="info_result">@Html.Raw(ViewBag.Resource.SearchResultsLabel)<span>@Html.Raw(ViewBag.TotalMessenger)</span></h4>
+            <ul class="list-12 style-2" id="resultSearch">
+
+                @if (ViewBag.Doctors != null && ViewBag.Doctors.Count > 0)
+                {
+                    foreach (var item in ViewBag.Doctors)
+                    {
+                        <li>
+                            <div class="thumb">
+                                <a href="@item.DoctorUrl" title="" class="viewdoctorcv" doctorid="@item.Id">
+                                    <img src="@item.Photo" alt="@item.DoctorName">
+                                </a>
+                            </div>
+                            <div class="desc-2">
+                                <div class="style-1">
+                                    <h3><a href="@item.DoctorUrl" title="@item.DoctorName" class="viewdoctorcv" doctorid="@item.Id" style="text-decoration: none">@item.DoctorName</a></h3>
+                                    <dl>
+                                        <dt>@Html.Raw(ViewBag.Resource.SpecialityLabel)</dt>
+                                        <dd class="specialties" doctorid="@item.Id">
+                                            @if (item.DoctorSpecialties.Count > 0)
+                                            {
+                                                foreach (var spec in item.DoctorSpecialties)
+                                                {
+                                                    if (!string.IsNullOrEmpty(spec.Link))
+                                                    {
+                                                        <a href="@spec.Link">@spec.Title</a><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        @spec.Title<br />
+                                                    }
+                                                }
+                                            }
+                                        </dd>
+
+
+                                        @if (item.DoctorSubspecialties.Count > 0)
+                                        {
+                                            <dt>@Html.Raw(ViewBag.Resource.SubspecialityLabel)</dt>
+                                            <dd class="specialties" doctorid="@item.Id">
+                                                @foreach (var spec in item.DoctorSubspecialties)
+                                                {
+                                                    @spec.Title<br />
+                                                }
+                                            </dd>
+                                        }
+                                    </dl>
+                                    <p><a href="@item.DoctorUrl" class="btn btn-primary viewdoctorcv" doctorid="@item.Id">@Html.Raw(ViewBag.Resource.DoctorViewProfileLabel)</a></p>
+                                </div>
+                                <div class="clinicinfo" doctorid="@item.Id" fullname="@item.DoctorName">
+                                    @if (item.Clinics.Count > 0)
+                                    {
+                                        foreach (var clinic in item.Clinics)
+                                        {
+                                            <div class="style-2">
+                                                <dl>
+                                                    <dt>@Html.Raw(ViewBag.Resource.DoctorClinisLabel)</dt>
+                                                    <dd>@clinic.ClinicName</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>@Html.Raw(ViewBag.Resource.DoctorLocationLabel)</dt>
+                                                    <dd>@Html.Raw(@clinic.ClinicLocation)</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>@Html.Raw(ViewBag.Resource.DoctorContactNoLabel)</dt>
+                                                    <dd>
+                                                        <a href='@clinic.ClinicContactNumberLink' class="doctorList-telNum findDoc-page" data-finddoctor='@item.DoctorName'>@clinic.ClinicContactNumber</a>
+                                                    </dd>
+                                                </dl>
+
+                                            </div>
+                                            <div class="bt-group">
+                                                @if (clinic.IsOnline)
+                                                {
+                                                    <a href='@clinic.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)' target='_blank'>@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href='@clinic.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)'>@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)</a>
+                                                }
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                    }
+                }
+
+            </ul>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="paging" style="display: none">
+                        <li id="page-first"><a href="javascript:void(0)" title=" @Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel) ">|&lt;&lt;</a></li>
+                        <li id="page-previous"><a href="javascript:void(0)" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                        <li id="page-next"><a href="javascript:void(0)" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                        <li id="page-last"><a href="javascript:void(0)" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+                    </ul>
+                    <input type="hidden" id="totalCount" value="@Html.Raw(ViewBag.TotalCount)" />
+                    <input type="hidden" id="pageNumber" value="@Html.Raw(ViewBag.PageNumer)" />
+                    <input type="hidden" id="totalPages" value="@Html.Raw(ViewBag.TotalPages)" />
+                    <input type="hidden" id="nextPage" value="@Html.Raw(ViewBag.NextPage)" />
+                    <input type="hidden" id="previousPage" value="@Html.Raw(ViewBag.PreviousPage)" />
+                    <input type="hidden" id="firstIndex" value="@Html.Raw(ViewBag.FirstIndex)" />
+                    <input type="hidden" id="lastIndex" value="@Html.Raw(ViewBag.LastIndex)" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="RecentSearches" style="display: none">
+        <div class="col-md-12 result-list">
+            <h4 class="title">@Html.Raw(ViewBag.Resource.RecentSearchesLabel)</h4>
+            <ul class="list-12 style-2" id="listRecentSearches">
+                @if (ViewBag.Recent != null && ViewBag.Recent.Count > 0)
+                {
+                    foreach (var item in ViewBag.Recent)
+                    {
+                        <li>
+                            <div class="thumb">
+                                <a href="@item.DoctorUrl" title="" class="viewdoctorcv" doctorid="@item.Id">
+                                    <img src="@item.Photo" alt="@item.DoctorName">
+                                </a>
+                            </div>
+                            <div class="desc-2">
+                                <div class="style-1">
+                                    <h3><a href="@item.DoctorUrl" title="@item.DoctorName" class="viewdoctorcv" doctorid="@item.Id" style="text-decoration: none">@item.DoctorName</a></h3>
+                                    <dl>
+                                        <dt>@Html.Raw(ViewBag.Resource.SpecialityLabel)</dt>
+                                        <dd class="specialties" doctorid="@item.Id">
+                                            @if (item.DoctorSpecialties.Count > 0)
+                                            {
+                                                foreach (var spec in item.DoctorSpecialties)
+                                                {
+                                                    if (!string.IsNullOrEmpty(spec.Link))
+                                                    {
+                                                        <a href="@spec.Link">@spec.Title</a><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        @spec.Title<br />
+                                                    }
+                                                }
+                                            }
+                                        </dd>
+
+                                        @if (item.DoctorSubspecialties.Count > 0)
+                                        {
+                                            <dt>@Html.Raw(ViewBag.Resource.SubspecialityLabel)</dt>
+                                            <dd class="specialties" doctorid="@item.Id">
+                                                @foreach (var spec in item.DoctorSubspecialties)
+                                                {
+                                                    @spec.Title<br />
+                                                }
+                                            </dd>
+                                        }
+                                    </dl>
+                                    <p><a href="@item.DoctorUrl" class="btn btn-primary viewdoctorcv" doctorid="@item.Id">@Html.Raw(ViewBag.Resource.DoctorViewProfileLabel)</a></p>
+                                </div>
+                                <div class="clinicinfo" doctorid="@item.Id" fullname="@item.DoctorName">
+                                    @if (item.Clinics.Count > 0)
+                                    {
+                                        foreach (var clinic in item.Clinics)
+                                        {
+                                            <div class="style-2">
+                                                <dl>
+                                                    <dt>@Html.Raw(ViewBag.Resource.DoctorClinisLabel)</dt>
+                                                    <dd>@clinic.ClinicName</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>@Html.Raw(ViewBag.Resource.DoctorLocationLabel)</dt>
+                                                    <dd>@Html.Raw(@clinic.ClinicLocation)</dd>
+                                                </dl>
+                                                <dl>
+                                                    <dt>@Html.Raw(ViewBag.Resource.DoctorContactNoLabel)</dt>
+                                                    <dd>
+                                                        <a href='@clinic.ClinicContactNumberLink' class="doctorList-telNum findDoc-page" data-finddoctor='@item.DoctorName'>@clinic.ClinicContactNumber</a>
+                                                    </dd>
+                                                </dl>
+                                            </div>
+                                            <div class="bt-group">
+                                                @if (clinic.IsOnline)
+                                                {
+                                                    <a href='@clinic.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)' target='_blank'>@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href='@clinic.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)'>@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)</a>
+                                                }
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+    <input id="CountRecentSearches" type="hidden" value="@Html.Raw(ViewBag.Recent.Count)" />
+</section>
+
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script type="text/javascript">
+    var culture = "@ViewBag.CurrentCultural";
+    var pageTitle_NoSearch = "@ViewBag.PageTitle_NoSearch";
+    var pageTitle_HasSearch = "@ViewBag.PageTitle_HasSearch";
+</script>
+
+<script type="text/x-jquery-tmpl" id="List_Areas_all">
+    <optgroup nodeid="${ParentId}" label="${ParentTitle}" class="child_areas" subid="${ParentId}"></optgroup>
+</script>
+
+<script type="text/x-jquery-tmpl" id="child_areas_item">
+    <option value="${SubSpecityId}">${SubSpecityTitle}</option>
+</script>
+
+<script id="List_Areas" type="text/x-jquery-tmpl">
+    <option value="${SubSpecityId}">${SubSpecityTitle}</option>
+</script>
+
+<script id="List_doctor" type="text/x-jquery-tmpl">
+    <li>
+        <div class="thumb">
+            <a href="${DoctorUrl}" title="${DoctorName}" class="viewdoctorcv" doctorid="${Id}">
+                <img src="${Photo}" alt="${DoctorName}">
+            </a>
+        </div>
+        <div class="desc-2">
+            <div class="style-1">
+                <h3><a href="${DoctorUrl}" title="${DoctorName}" class="viewdoctorcv" doctorid="${Id}" style="text-decoration: none">${DoctorName}</a></h3>
+                <dl>
+                    <dt>@Html.Raw(ViewBag.Resource.SpecialityLabel)</dt>
+                    <dd class="specialties" doctorid="${Id}"></dd>
+
+                    <dt class="labelSubspecialties" doctorid="${Id}">@Html.Raw(ViewBag.Resource.SubspecialityLabel)</dt>
+                    <dd class="subspecialties" doctorid="${Id}"></dd>
+                </dl>
+                <p><a href="${DoctorUrl}" class="btn btn-primary viewdoctorcv" doctorid="${Id}">@Html.Raw(ViewBag.Resource.DoctorViewProfileLabel)</a></p>
+            </div>
+            <div class="clinicinfo" doctorid="${Id}" fullname="${DoctorName}">
+            </div>
+        </div>
+    </li>
+</script>
+<script id="specialtiesList" type="text/x-jquery-tmpl">
+    {{if Link}}
+    <a href="${Link}">${Title}</a>
+    <br />
+    {{else}}
+    ${Title}
+    <br />
+    {{/if}}
+</script>
+<script id="subspecialtiesList" type="text/x-jquery-tmpl">
+    {{if Link}}
+    <a href="${Link}">${Title}</a>
+    <br />
+    {{else}}
+    ${Title}
+    <br />
+    {{/if}}
+</script>
+<script id="Clinic" type="text/x-jquery-tmpl">
+    <div class="style-2">
+        <dl>
+            <dt>@Html.Raw(ViewBag.Resource.DoctorClinisLabel)</dt>
+            <dd>${ClinicName}</dd>
+        </dl>
+        <dl>
+            <dt>@Html.Raw(ViewBag.Resource.DoctorLocationLabel)</dt>
+            <dd>{{html ClinicLocation}}</dd>
+        </dl>
+        <dl>
+            <dt>@Html.Raw(ViewBag.Resource.DoctorContactNoLabel)</dt>
+            <dd><a href='${ClinicContactNumberLink}' class="doctorList-telNum findDoc-page" data-finddoctor='${DoctorName}'>${ClinicContactNumber}</a></dd>
+        </dl>
+
+    </div>
+    <div class="bt-group">
+        {{if IsOnline}}
+        <a href='${AppointmentUrl}' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)' target='_blank'>@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)</a>
+        {{else}}
+        <a href='${AppointmentUrl}' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)'>@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)</a>
+        {{/if}}
+    </div>
+</script>
+@Scripts.Render("~/bundlescript/finddoctor")

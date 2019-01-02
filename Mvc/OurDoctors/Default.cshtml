@@ -1,0 +1,91 @@
+@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.OurDoctorsModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="@Html.Raw(ViewBag.HomeUrl)" title="@Html.Raw(ViewBag.HomeLabel)">@Html.Raw(ViewBag.HomeLabel)</a></li>                
+                <li><a href="@Html.Raw(ViewBag.OurDoctorsUrl)" title="@Html.Raw(ViewBag.OurDoctors)">@Html.Raw(ViewBag.OurDoctors)</a></li>
+                @if (!string.IsNullOrEmpty(ViewBag.SelectedSpecialtyLabel))
+                { 
+                    <li><a href="@Html.Raw(ViewBag.SelectedSpecialtyUrl)">@Html.Raw(ViewBag.SelectedSpecialtyLabel)</a></li>
+                }
+            </ol>
+        </div>
+    </div>
+</div>
+<section class="container">
+    <h1 class="title">@Html.Raw(ViewBag.OurDoctorsLabel)</h1>
+    <div class="our-doctor">
+        <div class="col-md-4">
+            <h3>@Html.Raw(ViewBag.BrowsebyKeySpecialty)</h3> 
+            <select class="form-control" id="listSpecialty">
+                @foreach (var specialty in Model.Specialties)
+                {
+                    if (@specialty.Checked)
+                    {
+                    <option value="@specialty.Value" selected="selected">@specialty.Title @specialty.Description</option>
+                    }
+                    else
+                    {
+                    <option value="@specialty.Value">@specialty.Title @specialty.Description</option>
+                    }
+                }
+            </select>
+            <div class="scroll">
+                <ul class="list-specialty">
+                    @foreach (var s in Model.Specialties)
+                    {
+                        if (@s.Checked)
+                        {
+                        <li class="active"><a href="@s.UrlName" title="@s.Title" >@s.Title @s.Description</a></li>
+                        }
+                        else
+                        {
+                        <li><a href="@s.UrlName" title="@s.Title">@s.Title @s.Description</a></li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h3>@Html.Raw(ViewBag.OurDoctors)</h3>
+            @if (Model.TotalPages > 0)
+            {
+                <ul class="list-doctors" id="ulSpecialty">
+                    @foreach (var doctor in Model.Doctors)
+                    {
+                        <li>
+                            <a href="@doctor.Url" title="@doctor.Name">@doctor.Name</a>
+                        </li>
+                    }
+                </ul>
+            
+                <ul class="paging">
+                    @foreach (var p in Model.Pages)
+                    {
+                        if (@p.Checked)
+                        {
+                        <li class="active">@p.Title</li>
+                        }
+                        else
+                        {
+                        <li><a href="@p.Url" title="@p.Title">@p.Title</a></li>
+                        }
+                    }
+                </ul>
+            }
+            else
+            {
+                @Html.Raw(ViewBag.DoctorFoundNoResult)
+            }
+        </div>
+    </div>
+</section>
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script type="text/javascript">
+    var ourDoctorsUrl = "@Html.Raw(ViewBag.OurDoctorsUrl)";
+</script>
+@Scripts.Render("~/bundlescript/ourdoctors")

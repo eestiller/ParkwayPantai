@@ -1,0 +1,81 @@
+﻿@model  IEnumerable<SitefinityWebApp.Mvc.Models.DisplayOptimizedImagesModel>
+<style>
+    .exHeader {
+        padding: 5px 4px 10px;
+        white-space: nowrap;
+        font-size: 9px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #eee;
+        font-weight: normal;
+        color: #777;
+    }
+
+    .item {
+        padding: 5px 15px 10px;
+    }
+</style>
+<div style="">
+    <h1 id="sfToMainContent" class="sfBreadCrumb"><span id="ctl04_clinicBackendList_ctl00_ctl00_ViewTitle">Optimized Images</span></h1>
+    <div class="sfMain sfClearfix" style="width: 100%;">
+        <div class="sfContent" style="width: 100%;">
+            <div class="sfWorkArea">
+                <div style="padding-top: 27px;">
+                    <span class="sfpublished">
+                        @ViewBag.Optimized image(s) are optimized.
+                    </span>
+                    <span class="sflocked" style="margin-left: 50px;">
+                        @ViewBag.NoChanges image(s) can not changed.
+                    </span>
+                </div>
+                <div style="padding-top: 27px;">
+
+                    <table id="OptimizedImageList" style="width:100%;table-layout:auto;empty-cells:show;">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="exHeader" style="width: 40px; text-align: center;">No.</th>
+                                <th scope="col" class="exHeader" style="width:20px;"></th>
+                                <th scope="col" class="exHeader">File Name</th>
+                                <th scope="col" class="exHeader" style="width:135px;">Original Size (bytes)</th>
+                                <th scope="col" class="exHeader" style="width: 135px;">Optimized Size (bytes)</th>
+                                <th scope="col" class="exHeader" style="width:20px;">Percent (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ int i = 1;}
+                            @foreach (var item in Model)
+                            {
+                                <tr class="rgRow" style="visibility: visible; display: table-row; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #eee;">
+                                    <td style="text-align:center;">
+                                        @i
+                                    </td>
+                                    <td>
+                                        <span class="@Html.DisplayFor(modelItem => item.Icon)">
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <strong class="sfItemTitle">@Html.DisplayFor(modelItem => item.FilePath)</strong>
+                                        <strong class="sfItemTitle">@Html.DisplayFor(modelItem => item.FileName)</strong>
+                                    </td>
+                                    <td style="text-align:right;">
+
+                                        <strong class="sfItemTitle item">@Html.DisplayFor(modelItem => item.OriginalSize)</strong>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <strong class="sfItemTitle  item">@Html.DisplayFor(modelItem => item.OptimizedSize)</strong>
+                                    </td>
+                                    <td style="text-align:right;">
+                                        <strong class="sfItemTitle  item">  @Html.DisplayFor(modelItem => item.Percent)</strong>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

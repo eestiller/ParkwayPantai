@@ -1,0 +1,278 @@
+﻿@{
+    List<SitefinityWebApp.Custom.Models.LanguageItem> languages = null;
+}
+<div class="top-head is-desktop itest">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-3 pull-right">
+                <input id="search" class="form-control" type="text" name="Search" value="">
+                <span class="fake-btn"></span>
+            </div>
+            <div class="col-md-2 pull-right text-right">
+                <div class="dropdown menu-language">
+                    @Html.Raw(SitefinityWebApp.Mvc.Helper.HtmlHelperExt.RenderMenu(Parkway.Core.Utilities.EnumUtil.EnvironmentType.Desktop, ref languages))
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="top-main">
+    <div class="head">
+        <section class="container fakebackground">
+            <div class="row">
+                <div class="col-md-12">
+                    <header>
+                        <a href="@ViewBag.PrefixLanguage/" title="Parkway Hospital Singapore">
+                            <img src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/logo.png" alt="We create new possibilities for life"></a>
+                    </header>
+                    <ul class="top-contact is-desktop">
+                        <li>
+                            <p><a href="@ViewBag.ContactPage" rel="nofollow" title="@ViewBag.Resource.ContactUs">@ViewBag.Resource.ContactUs</a></p>
+                        </li>
+                    </ul>
+                    <ul class="icons-m is-mobile">
+                        <li><a id="responsive-search-button" rel="nofollow" href="#sidr-second">
+                            <img src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/icon-search-m.jpg" alt="@ViewBag.Resource.Search"></a></li>
+                        <li><a id="responsive-menu-button" rel="nofollow" href="#sidr-main">
+                            <img src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/icon-nav-m.jpg" alt="@ViewBag.Resource.Menu"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    <section class="container is-desktop">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="main-nav">
+                    <ul class="clearfix menu-4-items">
+                        <li class="">
+                            @if (@ViewBag.PrefixLanguage != "/rs")
+                            {
+                                <a href="@ViewBag.PrefixLanguage/specialties/medical-specialties" title="@ViewBag.Resource.DiscoverMedicalSpecialties"><span>@ViewBag.Resource.Discover<br>@ViewBag.Resource.MedicalSpecialties</span></a>   
+                            }
+                            else
+                            {
+                                <a href="@ViewBag.PrefixLanguage/spesialisasi/medical-specialties" title="@ViewBag.Resource.DiscoverMedicalSpecialties"><span>@ViewBag.Resource.Discover<br>@ViewBag.Resource.MedicalSpecialties</span></a>   
+                            }
+                            <div class="sub-main-nav">
+                                <div class="col-md-8">
+                                    <h4>@ViewBag.Resource.MedicalSpecialties</h4>
+                                    <ul>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/brains-nerves" title="@ViewBag.Resource.BrainNervesNeurology">@ViewBag.Resource.BrainNervesNeurology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/bones" title="@ViewBag.Resource.BonesOrthopaedics">@ViewBag.Resource.BonesOrthopaedics</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/cancer" title="@ViewBag.Resource.CancerOncology">@ViewBag.Resource.CancerOncology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/children" title="@ViewBag.Resource.ChildrenPaediatrics">@ViewBag.Resource.ChildrenPaediatrics</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/ear-nose-throat" title="@ViewBag.Resource.EarNoseThroatOtorhinolaryngology">@ViewBag.Resource.EarNoseThroatOtorhinolaryngology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/eyes" title="@ViewBag.Resource.EyesOphthalmology">@ViewBag.Resource.EyesOphthalmology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/general-surgery" title="@ViewBag.Resource.GeneralSurgery">@ViewBag.Resource.GeneralSurgery</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/heart-vascular" title="@ViewBag.Resource.HeartVascularCardiovascular">@ViewBag.Resource.HeartVascularCardiovascular</a></li>
+                                    </ul>
+                                    <ul>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/hormone-disorder" title="@ViewBag.Resource.HormoneDisorderEndocrinology">@ViewBag.Resource.HormoneDisorderEndocrinology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/kidneys" title="@ViewBag.Resource.KidneysRenalMedicine">@ViewBag.Resource.KidneysRenalMedicine</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/lungs" title="@ViewBag.Resource.LungsRespiratoryMedicine">@ViewBag.Resource.LungsRespiratoryMedicine</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/stomach-digestive" title="@ViewBag.Resource.StomachDigestiveSystemGastroenterology">@ViewBag.Resource.StomachDigestiveSystemGastroenterology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/transplantation-cellular" title="@ViewBag.Resource.TransplantCellularTheraphy">@ViewBag.Resource.TransplantCellularTheraphy</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/urinary-reproductive" title="@ViewBag.Resource.UrinaryReproductiveSystemUrology">@ViewBag.Resource.UrinaryReproductiveSystemUrology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/women-gynaecology" title="@ViewBag.Resource.WomenObstetricsGynaecology">@ViewBag.Resource.WomenObstetricsGynaecology</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/other-specialties" title="@ViewBag.Resource.OtherSpecialties">@ViewBag.Resource.OtherSpecialties</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>@ViewBag.Resource.AdvancedSurgicalProcedures</h4>
+                                    <ul>
+                                        @if (@ViewBag.PrefixLanguage != "/benh-vien")
+                                        {
+                                            <li><a href="@ViewBag.PrefixLanguage/specialties/advanced-procedures/mis" title="@ViewBag.Resource.MinimallyInvasiveSurgery">@ViewBag.Resource.MinimallyInvasiveSurgery</a></li>
+                                        }
+                                        @if (@ViewBag.PrefixLanguage != "/rs")
+                                        {
+                                            <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/transplantation-cellular" title="@ViewBag.Resource.TransplantationCellularTherapy">@ViewBag.Resource.TransplantationCellularTherapy</a></li>
+                                        }
+                                    </ul>
+                                    <ul class="thumb">
+                                        <li><a href="@ViewBag.PrefixLanguage/specialties/advanced-procedures/robotic-surgery/" title="@ViewBag.Resource.RoboticSurgery">
+                                            <img src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/en/specialties/robotic-surgery.jpg" alt="@ViewBag.Resource.RoboticSurgery"></a>
+                                            <h5><a href="@ViewBag.PrefixLanguage/specialties/advanced-procedures/robotic-surgery/" title="@ViewBag.Resource.RoboticSurgery">@ViewBag.Resource.RoboticSurgery</a></h5>
+                                            <p>@ViewBag.Resource.Striveforabetterclinical</p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="type-2">
+                            <a href="@ViewBag.PrefixLanguage/explore-our-hospitals" title="@ViewBag.Resource.Explore"><span>@ViewBag.Resource.Explore<br />@ViewBag.Resource.OurHospitals</span></a>
+                            <div class="sub-main-nav type-2">
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li><a href="@ViewBag.PrefixLanguage/explore-our-hospitals/mount-elizabeth-hospital" title="@ViewBag.Resource.MountElizabethHospitals">@ViewBag.Resource.MountElizabethHospitals</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/explore-our-hospitals/gleneagles-hospital" title="@ViewBag.Resource.GleneaglesHospital">@ViewBag.Resource.GleneaglesHospital</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/explore-our-hospitals/parkway-east-hospital" title="@ViewBag.Resource.ParkwayEastHospital">@ViewBag.Resource.ParkwayEastHospital</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="type-2"><a href="@ViewBag.PrefixLanguage/cost-financing" title="@ViewBag.Resource.AboutCostFinancing"><span>@ViewBag.Resource.About<br>@ViewBag.Resource.CostFinancing</span></a>
+                            <div class="sub-main-nav type-2">
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li><a href="@ViewBag.PrefixLanguage/cost-financing/room-rates" title="@ViewBag.Resource.RoomRates">@ViewBag.Resource.RoomRates</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/cost-financing/estimated-bill-size/" title="@ViewBag.Resource.EstimatedBillSize">@ViewBag.Resource.EstimatedBillSize</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/cost-financing/bill-settlement" title="@ViewBag.Resource.BillSettlement">@ViewBag.Resource.BillSettlement</a></li>
+                                        @if(ViewBag.CurrentLanguage == "id")
+                                        {
+                                            <li><a href="@ViewBag.PrefixLanguage/biaya-pendanaan/keistimewaan-eksklusif" title="@ViewBag.Resource.ExclusivePrivileges">@ViewBag.Resource.ExclusivePrivileges</a></li>
+                                        }
+                                        <li><a href="@ViewBag.PrefixLanguage/cost-financing/price-assurance-programme" title="@ViewBag.Resource.PriceAssuranceProgramme">@ViewBag.Resource.PriceAssuranceProgramme</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="type-2"><a href="@ViewBag.PrefixLanguage/plan-your-visit" title="@ViewBag.Resource.PlanYourVisit"><span>@ViewBag.Resource.Plan<br>@ViewBag.Resource.YourVisit</span></a>
+                            <div class="sub-main-nav type-2">
+                                <div class="col-md-4">
+                                    <ul>
+                                        <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/international-patient-guide" title="@ViewBag.Resource.InternationalPatientsGuide">@ViewBag.Resource.InternationalPatientsGuide</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/patient-assistance-centres" title="@ViewBag.Resource.PatientAssistanceCentres">@ViewBag.Resource.PatientAssistanceCentres</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/admission-guide" title="@ViewBag.Resource.AdmissionGuide">@ViewBag.Resource.AdmissionGuide</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/ambulance-special-transport" title="@ViewBag.Resource.AmbulanceSpecialTransport">@ViewBag.Resource.AmbulanceSpecialTransport</a></li>
+                                        <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/accommodation-nearby" title="@ViewBag.Resource.AccommodationNearby">@ViewBag.Resource.AccommodationNearby</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <div id="navigation" class="is-mobile">
+                    <ul>
+                        <li><a href="@ViewBag.PrefixLanguage/" title="Parkway Hospital Singapore">
+                            <img src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/logo-m.png" alt="Parkway Hospital Singapore"></a>
+                        </li>
+                        <li>
+                            <div class="accordion-nav style-2">
+                                <ul>
+                                    <li>
+                                        <a href="javascript:void(0);" title=""><span>@ViewBag.Resource.Language</span></a>
+                                        <span>&nbsp;</span>
+                                        @Html.Raw(SitefinityWebApp.Mvc.Helper.HtmlHelperExt.RenderMenu(Parkway.Core.Utilities.EnumUtil.EnvironmentType.Mobile, ref languages))
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <ul class="mini-nav">
+                                <li><a href='@ViewBag.PrefixLanguage/find-doctor'>
+                                    <img id="Img1" src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/icon-hear.png" alt="@ViewBag.Resource.LogoTitle">@ViewBag.Resource.FindADoctor</a></li>
+                                <li><a href="@ViewBag.PrefixLanguage/make-appointment">
+                                    <img id="Img2" src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/icon-pen.png" alt="@ViewBag.Resource.LogoTitle">@ViewBag.Resource.MakeAnEnquiryOrAppointment</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <div class="accordion-nav">
+                                <ul>
+                                    <li>
+                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties" title="@ViewBag.Resource.DiscoverMedicalSpecialties"><span>@ViewBag.Resource.DiscoverMedicalSpecialties</span></a> <span>&nbsp;</span>
+                                        <ul class="sub-nav">
+                                            <li>
+                                                <h4>@ViewBag.Resource.MedicalSpecialities</h4>
+                                                <ul>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/brains-nerves" title="@ViewBag.Resource.BrainNervesNeurology">@ViewBag.Resource.BrainNervesNeurology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/bones" title="@ViewBag.Resource.BonesOrthopaedics">@ViewBag.Resource.BonesOrthopaedics</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/cancer" title="@ViewBag.Resource.CancerOncology">@ViewBag.Resource.CancerOncology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/children" title="@ViewBag.Resource.ChildrenPaediatrics">@ViewBag.Resource.ChildrenPaediatrics</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/ear-nose-throat" title="@ViewBag.Resource.EarNoseThroatOtorhinolaryngology">@ViewBag.Resource.EarNoseThroatOtorhinolaryngology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/eyes" title="@ViewBag.Resource.EyesOphthalmology">@ViewBag.Resource.EyesOphthalmology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/general-surgery" title="@ViewBag.Resource.GeneralSurgery">@ViewBag.Resource.GeneralSurgery</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/heart-vascular" title="@ViewBag.Resource.HeartVascularCardiovascular">@ViewBag.Resource.HeartVascularCardiovascular</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/hormone-disorder" title="@ViewBag.Resource.HormoneDisorderEndocrinology">@ViewBag.Resource.HormoneDisorderEndocrinology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/kidneys" title="@ViewBag.Resource.KidneysRenalMedicine">@ViewBag.Resource.KidneysRenalMedicine</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/lungs" title="@ViewBag.Resource.LungsRespiratoryMedicine">@ViewBag.Resource.LungsRespiratoryMedicine</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/stomach-digestive" title="@ViewBag.Resource.StomachDigestiveSystemGastroenterology">@ViewBag.Resource.StomachDigestiveSystemGastroenterology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/transplantation-cellular" title="@ViewBag.Resource.TransplantCellularTheraphy">@ViewBag.Resource.TransplantCellularTheraphy</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/urinary-reproductive" title="@ViewBag.Resource.UrinaryReproductiveSystemUrology">@ViewBag.Resource.UrinaryReproductiveSystemUrology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/women-gynaecology" title="@ViewBag.Resource.WomenObstetricsGynaecology">@ViewBag.Resource.WomenObstetricsGynaecology</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/other-specialties" title="@ViewBag.Resource.OtherSpecialties">@ViewBag.Resource.OtherSpecialties</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <h4>@ViewBag.Resource.AdvancedSurgicalProcedures</h4>
+                                                <ul>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/advanced-procedures/mis" title="@ViewBag.Resource.MinimallyInvasiveSurgery">@ViewBag.Resource.MinimallyInvasiveSurgery</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/advanced-procedures/robotic-surgery" title="@ViewBag.Resource.RoboticSurgery">@ViewBag.Resource.RoboticSurgery</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/specialties/medical-specialties/transplantation-cellular" title="@ViewBag.Resource.TransplantationCellularTherapy">@ViewBag.Resource.TransplantationCellularTherapy</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="@ViewBag.PrefixLanguage/explore-our-hospitals" title="@ViewBag.Resource.ExploreOurHospitals"><span>@ViewBag.Resource.ExploreOurHospitals</span></a><span>&nbsp;</span>
+                                        <ul class="sub-nav">
+                                            <li><a href="@ViewBag.PrefixLanguage/explore-our-hospitals/mount-elizabeth-hospital" title="@ViewBag.Resource.MountElizabethHospitals">@ViewBag.Resource.MountElizabethHospitals</a></li>
+                                            <li><a href="@ViewBag.PrefixLanguage/explore-our-hospitals/gleneagles-hospital" title="@ViewBag.Resource.GleneaglesHospital">@ViewBag.Resource.GleneaglesHospital</a></li>
+                                            <li><a href="@ViewBag.PrefixLanguage/explore-our-hospitals/parkway-east-hospital" title="@ViewBag.Resource.ParkwayEastHospital">@ViewBag.Resource.ParkwayEastHospital</a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="@ViewBag.PrefixLanguage/cost-financing" title="@ViewBag.Resource.AboutCostFinancing"><span>@ViewBag.Resource.AboutCostFinancing</span></a> <span>&nbsp;</span>
+                                        <ul class="sub-nav">
+                                            <li>
+                                                <ul>
+                                                    <li><a href="@ViewBag.PrefixLanguage/cost-financing/room-rates" title="@ViewBag.Resource.RoomRates">@ViewBag.Resource.RoomRates</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/cost-financing/estimated-bill-size/" title="@ViewBag.Resource.EstimatedBillSize">@ViewBag.Resource.EstimatedBillSize</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/cost-financing/bill-settlement" title="@ViewBag.Resource.BillSettlement">@ViewBag.Resource.BillSettlement</a></li>
+                                                    @if(ViewBag.CurrentLanguage == "id")
+                                                    {
+                                                        <li><a href="@ViewBag.PrefixLanguage/biaya-pendanaan/keistimewaan-eksklusif" title="@ViewBag.Resource.ExclusivePrivileges">@ViewBag.Resource.ExclusivePrivileges</a></li>
+                                                    }
+                                                    <li><a href="@ViewBag.PrefixLanguage/cost-financing/price-assurance-programme" title="@ViewBag.Resource.PriceAssuranceProgramme">@ViewBag.Resource.PriceAssuranceProgramme</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="@ViewBag.PrefixLanguage/plan-your-visit" title="@ViewBag.Resource.PlanYourVisit"><span>@ViewBag.Resource.PlanYourVisit</span></a> <span>&nbsp;</span>
+                                        <ul class="sub-nav">
+                                            <li>
+                                                <ul>
+                                                    <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/international-patient-guide" title="@ViewBag.Resource.InternationalPatientsGuide">@ViewBag.Resource.InternationalPatientsGuide</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/admission-guide" title="@ViewBag.Resource.AdmissionGuide">@ViewBag.Resource.AdmissionGuide</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/ambulance-special-transport" title="@ViewBag.Resource.AmbulanceSpecialTransport">@ViewBag.Resource.AmbulanceSpecialTransport</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/accommodation-nearby" title="@ViewBag.Resource.AccommodationNearby">@ViewBag.Resource.AccommodationNearby</a></li>
+                                                    <li><a href="@ViewBag.PrefixLanguage/plan-your-visit/patient-assistance-centres" title="@ViewBag.Resource.PatientAssistanceCentres">@ViewBag.Resource.PatientAssistanceCentres</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="last"><a href="javascript:void(0);" class="nolink" title="@ViewBag.Resource.More"><span>@ViewBag.Resource.More</span></a> <span>&nbsp;</span>
+                                        <ul class="sub-nav">
+                                            <li><a href="@ViewBag.PrefixLanguage/about-us" title="@ViewBag.Resource.AboutUs">@ViewBag.Resource.AboutUs</a></li>
+                                            <li><a href="@ViewBag.PrefixLanguage/news-events" title="@ViewBag.Resource.NewsEvents">@ViewBag.Resource.NewsEvents</a></li>
+                                            <li><a href="http://www.parkwayhealth.com/newsroom/media_releases/" title="@ViewBag.Resource.Media">@ViewBag.Resource.Media</a></li>
+                                            <li><a href="@ViewBag.PrefixLanguage/contact-us" title="@ViewBag.Resource.ContactUs">@ViewBag.Resource.ContactUs</a></li>
+                                            <li><a href="@ViewBag.PrefixLanguage/site-map" title="@ViewBag.Resource.SiteMap">@ViewBag.Resource.SiteMap</a></li>
+                                            <li><a href="@ViewBag.PrefixLanguage/terms-conditions" title="@ViewBag.Resource.TermsAndConditions">@ViewBag.Resource.TermsAndConditions</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="search-mobile" class="is-mobile">
+                    <ul>
+                        <li><a href="@ViewBag.PrefixLanguage/" title="Parkway Hospital Singapore">
+                            <img src="/Sitefinity/WebSiteTemplates/CpacTemplate/App_Themes/CpacTheme/Images/logo-m.png" alt="Parkway Hospital Singapore"></a></li>
+                        <li>
+                            <p>
+                                <label for="search-m">@ViewBag.Resource.Search</label>
+                            </p>
+                            <p>
+                                <input type="text" name="" id="search-m" class="form-control" value="" locale="@ViewBag.CurrentLanguage">
+                            </p>
+                            <p>
+                                <a href="#" title="@ViewBag.Resource.Search" class="btn btn-primary" runat="server">@ViewBag.Resource.Search</a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

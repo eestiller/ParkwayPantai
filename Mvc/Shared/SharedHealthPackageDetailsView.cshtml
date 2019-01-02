@@ -1,0 +1,14 @@
+﻿@model SitefinityWebApp.Mvc.Models.DataModels.HealthPackage
+
+<h2>@Model.Title</h2>
+<strong class="price">@Model.DisplayPrice <span>(Inclusive of GST)</span></strong><br />
+
+@Html.Raw(Model.Content)<br/>
+
+<h3>Clinics offering this package: </h3>
+@foreach (KeyValuePair<string,Guid> clinicData in Model.RelatedClinicData)
+{
+    <p>@clinicData.Key</p>
+    var bookNowUrl = Model.EhsFormUrl + "&clinicId=" + clinicData.Value;
+    <a href='@bookNowUrl'>Book Now</a>
+}

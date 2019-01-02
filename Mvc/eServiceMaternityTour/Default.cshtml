@@ -1,0 +1,63 @@
+@model SitefinityWebApp.Mvc.Models.eServiceMaternityTourModel
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    <style type="text/css">
+        .p-title2 {
+            font-size: 1.5em; color: #000000; font-weight: 400; font-family: 'Lato',sans-serif;
+            line-height: 1.125em; margin: 10px 0 20px 0; padding: 0;
+        }
+        .pHeaderSubtitle {
+            margin-bottom: 20px;
+        }
+    </style>  
+
+    <section id="formEService" class="form-3">
+        <h1 class="title" style="margin-bottom: 10px;">@Html.Raw(Model.Resources.TitleLabel_MaternityTour)</h1>
+        @if (!Model.Resources.SubTitleLabel_MaternityTour.Equals("N/A", StringComparison.InvariantCultureIgnoreCase))
+        {
+            <p class="pHeaderSubtitle">@Html.Raw(Model.Resources.SubTitleLabel_MaternityTour.Replace("[Hospital]", Model.CurrentHospitalSite))</p>
+        }
+        <div id="formContainer" style="width: 100%; overflow: hidden;">
+            @Html.Partial("~/Mvc/Views/Shared/eServiceMaternityTour.cshtml", Model)
+        </div>
+        <div id="btnSubmitContainer" class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="text-center">
+                    <p>
+                        <button type="button" class="btn btn-primary" id="btnSubmit" commontext="@Html.Raw(Model.Resources.SubmitButtonText)" loading="@Html.Raw(Model.Resources.SubmitButtonLoadingText)">@Html.Raw(Model.Resources.SubmitButtonText)</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>  
+
+    @Html.Hidden("hid_AckEmailTemplateID_Maternity", Model.AcknowledgeEmailTemplateID)
+    @Html.Hidden("hid_AcknowledgeEmailSender_Maternity", Model.AcknowledgeEmailSender)
+    @Html.Hidden("hid_AdminEmailTemplateID_Maternity", Model.AdminEmailTemplateID)
+    @Html.Hidden("hid_AdminEmailRecipients_Maternity", Model.AdminEmailRecipients)
+    @Html.Hidden("hid_ConfirmationURL", Model.ConfirmationURL)
+    @Html.Hidden("hid_CampaignCode", Model.CampaignCode)
+    @Html.Hidden("hid_BasicErrorMessageLong", Model.Resources.Validator_BasicErrorMessageLong)
+    @Html.Hidden("hid_BasicErrorMessageShort", Model.Resources.Validator_BasicErrorMessageShort)
+    @Html.Hidden("hid_BasicErrorMessageRadio", Model.Resources.Validator_DefaultNoSelectionRadio)
+    @Html.Hidden("hid_BasicErrorMessageDate", Model.Resources.Validator_DefaultInvalidDate)
+    @Html.Hidden("hid_DefaultDoctorID", Model.DefaultDoctorID)
+
+    @Html.Hidden("hid_DateFormat", Model.CommonDateFormat)
+    @Html.Hidden("hid_GenDetails", Model.UserDetails)
+    @Html.Hidden("hid_CurrentSite", Model.CurrentSite)
+    @Html.Hidden("hid_CurrentCulture", Model.CurrentCulture)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("body").addClass("formMEP");
+            $("#form1").attr("novalidate", "novalidate");
+            ReloadMaternityTourFunctions_Standalone();
+        });
+    </script>
+}
+else
+{
+    <p>eService Maternity Form - Booking (Standalone)</p>
+}

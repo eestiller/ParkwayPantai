@@ -1,0 +1,79 @@
+﻿@using System.Web.Optimization
+ <div class="row">
+    <div class="col-md-12"><span id="findDoctorMessage" style="display: none;">@Html.Raw(ViewBag.Resource.FindDoctorResult)</span></div>
+    <div class="col-md-12">
+        <ul class='list-12 style-2' id="listDoctor">
+
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="paging" style="display: none">
+                <li id="page-first"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel)">|&lt;&lt;</a></li>
+                <li id="page-previous"><a href="#" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                <li id="page-next"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                <li id="page-last"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script id="doctors" type="text/x-jquery-tmpl">    
+    <li>
+        <div class='thumb'>
+            <a href="${DoctorUrl}" title=''>
+                <img src='${Photo}' alt='${DoctorName}' /></a>
+        </div>
+        <div class='desc-2'>
+            <div class='style-1'>
+                <h3 title='${DoctorName}'><a href="${DoctorUrl}" style='text-decoration: none;'>Dr ${DoctorName}</a></h3>
+                <dl>
+                    <dt>@Html.Raw(ViewBag.Resource.SpecialityLabel)</dt>
+                    <dd class='specialties' doctorid='${Id}'></dd>
+                </dl>
+                <p><a href='${DoctorUrl}' class='btn btn-primary' title='@Html.Raw(ViewBag.Resource.DoctorViewProfileLabel)'>@Html.Raw(ViewBag.Resource.DoctorViewProfileLabel)</a></p>
+            </div>
+            <div class="listClinics" doctorid="${Id}">
+            </div>
+        </div>
+    </li>
+</script>
+
+<script id="clinic" type="text/x-jquery-tmpl">
+    <div class='style-2'>
+        <dl>
+            <dt>@Html.Raw(ViewBag.Resource.DoctorClinisLabel)</dt>
+            <dd>${ClinicName}</dd>
+        </dl>
+        <dl>
+            <dt>@Html.Raw(ViewBag.Resource.DoctorLocationLabel)</dt>
+            <dd>{{html ClinicLocation}}</dd>
+        </dl>
+        <dl>
+            <dt>@Html.Raw(ViewBag.Resource.DoctorContactNoLabel)</dt>
+            <dd>{{html ClinicContactNumber}}</dd>
+        </dl>
+    </div>
+    <div class='bt-group'>
+        {{if IsOnline}}
+        <a href='${AppointmentUrl}' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)' target='_blank'>@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)</a>
+        {{else}}
+        <a href='${AppointmentUrl}' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)'>@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)</a>
+        {{/if}}   
+    </div>
+</script>
+<script id='specialtiesList' type='text/x-jquery-tmpl'>
+    {{if Link}}
+    <a href="${Link}">${Title}</a><br />
+    {{else}}
+      ${Title}<br />
+    {{/if}}    
+</script>
+
+<script type="text/javascript">
+    var ourSpecialistsId = "@Html.Raw(ViewBag.OurSpecialistsId)";
+    var pageTitleTemplate = "@Html.Raw(ViewBag.PageTitle)";
+</script>
+
+@Scripts.Render("~/bundlescript/ourspecialists")

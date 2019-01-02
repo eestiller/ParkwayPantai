@@ -1,0 +1,156 @@
+@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.eServiceFormModel
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    <style type="text/css">
+        #imageFloaterBig {
+            display: inline-block; margin-left: 6px; background: #fff url(/Mvc/Content/loading/loading.gif) no-repeat center;
+            background-size: 20px auto; width: 20px; height: 30px;
+        }
+        .btn-group {
+            border: 1px solid #c5c5c5; border-radius: 4px;
+        }
+            .btn-group span {
+                background-color: #ffffff; color: #2e2e2e; padding: 5px 10px; cursor: pointer; float: left;
+                background-image: url(textures/highlight.png);
+                background-image: none,-webkit-gradient(linear,left top,left bottom,from(rgba(255,255,255,.6)),to(rgba(255,255,255,0)));
+                background-image: none,-webkit-linear-gradient(top,rgba(255,255,255,.6) 0,rgba(255,255,255,0) 100%);
+                background-image: none,linear-gradient(to bottom,rgba(255,255,255,.6) 0,rgba(255,255,255,0) 100%);
+                background-position: 50% 50%;
+                background-color: #ececec;
+            }
+                .btn-group span:first-child {
+                    border-top-left-radius: 4px; border-bottom-left-radius: 4px;
+                }
+                .btn-group span:last-child) {
+                    border-top-right-radius: 4px; border-bottom-right-radius: 4px;
+                }
+            .btn-group:after {
+                content: ""; clear: both; display: table;
+            }
+            .btn-group .itemSelected {
+                background-color: #549cb5; color: white;
+            }
+        .p-title2 {
+            font-size: 1.5em; color: #000000; font-weight: 400; font-family: 'Lato',sans-serif; line-height: 1.125em;
+            margin: 10px 0 20px 0; padding: 0;
+        }
+        .nearestoffice-label {
+            display: block; margin-top: 5px; font-size: 14px;
+        }
+    </style>
+
+    <section id="formEService" class="form-3">
+        <h1 class="title">@Html.Raw(Model.Resources.TitleLabel_eService)</h1>
+        <div class="row">
+            <div class="formWrap clearfix topForm">
+                <div class="col-md-3"><label>@Html.Raw(Model.Resources.PurposesLabel)</label></div>
+                <div class="col-md-9" id="con_Purpose">
+                    @Html.Raw(Model.CreateButtonGroup("ddl_Purpose", Model.Purposes, Model.DefaultPurposesKey, "btn-group"))
+                    <div id="imageFloaterBig">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div id="controlSubmission" class="row">
+            <div class="formWrap clearfix topForm">
+                <div class="col-md-3"><label>@Html.Raw(Model.Resources.SubmissionsLabel)</label></div>
+                <div class="col-md-6">
+                    <div id="con_Submission" class="rel">
+                        @(Html.Kendo().DropDownList()
+                            .Name("ddl_Submission")
+                            .DataTextField("Value")
+                            .DataValueField("Key")
+                            .BindTo(Model.Submissions)
+                            .OptionLabel(Model.Resources.SubmissionsOptionLabel)
+                            .Events(events => events.Change("ChangePurpose"))
+                            .HtmlAttributes(new
+                            {
+                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                tooltip = Model.Resources.SubmissionsTooltip,
+                                tooltipPos = "right"
+                            })
+                        )
+                        <span class="k-invalid-msg" data-for="ddl_Submission"></span>
+                    </div>
+
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+
+        <div id="formContainer" style="width: 100%; overflow: hidden;"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="panel-collapse bottom-notes" style="margin-top:10px;">
+                    <p class="p-title2">@Html.Raw(Model.Resources.ThingsToNote_Title)</p>
+                    @if (Model.ThingsToNote1 != "")
+                    {
+                        <span style="font-weight: normal">@Html.Raw(Model.ThingsToNote1)</span>
+                    }
+                    @if (Model.ThingsToNote2 != "" && Model.ThingsToNote2 != "&nbsp;")
+                    {
+                        if (Model.ThingsToNote1 != "" && Model.ThingsToNote1 != "&nbsp;")
+                        {
+                            <br /><br />
+                        }
+                        <span style="font-weight: normal">@Html.Raw(Model.ThingsToNote2)</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div id="btnSubmitContainer" class="row" style="display: none;">
+            <div class="col-md-12 col-xs-12">
+                <div class="text-center">
+                    <p>
+                        <button type="button" class="btn btn-primary" id="btnSubmit" commontext="@Html.Raw(Model.Resources.SubmitButtonText)" loading="@Html.Raw(Model.Resources.SubmitButtonLoadingText)">@Html.Raw(Model.Resources.SubmitButtonText)</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @Html.Hidden("hid_CampaignCode", Model.CampaignCode)
+    @Html.Hidden("hid_ReturnMessage", "")
+    @Html.Hidden("hid_BasicErrorMessageLong", Model.Resources.Validator_BasicErrorMessageLong)
+    @Html.Hidden("hid_BasicErrorMessageShort", Model.Resources.Validator_BasicErrorMessageShort)
+    @Html.Hidden("hid_BasicErrorMessageRadio", Model.Resources.Validator_DefaultNoSelectionRadio)
+    @Html.Hidden("hid_BasicErrorMessageDate", Model.Resources.Validator_DefaultInvalidDate)
+    @Html.Hidden("hid_HasOtherPersonFields", Model.DisplayOtherPersonFields.ToString().ToLower())
+    @Html.Hidden("hid_ShowOtherPersonFields", Model.DisplayOtherPersonFields.ToString().ToLower())
+    @Html.Hidden("hid_DateFormat", Model.CommonDateFormat)
+    @Html.Hidden("hid_GenDetails", Model.UserDetails)
+    @Html.Hidden("hid_DefaultDoctorID", Model.DefaultDoctorID)
+    @Html.Hidden("hid_CurrentSite", Model.CurrentSite)
+    @Html.Hidden("hid_CurrentCulture", Model.CurrentCulture)
+    @Html.Hidden("hid_DefaultSubmissionKey", Model.DefaultSubmissionsKey)
+
+    @Html.Hidden("hid_HospitalID", Model.HospitalID)
+    @Html.Hidden("hid_AckEmailTemplateID_Appointment", Model.AckEmailTemplateID_Appointment)
+    @Html.Hidden("hid_AcknowledgeEmailSender_Appointment", Model.AckEmailSender_Appointment)
+    @Html.Hidden("hid_AdminEmailTemplateID_Appointment", Model.AdminEmailTemplateID_Appointment)
+    @Html.Hidden("hid_AdminEmailRecipients_Appointment", Model.AdminEmailRecipients_Appointment)
+    @Html.Hidden("hid_AckEmailTemplateID_Enquiry", Model.AckEmailTemplateID_Enquiry)
+    @Html.Hidden("hid_AcknowledgeEmailSender_Enquiry", Model.AckEmailSender_Enquiry)
+    @Html.Hidden("hid_AdminEmailTemplateID_Enquiry", Model.AdminEmailTemplateID_Enquiry)
+    @Html.Hidden("hid_AdminEmailRecipients_Enquiry", Model.AdminEmailRecipients_Enquiry)
+    @Html.Hidden("hid_AckEmailTemplateID_Maternity", Model.AckEmailTemplateID_Maternity)
+    @Html.Hidden("hid_AcknowledgeEmailSender_Maternity", Model.AckEmailSender_Maternity)
+    @Html.Hidden("hid_AdminEmailTemplateID_Maternity", Model.AdminEmailTemplateID_Maternity)
+    @Html.Hidden("hid_AdminEmailRecipients_Maternity", Model.AdminEmailRecipients_Maternity)
+    @Html.Hidden("hid_ConfirmationURL", Model.ConfirmationURL)
+
+    <script type="text/javascript">
+        var defaultBtnSelection = 0;
+        $(document).ready(function () {
+            $('body').addClass('formMEP');
+            $('#form1').attr("novalidate", "novalidate");
+            ReloadEServiceFunctions();
+        });
+    </script>
+}
+else{
+    <p>eService Form (Merged)</p>
+}

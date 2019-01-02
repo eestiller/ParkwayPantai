@@ -1,0 +1,80 @@
+﻿@using System.Web.Optimization
+@using Parkway.Core.Utilities
+<h1 class="title">@Html.Raw(ViewBag.Resource.NewsAndEventsLabel)</h1>
+<div class="form-group">
+    <select name="" id="newsyearCombobox" class="form-control">
+        @for (int i = DateTime.Now.Year; i >= ViewBag.YearMin; i--)
+        {
+            <option>@i</option>
+        }
+    </select>
+    <input type="text" value="" name="SearchNews" class="form-control" id="SearchNews">
+    <a class="btn btn-primary" id="btnSearchNews" title="@Html.Raw(ViewBag.Resource.SearchLabel)">@Html.Raw(ViewBag.Resource.SearchLabel)</a>
+</div>
+<div class="row">
+    <section class="col-md-12">
+        <ul id="accordion" class="panel-group">
+            <li class="panel panel-default">
+                <h2 class="panel-heading"><a title="@Html.Raw(ViewBag.Resource.NewsLabel)" href="#collapseOne" data-parent="#accordion" data-toggle="collapse" class="active">@Html.Raw(ViewBag.Resource.NewsLabel)</a></h2>
+                <article class="panel-collapse collapse in" id="collapseOne">
+                    <ul class="list-11">
+                        <li>
+                            <h3 id="newsLabel"></h3>
+                            <ul class="lstNews">
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="paging" style="display: none" id="pagingNews">
+                                <li id="page-first"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel)">|&lt;&lt;</a></li>
+                                <li id="page-previous"><a href="#" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                                <li id="page-next"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                                <li id="page-last"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </li>
+            <li class="panel panel-default">
+                <h2 class="panel-heading"><a href="#collapseTwo" data-parent="#accordion" data-toggle="collapse">@Html.Raw(ViewBag.Resource.EventLabel)</a></h2>
+                <article class="panel-collapse collapse" id="collapseTwo">
+                    <ul class="list-11">
+                        <li>
+                            <h3 id="eventsLabel"></h3>
+                            <ul class="lstEvents">
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ul class="paging" style="display: none" id="pagingEvents">
+                                <li id="page-first-events"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel)">|&lt;&lt;</a></li>
+                                <li id="page-previous-events"><a href="#" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                                <li id="page-next-events"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                                <li id="page-last-events"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </li>
+        </ul>
+    </section>
+</div>
+<script id="itemnews" type="text/x-jquery-tmpl">
+    <li>${Title}<p><a class='link-href' title='@Html.Raw(ViewBag.Resource.ReadMoreLabel)' href='${DetailUrl}'>@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></p></li>
+</script>
+<script id="itemevents" type="text/x-jquery-tmpl">
+    <li>${Title}<p><a class='link-href' title='@Html.Raw(ViewBag.Resource.ReadMoreLabel)' href='${DetailUrl}'>@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></p></li>
+</script>
+<script type="text/javascript">
+    var titlenews = "@Html.Raw(ViewBag.Resource.NewsLabel)";
+    var titleevents = "@Html.Raw(ViewBag.Resource.EventLabel)";
+    var emptyNewsMessage = "@Html.Raw(ViewBag.Resource.EmptyNewsMessage)";
+    var emptyEventMessage = "@Html.Raw(ViewBag.Resource.EmptyEventsMessage)";
+    var prefixLang = "@Html.Raw(ViewBag.PrefixLang)";
+    var currentCulture = "@Html.Raw(ViewBag.CurrentCulture)";
+</script>
+@Scripts.Render("~/bundlescript/newslistdp")
+
+

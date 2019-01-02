@@ -1,0 +1,27 @@
+﻿@using System.Web.Optimization
+<h1 class="title">Contact Us</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="padd-devices">
+            @*<p><strong>@Html.Raw(ViewBag.Resource.ContactLabel)</strong></p>
+            <p class=""></p>
+            <p class="phone">@Html.Raw(ViewBag.Resource.PhoneLabel)</p>*@
+        </div>
+    </div>
+</div>
+<div class="article-2">
+    <h4>@Html.Raw(ViewBag.Resource.FeedbackLabel)</h4>
+    <textarea id="feedback" name="feedback" maxlength="1000"></textarea>
+    <p id="valFeedback" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+    <p class="text-center"><a id="submit" title="Submit" class="btn btn-primary">@Html.Raw(ViewBag.Resource.SubmitLabel)</a></p>
+</div>
+<div id="popup-success" class="popup style-1" style="display: none;">
+    <h4 id="headermessange">@Html.Raw(ViewBag.Resource.MessengeContactLabel)</h4>
+</div>
+<a href="#popup-success" id="show_popup" title="Popup" style="display: none">a</a>
+
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+@Scripts.Render("~/bundlescript/doctorfeedback")
+
+

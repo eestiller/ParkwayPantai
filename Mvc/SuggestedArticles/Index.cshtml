@@ -1,0 +1,163 @@
+@using SitefinityWebApp.Custom.Code;
+
+@model SitefinityWebApp.Mvc.Models.SuggestedArticlesViewModel
+@{
+    var iconClassArticle = "fa-file-text";
+    var iconClassInfo = "fa-pie-chart";
+    var iconClassVideo = "fa-video-camera";
+}
+
+<div class="suggested-articles">
+    @if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+    {
+        if (Model.RelatedArticles != null && Model.RelatedArticles.Count > 0)
+        {
+            <h4>@Html.Resource("RelatedArticles", resourcesCulture: Model.CurrentCulture)</h4>
+            <div class="articles-section">
+                <ul class="owl_demo">
+                    @foreach (var article in Model.RelatedArticles)
+                    {
+                        <li class="items">
+                            <div class="articles-block">
+                            @if (article.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Infographic)
+                            {
+                                <figure><img src="@article.ThumbnailUrl" alt="@article.ThumbnailAlt" /><a href="@article.InfographicImageDesktop" class="fancybox" data-url="@article.FullUrl">@Html.Resource("ReadArticleInfo", resourcesCulture: Model.CurrentCulture)</a></figure>
+                            }
+                            else if (article.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Video)
+                            {
+                                <figure><img src="@article.ThumbnailUrl" alt="@article.ThumbnailAlt" /><a href="@article.VideoUrl" class="fancybox-media">@Html.Resource("VideosWatch", resourcesCulture: Model.CurrentCulture)</a></figure>
+                            }
+                            else
+                            {
+                                <figure><img src="@article.ThumbnailUrl" alt="@article.ThumbnailAlt" /><a href="@article.FullUrl">@Html.Resource("ReadArticle", resourcesCulture: Model.CurrentCulture)</a></figure>
+                            }
+                            <div class="articles-tag">
+                                @{ string articleType_resourceLabel = "HealthPlusArticleTypeLabel_Article", iconClass = iconClassArticle; }
+                                @if (article.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Infographic)
+                                {
+                                    iconClass = iconClassInfo;
+                                    articleType_resourceLabel = "HealthPlusArticleTypeLabel_Infographic";
+                                }
+                                else if (article.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Video)
+                                {
+                                    iconClass = iconClassVideo;
+                                    articleType_resourceLabel = "HealthPlusArticleTypeLabel_Video";
+                                }
+                                <i class="fa @iconClass" aria-hidden="true"></i>@Html.Resource(articleType_resourceLabel, resourcesCulture: Model.CurrentCulture)
+                            </div>
+                            <section class="articles-con">
+                                <a href="@article.FullUrl">
+                                    <h4>@article.ArticleTitle</h4>
+                                    @if (article.Intro.StartsWith("<p>"))
+                                    {
+                                        @Html.Raw(@article.Intro)
+                                    }
+                                    else
+                                    {
+                                        <p>@Html.Raw(@article.Intro)</p>
+                                    }
+                                </a>
+                            </section>
+                        </div>
+                    </li>
+                    }
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <section class="sort-header clearfix">
+                <h5>@Html.Resource("SearchForOtherArticles", resourcesCulture: Model.CurrentCulture)</h5>
+                <div class="articles-nav clearfix">
+                    <div class="owl_nav">
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <div class="items"><a href='@(Model.TagsNavigateUrlPrefix + tag.TagTitle_EN)'>@Html.Raw(tag.TagTitle)</a></div>
+                        }
+                    </div>
+                </div>
+            </section>
+        }
+    }
+    else
+    {
+        <span>Suggested Articles widget</span>
+    }
+</div>
+<div class="article-clone"></div>
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    <script type="text/javascript">
+        $(function () {
+            // Owl Slider
+            $('.owl_demo').owlCarousel({
+                loop: $('.owl_demo .items').length > 1,
+                margin: 0,
+                items: 4,
+                //autoWidth:true,
+                dots: false,
+                responsiveClass: true,
+                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true,
+                        stagePadding: 10
+                    },
+                    479: {
+                        items: 1,
+                        nav: true,
+                        stagePadding: 10
+                    },
+                    600: {
+                        items: 2,
+                        nav: true
+                    },
+                    768: {
+                        items: 3,
+                        nav: true,
+                        slideBy: 3
+                    },
+                    992: {
+                        items: 4,
+                        nav: true,
+                        slideBy: 4
+                    }
+                }
+            })
+
+            //Owl Head Bar
+            $('.owl_nav').owlCarousel({
+                loop: true,
+                margin: 0,
+                autoWidth: true,
+                items: 6,
+                slideBy: 6,
+                dots: false,
+                responsiveClass: true,
+                navText: ["<i class='fa fa-angle-left'></i>", "<i class='fa fa-angle-right'></i>"],
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true
+                    },
+                    600: {
+                        items: 1,
+                        nav: true
+                    },
+                    1000: {
+                        items: 6,
+                        nav: true,
+                        slideBy: 5,
+                    }
+                }
+            })
+        });
+    </script>
+    <style type="text/css">
+        .suggested-articles .articles-section .owl-nav .owl-prev:after {
+            content: "\@Html.Resource("HealthPlus_ArticleDetail_SuggestedArticles_Previous", resourcesCulture: Model.CurrentCulture)";
+        }
+        .suggested-articles .articles-section .owl-nav .owl-next:before {
+            content: "\@Html.Resource("HealthPlus_ArticleDetail_SuggestedArticles_More", resourcesCulture: Model.CurrentCulture)";
+        }
+    </style>
+}

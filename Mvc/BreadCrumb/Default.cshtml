@@ -1,0 +1,9 @@
+<ol itemscope itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+    @if (ViewBag.MenuItems != null)
+    {
+        foreach (var item in ViewBag.MenuItems)
+        {
+            @Html.Raw(item.Url);
+        }
+    }
+</ol>

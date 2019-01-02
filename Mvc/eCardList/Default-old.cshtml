@@ -1,0 +1,274 @@
+@using Kendo.Mvc.UI
+@using SitefinityWebApp.Mvc.Models.DataModels
+
+@model SitefinityWebApp.Mvc.Models.eCardListModel
+
+<div class="container ecard-portal">
+    <div class="row form-group list-head">
+        <div class="col-xs-12 col-md-8">
+            <h1>eCard Gallery</h1>
+        </div>
+        <div class="col-xs-6 col-md-2 category-box">
+            @(Html.Kendo().DropDownList()
+            .Name("CategoryFilter")
+            .OptionLabel("Categories: All")
+            .DataTextField("Value")
+            .DataValueField("Key")
+            .BindTo(Model.Categories)
+            .Events(events => events.Change("ReloadeCardList"))
+            .Deferred()
+            )
+        </div>
+        <div class="col-xs-6 col-md-2 type-box">
+            @(Html.Kendo().DropDownList()
+            .Name("TypeFilter")
+            .OptionLabel("Type: All")
+            .DataTextField("Value")
+            .DataValueField("Key")
+            .BindTo(Model.Types)
+            .Events(events => events.Change("ReloadeCardList"))
+            .Deferred()
+            )
+        </div>
+    </div>
+    <script type="text/x-kendo-tmpl" id="ecard-list-template">
+        <div class="col-xs-12 col-md-4 vlist">
+
+            <div class="vlist-inner">
+                <div class="wrap-img">
+                    @*  *@
+                    <a id="#:UrlName#" class="fancybox-item" href="\\#div#:UrlName#"><img src="#:ImageUrl#" alt="#:Title#" class="img-responsive" /></a>
+                    <div style="display:none;">
+                        <div id="div#:UrlName#">
+                            #if(MediaType == 1){#
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <img src="#:MediaInfo#" alt="#:Title#" class="col-md-12" />
+                                </div>
+                            </div>
+                            #}else if (MediaType == 2){#
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <video controls class="col-md-12">
+                                        <source src="#:MediaInfo#" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            </div>
+                            #}else if (MediaType == 3){#
+                            #=MediaInfo#
+                            #}#
+                        </div>
+                    </div>
+                </div>
+                <div class="wrap-content">
+                    <a href="/ecard-portal/submission/#:UrlName#"><h3 class="ecard-title">#:Title#</h3></a>
+                </div>
+            </div>
+
+        </div>
+    </script>
+    <div id="diveCardList">
+        @(Html.Kendo().ListView<eCardTemplate>()
+        .Name("eCardList")
+        .TagName("div")
+        .ClientTemplateId("ecard-list-template")
+        .DataSource(dataSource =>
+        {
+            dataSource.Read(read => read.Url("/api/eCardListApi/GeteCardList").Type(HttpVerbs.Get).Data("eCardListFilter"));
+            dataSource.PageSize(Model.ListSize);
+        })
+        .Events(events => events.DataBound("eCardListOnDatabound"))
+        .Pageable()
+        .HtmlAttributes(new { @class = "row  form-group" })
+                .Deferred()
+        )
+    </div>
+</div>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="divMediaPopup">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="divMediaBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="k-icon k-i-close k-icon-20"></span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+.row.form-group.list-head {
+    display: flex;
+    align-items: center;
+}
+
+
+.list-head span.k-dropdown-wrap.k-state-default {
+    background: #FFFFFF;
+    border-radius: 0;
+    padding: 12px 20px;
+    font-size: 16px;
+	text-align:left;
+}
+.category-box .k-state-default .k-input,
+.type-box .k-state-default .k-input{
+font-weight:bold;
+}
+.category-box{
+	padding: 0;
+	float: right;
+}
+.type-box{
+	padding: 0;
+	float: left;
+}
+div#eCardList {
+    border: none;
+}
+#eCardList .col-md-4.vlist {
+    border: 1px solid #CCC;
+    padding: 0;
+    margin: 0 18px 36px 18px;
+}
+#eCardList span.k-pager-info.k-label{
+	display: none;
+}
+div#eCardList_pager {
+    background: transparent;
+    border: none;
+	    margin: 0 auto;
+    display: block;
+    text-align: center;
+}
+
+#eCardList a.k-link.k-pager-nav.k-pager-first.k-state-disabled,
+#eCardList a.k-link.k-pager-nav.k-state-disabled {
+    border-radius: 0;
+}
+#eCardList .k-pager-numbers .k-link, .k-pager-numbers .k-state-selected, .k-pager-wrap>.k-link{
+	border-radius: 0;
+	padding: 5px;
+}
+#eCardList .k-pager-numbers .k-link, .k-pager-numbers .k-state-selected {
+    height: 2em;
+}
+.vlist-inner {
+    padding: 15px;
+	    box-shadow: 0px 8px 25px #CCC;
+		    min-height: 310px;
+}
+.category-box span.k-widget.k-dropdown.k-header {
+    float: right;
+    right: 0;
+	width:100%;
+}
+.k-pager-info {
+    visibility: hidden;
+}
+.ecard-event {
+    color: #777777;
+}
+span.k-icon.k-i-arrow-60-down:before {
+        content: "\e010";
+		    
+}
+span.k-icon.k-i-arrow-60-down {
+padding-left: 15px;
+}
+.k-state-default>.k-select{
+display: flex;
+    align-items: center;
+	}
+.k-icon-20{
+font-size:20px;}
+.k-pager-first,
+.k-pager-last{
+display:none !important;
+}
+#eCardList_pager a{
+padding:5px;
+margin-right: 10px;
+display: inline-block;
+}
+.k-pager-numbers .k-link{
+border-style: solid;
+    border-width: 1px;
+    border-radius: 0;
+	    border-color: #d5d5d5;
+}
+.k-pager-numbers {
+    margin: 0 2px;
+    display: inline-block;
+}
+.k-pager-numbers .k-link, .k-pager-numbers .k-state-selected {
+    height: 2em;
+	    margin-right: 10px;
+}
+.k-pager-numbers li {
+    display: inline;
+}
+#divMediaPopup .modal-body{
+position: relative;
+    /* padding-bottom: 59.25%; */
+	min-height: 545px;
+    overflow: hidden;
+    max-width: 100%;
+    height: auto;
+    margin-left: 30px;
+    margin-right: 30px;
+	display: grid;
+    align-items: center;
+}
+#divMediaPopup iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#divMediaBody p {
+    bottom: 0;
+	left: 0;
+    position: absolute;
+}
+#divMediaPopup button.btn.btn-default {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    border: none;
+}
+
+#divMediaPopup .modal-footer{
+margin-top:0;
+padding:0;
+border: none;
+}
+.k-pager-numbers {
+    margin: 0 2px;
+    display: inline-block;
+    top: -5px;
+    position: inherit;
+}
+#divMediaInfo iframe{
+position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 30px;
+	}
+	.wrap-content a{
+	text-decoration:none;
+	}
+	.k-pager-wrap>.k-link {
+    float: none;
+	}
+	.k-pager-input, .k-pager-numbers li{
+	float: none;
+	}
+	header.header.border {
+    position: static !important;
+}
+</style>
+<script src="@Url.Content("~/Mvc/Scripts/eCardList.js")" type="text/javascript"></script>

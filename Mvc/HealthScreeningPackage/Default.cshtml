@@ -1,0 +1,61 @@
+@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.HealthScreeningPackageModel
+
+
+<div id="filterSection" class="row">
+    <div class="col-md-12 screening-filter">
+
+        <span>Show me health screening packages for </span>
+
+        @(Html.Kendo().DropDownList()
+                .Name("GenderDropdown")
+                .DataTextField("Key")
+                .DataValueField("Value")
+                .BindTo(Model.GenderSelection)
+                .Events(events => events.Change("GetHealthPackages"))
+                .Deferred()
+        )
+        <span>and my age is between </span>
+        @(Html.Kendo().DropDownList()
+                .Name("AgeDropdown")
+                .DataTextField("Key")
+                .DataValueField("Value")
+                .BindTo(Model.AgeSelection)
+                .Events(events => events.Change("GetHealthPackages"))
+                .Deferred()
+        )
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div id="PackageResultList" class="clearfix">
+        </div>
+        <div id="preloader" style="display: none;text-align:center">
+            <img src="/Sitefinity/WebsiteTemplates/ShentonTemplate/App_Themes/ShentonTheme/Images/preloader_6.gif" alt="Loading..." style="width:60px;height:auto;" />
+        </div>
+        
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="RelatedPackageList" class="clearfix">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+		<div class="text-center clearfix"><button type="button" id="ViewAll" class="health-screening-view-all">View All</button></div>
+	</div>
+</div>
+
+<div id="DetailsContainer">
+    <div class="detailsWrap">
+        <button type="button" id="CloseDetails">&times;</button>
+        <div id="PackageDetailsSection"></div>
+    </div>
+</div>

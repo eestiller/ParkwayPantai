@@ -1,0 +1,186 @@
+﻿@using System.Web.Optimization
+@using Parkway.Core.Utilities
+@model SitefinityWebApp.Mvc.Models.AppointmentModel
+
+<section class="container form-3">
+    <h1 class="title">@Html.Raw(ViewBag.Resource.MakeanEnquiryLabel)</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@Html.Raw(ViewBag.Resource.ContactInformationLabel)</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-2">
+                <label for="title-name">@Html.Raw(ViewBag.Resource.TitleLabel)</label>
+                @Html.DropDownListFor(m => m.TitleGender, new SelectList(ViewBag.TitleGenders as System.Collections.IEnumerable, "Id", "Title"), new { @id = "title-name", @class = "form-control" })
+            </div>
+            <div class="col-sm-5">
+                <label for="name">@Html.Raw(ViewBag.Resource.NameLabel)</label>
+                @Html.TextBoxFor(m => m.Name, new { @id = "txtname", @class = "form-control", @maxlength = 250 })
+                <p id="valName" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+            <div class="col-sm-5">
+                <label for="email">@Html.Raw(ViewBag.Resource.EmailLabel)</label>
+                @Html.TextBoxFor(m => m.Email, new { @id = "txtEmail", @class = "form-control", @maxlength = 150 })
+                <p id="valEmail" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-3">
+                <label for="nationality">@Html.Raw(ViewBag.Resource.CountryofResidenceLabel)</label>
+                @Html.DropDownListFor(m => m.CountryId, new SelectList(ViewBag.Countries as System.Collections.IEnumerable, "Id", "Title"), new { @class = "form-control", @id = "nationality" })
+            </div>
+            <div class="col-sm-4">
+                <label for="passport_no">@Html.Raw(ViewBag.Resource.NRICorPassportNumberLabel)</label>
+                @Html.TextBoxFor(m => m.Passport, new { @id = "txtpassport_no", @class = "form-control", @maxlength = 20 })
+            </div>
+            <div class="col-sm-5">
+                <label for="phone">@Html.Raw(ViewBag.Resource.PhoneNumberLabel)</label>
+                @Html.TextBoxFor(m => m.Mobilephone, new { @id = "txtphone", @class = "form-control", @Value = "", @maxlength = 20 })
+                <p id="valPhone" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-12">
+                <label for="subscript">
+                    <input type="checkbox" name="subscript" id="subscript" value="@Html.Raw(ViewBag.Resource.ReceiveMarketingMaterialsLabel)">
+                    @Html.Raw(ViewBag.Resource.ReceiveMarketingMaterialsLabel)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@Html.Raw(ViewBag.Resource.PurposeLabel)</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-8">
+                @Html.DropDownListFor(m => m.Purposes, new SelectList(ViewBag.Purposes as System.Collections.IEnumerable, "Id", "Title"), new { @class = "form-control", @id = "purpose" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@Html.Raw(ViewBag.Resource.MedicalConditionLabel)</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-8">
+                @Html.DropDownListFor(m => m.Medicalconditions, new SelectList(ViewBag.MedicalConditions as System.Collections.IEnumerable, "Id", "Title"), new { @class = "form-control", @id = "medical-condition" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@Html.Raw(ViewBag.Resource.YourEnquiryLabel)</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-12">
+                @Html.TextAreaFor(m => m.Enquiry, new { @id = "enquiry", @class = "form-control", @maxlength = 500 })
+                <p id="valEnquiry" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@Html.Raw(ViewBag.Resource.YourPreferredLabel)</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-6">
+                <label for="dr-fullname">@Html.Raw(ViewBag.Resource.DoctorFullNameLabel)</label>
+                @Html.TextBoxFor(m => m.DoctorFullname, new { @id = "dr-fullname", @class = "typeahead form-control", @Value = @Html.Raw(ViewBag.DoctorFullName), @maxlength = 250 })
+            </div>
+            <div class="col-sm-6">
+                @Html.HiddenFor(m => m.DoctorId, new { @id = "doctorid", @Value = @Html.Raw(ViewBag.DoctorId) })
+                @Html.HiddenFor(m => m.ClinicId, new { @id = "clinicid", @Value = @Html.Raw(ViewBag.ClinicId) })
+            </div>
+            <div class="col-sm-12">
+                <p class="text-right"><a href="@ApplicationConfig.Instance.PrefixLang/find-doctor" title="@Html.Raw(ViewBag.Resource.FindaDoctorLabel)" target="_blank">@Html.Raw(ViewBag.Resource.FindaDoctorLabel)</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@Html.Raw(ViewBag.Resource.PreferredDateLabel)</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-4">
+                <label for="date">@Html.Raw(ViewBag.Resource.DateLabel)</label>
+                @Html.TextBoxFor(m => m.AppointmentDate, new { @id = "AppointmentDate", @class = "form-control datepicker", @maxlength = 10 })
+                <p id="valDate" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+            <div class="col-sm-4">
+                <label for="time">@Html.Raw(ViewBag.Resource.TimeLabel)</label>
+                <select class="form-control" id="time" name="time">
+                    <option value="">@Html.Raw(ViewBag.Resource.SelectTimeLabel)</option>
+                    @if (ViewBag.TimeRanges != null)
+                    {
+                        foreach (var timeRange in ViewBag.TimeRanges)
+                        {
+                        <option value="@timeRange.Id">@timeRange.Title</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-sm-12">
+                <label>@Html.Raw(ViewBag.Resource.LocationLabel)</label>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-12">
+                <ul class="list-6">
+                    @foreach (var hopital in ViewBag.Hospitals)
+                    {
+                        <li>
+                            <label>
+                                <input type="checkbox" class="hospitals_Child" name="@hopital.Title"  value="@hopital.Id" >
+                                @hopital.Title
+                            </label>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h2>@Html.Raw(ViewBag.Resource.PrivacyStatementLabel)</h2>
+        </div>
+        <div class="col-md-12">
+            <div class="col-sm-12">
+                <label for="privacy-1" class="style-2" id="chkagree">
+                    <input type="checkbox" name="isagree" id="isagree" value="@Html.Raw(ViewBag.Resource.AgreeLabel)" ><span>@Html.Raw(ViewBag.Resource.AgreeLabel)</span>
+                </label>
+                <p id="valAgree" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+            <div class="col-sm-12">
+                <label for="privacy-2" class="style-2">
+                    <input type="checkbox" name="isreceiveinfo" id="isreceiveinfo" value="@Html.Raw(ViewBag.Resource.ReceiveInformationLabel)"><span>@Html.Raw(ViewBag.Resource.ReceiveInformationLabel)</span>
+                </label>
+            </div>
+            <div class="text-center col-sm-12">
+                <p>
+                    <input type="button" value="@Html.Raw(ViewBag.Resource.SubmitLabel)" title="Submit" id="btnSave" class="btn btn-primary" >
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="popup-success" class="popup style-1" style="display: none;">
+    <h4 id="headermessange">@Html.Raw(ViewBag.Resource.MessengeEnquiryLabel)</h4>
+</div>
+<a href="#popup-success" id="show_popup" title="Popup" style="display: none">a</a>
+
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script type="text/javascript">
+    var required = '@Html.Raw(ViewBag.ValidateResource.RequiredLabel)';
+    var validateEmail = '@Html.Raw(ViewBag.ValidateResource.EmailFormatLabel)';
+    var validateDate = '@Html.Raw(ViewBag.ValidateResource.DateFormatLabel)';
+    var validateName = '@Html.Raw(ViewBag.ValidateResource.NameFormatLabel)';
+</script>
+@Scripts.Render("~/bundlescript/appointment")
+

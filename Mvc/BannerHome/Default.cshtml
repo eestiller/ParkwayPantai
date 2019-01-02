@@ -1,0 +1,31 @@
+@model IEnumerable<SitefinityWebApp.Custom.Models.BannerViewModel>
+@using Parkway.Core.Utilities
+<ul class="slides">
+    @foreach (var item in Model)
+    {
+        <li>
+            <a href="@item.Link" title="@item.Alt">
+                <img class="lazy" alt="@item.Alt" data-src768="@item.Src768"
+                     data-src0="@item.Src768"
+                     data-src991="@(item.Src1300 ?? item.Src1400)"
+                     data-src1400="@item.Src1920">
+                <div class="flex-caption">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                @if (ApplicationConfig.Instance.CurrentSite.Equals("MEH") || ApplicationConfig.Instance.CurrentSite.Equals("CPAC"))
+                                {
+                                    <h1 class="title">@Html.Raw(item.HtmlContent)</h1>
+                                }
+                                else
+                                {
+                                    @Html.Raw(item.HtmlContent)
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,18 @@
+@using SitefinityWebApp.Mvc.Models.DataModels
+@model SitefinityWebApp.Mvc.Models.ParkwayNetworkClinicsModel
+
+@foreach (Clinic clinic in Model.Clinics)
+{
+    <div class="hospitalContent">
+        <h2>@clinic.Name</h2>
+        <div>
+            @if (!string.IsNullOrEmpty(clinic.ShortDescription))
+            {
+                <p>@clinic.ShortDescription</p>
+            }
+            <p>@clinic.Address</p>
+            <a class="list-network-website" href="@clinic.DetailsPageUrl">View Details</a>
+            <a class="list-network-direction" target="_blank" href="@clinic.DirectionUrl">Maps Directions</a>
+        </div>
+    </div>
+}

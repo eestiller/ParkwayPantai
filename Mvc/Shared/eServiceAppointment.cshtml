@@ -1,0 +1,1057 @@
+﻿@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.EnhancedAppointmentFormModel
+
+<style type="text/css">
+    .padComboBox {
+        padding: 0 0 0 0;
+    }
+
+        .padComboBox > .k-input {
+            border-radius: 3px;
+        }
+
+    #txt_PreferredDoctor-list {
+        background-color: #ffffff !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+        #txt_PreferredDoctor-list li.k-state-focused {
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border-color: transparent !important;
+            border-radius: 0px !important;
+        }
+
+        #txt_PreferredDoctor-list li.k-state-hover {
+            -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+            border-color: #037ac8 !important;
+            border-radius: 0px !important;
+            background-color: #037ac8 !important;
+            color: #ffffff !important;
+        }
+
+        #txt_PreferredDoctor-list .doctorSpecialty {
+            font-size: 10px;
+            color: #9a9a9a;
+            line-height: normal;
+        }
+
+        #txt_PreferredDoctor-list li.k-state-hover .doctorSpecialty {
+            color: #ffffff;
+        }
+
+    .loadingSearch {
+        position: absolute;
+        top: 7px;
+        right: 5px;
+        background: #fff url(/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/images/icon-search.jpg) no-repeat top right;
+        background-size: 20px auto;
+        width: 20px;
+        height: 20px;
+        background-image: none;
+    }
+
+    .k-combobox .k-icon.k-clear-value {
+        display: none !important;
+    }
+
+    .loadingWait {
+        position: absolute;
+        top: 6px;
+        right: 5px;
+        background: #fff url(/Mvc/Content/loading/loading.gif) no-repeat top right;
+        background-size: 20px auto;
+        width: 20px;
+        height: 20px;
+    }
+
+    .k-nodata-custom {
+        background-color: #fff !important;
+        color: #000000;
+        font-weight: bold;
+    }
+
+    .loadingGif {
+        width: 15px;
+        height: auto;
+        display: inline-block;
+        margin-top: 7px;
+    }
+
+    #cal_PreferredDate_dateview .k-today, #cal_AlternativeDate_dateview .k-today {
+        -webkit-box-shadow: inset 0 0 0 0px #f35800;
+        box-shadow: inset 0 0 0 0px #f35800;
+        border: 0px;
+    }
+
+        #cal_PreferredDate_dateview .k-today .k-link, #cal_AlternativeDate_dateview .k-today .k-link {
+            color: #c3c3c3;
+        }
+</style>
+
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <h2>@Html.Raw(Model.Resources.DetailsTitle_Appointment)</h2>
+    </div>
+</div>
+
+<!-- Appointment Information -->
+<div class="row">
+    <div class="sectionShaded">
+        @Html.Hidden("hid_SelectedDoctorID", "")
+        @Html.Hidden("hid_SelectedDoctorHospitalID", "")
+
+        @if (Model.CurrentSite == "MEH" || Model.CurrentSite == "CPAC" || Model.CurrentSite == "PHS")
+        {
+            <div class="formWrap clearfix">
+                <div class="col-md-6">
+                    <div id="prefDoctorDiv" combowidth="100%" class="rel">
+                        <div><label>@Html.Raw(Model.Resources.PreferredDoctorLabel)</label></div>
+                        <div>
+                            <input id="txt_PreferredDoctor" placeholder="@Html.Raw(Model.Resources.PreferredDoctorPlaceholder)" validmsg="@Html.Raw(Model.Resources.CommonRequiredFieldText)" tooltip="@Html.Raw(Model.Resources.PreferredDoctorTooltip)" tooltipPos="top" />
+                            <script id="ComboTemplate" type="text/x-kendo-tmpl">
+                                <p class="doctorTitle">#= ReplaceHTMLText(data.DoctorDisplay) #</p>
+                                <p class="doctorSpecialty">@Html.Raw(Model.Resources.SpecialtyLabel): #= data.Specialties #</p>
+                            </script>
+                            <script id="noDataTemplate" type="text/x-kendo-tmpl">
+                                @Html.Raw(Model.Resources.PreferredDoctorNoDataText)
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="field">
+                        <div><label>@Html.Raw(Model.Resources.PreferredHospitalLabel)</label></div>
+                        <div class="rel">
+                            <div id="con_PreferredHospital" class="dropdownKendo">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ddl_PreferredHospital")
+                                    //.Events(e => e.Select("ChangeHospital"))
+                                    .DataTextField("Value")
+                                    .DataValueField("Key")
+                                    .DataSource(dataSource => dataSource
+                                        .Custom()
+                                        .Transport(transport => transport
+                                            .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=preferred-hospital"))
+                                        )
+                                    )
+                                    .OptionLabel(Model.Resources.PreferredHospitalOptionLabel)
+                                    .HtmlAttributes(new
+                                    {
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        tooltip = Model.Resources.PreferredHospitalTooltip,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="ddl_PreferredHospital"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formWrap clearfix">
+                <div class="col-md-6">
+                    <div>
+                        <div id="prefSpecialtyDiv">
+                            <div>
+                                <div><label>@Html.Raw(Model.Resources.SpecialtyLabel)</label></div>
+                                <div id="con_Specialty" class="rel">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("ddl_Specialty")
+                                        .Height(400)
+                                        .DataTextField("Value")
+                                        .DataValueField("Key")
+                                        .DataSource(dataSource => dataSource
+                                            .Custom()
+                                            .Transport(transport => transport
+                                                .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=speciality"))
+                                            )
+                                        )
+                                        .OptionLabel(Model.Resources.SpecialtyOptionLabel)
+                                        .HtmlAttributes(new
+                                        {
+                                            validmsg = Model.Resources.CommonRequiredFieldText,
+                                            tooltip = Model.Resources.SpecialtyTooltip,
+                                            tooltipPos = "right"
+                                        })
+                                    )
+                                    <span class="k-invalid-msg" data-for="ddl_Specialty"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="rel field">
+                        <div><label>@Html.Raw(Model.Resources.ReferenceCodeLabel)</label></div>
+                        <div>
+                            @(Html.Kendo().TextBox()
+                                .Name("txt_ReferenceCode")
+                                .HtmlAttributes(new
+                                {
+                                    @maxlength = "20",
+                                    placeholder = Model.Resources.ReferenceCodePlaceholder,
+                                    tooltip = Model.Resources.ReferenceCodeTooltip,
+                                    tooltipPos = "right"
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="txt_ReferenceCode"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formWrap last clearfix">
+                <div class="col-md-6">
+                    <div class="field">
+                        <div><label>@Html.Raw(Model.Resources.ReasonConsultationLabel)</label></div>
+                        <div class="rel">
+                            @Html.TextArea("txt_ReasonConsultation", "", new
+                            {
+                                @class = "k-textbox",
+                                style = "",
+                                @maxlength = "4000",
+                                cols = "20",
+                                rows = "2",
+                                customrequired = "true",
+                                placeholder = Model.Resources.ReasonConsultationPlaceholder,
+                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                tooltip = Model.Resources.ReasonConsultationTooltip,
+                                tooltipPos = "bottom"
+                            })
+                            <span class="k-invalid-msg" data-for="txt_Enquiry"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 field">
+                    <div><label>@Html.Raw(Model.Resources.DateAppointmentLabel)</label></div>
+                    <div>
+                        <div class="list rel">
+                            <div class="list-6 rel radioWrap" id="ddl_Appointment">
+                                @{
+                                    int btnCount2 = 1;
+                                    foreach (KeyValuePair<string, string> item in Model.DateAppointment)
+                                    {
+                                        string btnID = "rad_Appointment" + btnCount2.ToString();
+                                        string useTooltip = "";
+
+                                        if (btnCount2 > 1)
+                                        {
+                                            @Html.Raw("&nbsp;&nbsp;");
+                                        }
+
+                                        if (btnCount2 == 1)
+                                        {
+                                            useTooltip = Model.Resources.DateOptionTooltip1;
+                                        }
+                                        else
+                                        {
+                                            useTooltip = Model.Resources.DateOptionTooltip2;
+                                        }
+
+                                        <label>@Html.RadioButton("DateOfAppointment", btnCount2.ToString(), false, new { @id = btnID, @class = "enquiryType", required = "required", textreturn = item.Key, tooltip = useTooltip, tooltipPos = "bottom" }) @Html.Raw(item.Value)</label>
+                                        btnCount2++;
+                                    }
+                                }
+                            </div>
+                            <span class="k-invalid-msg" data-for="DateOfAppointment" data-valmsg-for="DateOfAppointment"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="formWrap clearfix">
+                <div class="col-md-6">
+                    <div id="prefDoctorDiv" combowidth="100%" class="rel">
+                        <div><label>@Html.Raw(Model.Resources.PreferredDoctorLabel)</label></div>
+                        <div>
+                            <input id="txt_PreferredDoctor" placeholder="@Html.Raw(Model.Resources.PreferredDoctorPlaceholder)" validmsg="@Html.Raw(Model.Resources.CommonRequiredFieldText)" tooltip="@Html.Raw(Model.Resources.PreferredDoctorTooltip)" tooltipPos="top" />
+                            <script id="ComboTemplate" type="text/x-kendo-tmpl">
+                                <p class="doctorTitle">#= ReplaceHTMLText(data.DoctorDisplay) #</p>
+                                <p class="doctorSpecialty">@Html.Raw(Model.Resources.SpecialtyLabel): #= data.Specialties #</p>
+                            </script>
+                            <script id="noDataTemplate" type="text/x-kendo-tmpl">
+                                @Html.Raw(Model.Resources.PreferredDoctorNoDataText)
+                            </script>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div>
+                        <div id="prefSpecialtyDiv">
+                            <div>
+                                <div><label>@Html.Raw(Model.Resources.SpecialtyLabel)</label></div>
+                                <div id="con_Specialty" class="rel">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("ddl_Specialty")
+                                        .Height(400)
+                                        .DataTextField("Value")
+                                        .DataValueField("Key")
+                                        .DataSource(dataSource => dataSource
+                                            .Custom()
+                                            .Transport(transport => transport
+                                                .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=speciality"))
+                                            )
+                                        )
+                                        .OptionLabel(Model.Resources.SpecialtyOptionLabel)
+                                        .HtmlAttributes(new
+                                        {
+                                            validmsg = Model.Resources.CommonRequiredFieldText,
+                                            tooltip = Model.Resources.SpecialtyTooltip,
+                                            tooltipPos = "right"
+                                        })
+                                    )
+                                    <span class="k-invalid-msg" data-for="ddl_Specialty"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formWrap clearfix">
+                <div class="col-md-6">
+                    <div class="rel field">
+                        <div><label>@Html.Raw(Model.Resources.ReferenceCodeLabel)</label></div>
+                        <div>
+                            @(Html.Kendo().TextBox()
+                                .Name("txt_ReferenceCode")
+                                .HtmlAttributes(new
+                                {
+                                @maxlength = "20",
+                                placeholder = Model.Resources.ReferenceCodePlaceholder,
+                                tooltip = Model.Resources.ReferenceCodeTooltip,
+                                tooltipPos = "right"
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="txt_ReferenceCode"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="field">
+                        <div><label>@Html.Raw(Model.Resources.ReasonConsultationLabel)</label></div>
+                        <div class="rel">
+                            @Html.TextArea("txt_ReasonConsultation", "", new
+                            {
+                                @class = "k-textbox",
+                                style = "",
+                                @maxlength = "4000",
+                                cols = "20",
+                                rows = "2",
+                                customrequired = "true",
+                                placeholder = Model.Resources.ReasonConsultationPlaceholder,
+                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                tooltip = Model.Resources.ReasonConsultationTooltip,
+                                tooltipPos = "bottom"
+                            })
+                            <span class="k-invalid-msg" data-for="txt_Enquiry"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formWrap last clearfix">
+                <div class="col-md-6 field">
+                    <div><label>@Html.Raw(Model.Resources.DateAppointmentLabel)</label></div>
+                    <div>
+                        <div class="list rel">
+                            <div class="list-6 rel radioWrap" id="ddl_Appointment">
+                                @{
+                                    int btnCount2 = 1;
+                                    foreach (KeyValuePair<string, string> item in Model.DateAppointment)
+                                    {
+                                        string btnID = "rad_Appointment" + btnCount2.ToString();
+                                        string useTooltip = "";
+
+                                        if (btnCount2 > 1)
+                                        {
+                                            @Html.Raw("&nbsp;&nbsp;");
+                                        }
+
+                                        if (btnCount2 == 1)
+                                        {
+                                            useTooltip = Model.Resources.DateOptionTooltip1;
+                                        }
+                                        else
+                                        {
+                                            useTooltip = Model.Resources.DateOptionTooltip2;
+                                        }
+
+                                        <label>@Html.RadioButton("DateOfAppointment", btnCount2.ToString(), false, new { @id = btnID, @class = "enquiryType", required = "required", textreturn = item.Key, tooltip = useTooltip, tooltipPos = "bottom" }) @Html.Raw(item.Value)</label>
+                                        btnCount2++;
+                                    }
+                                }
+                            </div>
+                            <span class="k-invalid-msg" data-for="DateOfAppointment" data-valmsg-for="DateOfAppointment"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="appointment-picker">
+            <div class="clearfix">
+                <div class="col-md-6">
+                    <div id="PreferredDateAppt" class="apptWrap rel field">
+                        <div><label>@Html.Raw(Model.Resources.PreferredDateLabel)</label></div>
+                        <div id="con_PreferredDate" class="dropdownKendo">
+                            @(Html.Kendo().DatePicker()
+                                .Name("cal_PreferredDate")
+                                .Footer(false)
+                                .Format(Model.CommonDateFormat)
+                                .Events(e => e.Change("ChangeApptDate"))
+                                .DisableDates("DisableTimePickerDates")
+                                .HtmlAttributes(new
+                                {
+                                    placeholder = Model.Resources.PreferredDatePlaceholder,
+                                    validmsg = Model.Resources.CommonRequiredFieldText,
+                                    tooltip = Model.Resources.PreferredDateTooltip,
+                                    tooltipPos = "right"
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="cal_PreferredDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div id="PreferredTimeAppt" class="apptWrap rel field">
+                        <div><label>@Html.Raw(Model.Resources.PreferredTimeLabel)</label></div>
+                        <div>
+                            <div id="con_PreferredTime" class="dropdownKendo">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ddl_PreferredTime")
+                                    .DataTextField("Key")
+                                    .DataValueField("Value")
+                                    .OptionLabel(Model.Resources.PreferredTimePlaceholder)
+                                    .HtmlAttributes(new
+                                    {
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        notsamemsg = Model.Resources.Validator_PreferredTime_NotSameAsAlternative,
+                                        tooltip = Model.Resources.PreferredTimeTooltip,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="ddl_PreferredTime"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix">
+                <div class="col-md-6">
+                    <div id="AlternativeDateAppt" class="apptWrap rel field">
+                        <div>
+                            <div><label>@Html.Raw(Model.Resources.AlternativeDateLabel)</label></div>
+                            <div id="con_AlternativeDate" class="dropdownKendo">
+                                @(Html.Kendo().DatePicker()
+                                    .Name("cal_AlternativeDate")
+                                    .Footer(false)
+                                    .Format(Model.CommonDateFormat)
+                                    .Events(e => e.Change("ChangeApptDate"))
+                                    .DisableDates("DisableTimePickerDates")
+                                    .HtmlAttributes(new
+                                    {
+                                        placeholder = Model.Resources.AlternativeDatePlaceholder,
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        tooltip = Model.Resources.AlternativeDateTooltip,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="cal_AlternativeDate"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div id="AlternativeTimeAppt" class="apptWrap rel field">
+                        <div><label>@Html.Raw(Model.Resources.AlternativeTimeLabel)</label></div>
+                        <div>
+                            <div id="con_AlternativeTime" class="dropdownKendo">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ddl_AlternativeTime")
+                                    .DataTextField("Key")
+                                    .DataValueField("Value")
+                                    .OptionLabel(Model.Resources.AlternativeTimePlaceholder)
+                                    .HtmlAttributes(new
+                                    {
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        notsamemsg = Model.Resources.Validator_AlternativeTime_NotSameAsPreferred,
+                                        tooltip = Model.Resources.AlternativeTimeTooltip,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="ddl_AlternativeTime"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- end of shaded -->
+</div>
+
+<!-- Patients Information -->
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <h2>@Html.Raw(Model.Resources.PersonalInformationTitle)</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="sectionShaded">
+        <div class="formWrap clearfix">
+            <div class="col-md-6">
+                <div class="rel field">
+                    <div><label>@Html.Raw(Model.Resources.NameLabel)</label></div>
+                    <div>
+                        @(Html.Kendo().TextBox()
+                            .Name("txt_Name")
+                            .HtmlAttributes(new
+                            {
+                                customrequired = "true",
+                                placeholder = Model.Resources.NamePlaceholder,
+                                @maxlength = "80",
+                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                tooltip = Model.Resources.NameTooltip,
+                                tooltipPos = "right"
+                            })
+                        )
+                        <span class="k-invalid-msg" data-for="txt_Name"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div><label>@Html.Raw(Model.Resources.NRICPassportNoLabel)</label></div>
+                <div class="row multiField">
+                    <div class="mfWrap">
+                        <div class="col-xs-5 field">
+                            <div id="con_NRICPassportOptions" class="dropdownKendo rel">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ddl_NRICPassportOptions")
+                                    .DataTextField("Value")
+                                    .DataValueField("Key")
+                                    .DataSource(dataSource => dataSource
+                                        .Custom()
+                                        .Transport(transport => transport
+                                            .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=nric-passport"))
+                                        )
+                                    )
+                                    .Value(Model.DefaultID)
+                                    .Events(events => events.Change("ChangeNRICPassportOption"))
+                                    .HtmlAttributes(new
+                                    {
+                                        required = "required",
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        tooltip = Model.Resources.NRICPassportNoTooltip1,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="ddl_NRICPassportOptions"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-7">
+                            <div class="rel field">
+                                @(Html.Kendo().TextBox()
+                                    .Name("txt_NRICPassportNo")
+                                    .HtmlAttributes(new
+                                    {
+                                        required = "required",
+                                        placeholder = "",
+                                        placeholder1 = Model.Resources.NRICPlaceholder,
+                                        placeholder2 = Model.Resources.PassportPlaceholder,
+                                        placeholderdef = Model.Resources.NRICPassportDefaultPlaceholder,
+                                        @maxlength = "20",
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        invalidnric = Model.Resources.Validator_InvalidNRIC,
+                                        tooltip1 = Model.Resources.NRICTooltip,
+                                        tooltip2 = Model.Resources.PassportTooltip
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="txt_NRICPassportNo"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="formWrap m35 clearfix">
+            <div class="col-md-6 fieldGender">
+                <div class="genderWrap field">
+                    <div><label>@Html.Raw(Model.Resources.GenderLabel)</label></div>
+                    <div class="rel">  
+                        <div class="list-6 radioWrap" id="ddl_Gender">
+                            @{
+                                int btnCount = 1;
+                                foreach (KeyValuePair<string, string> item in Model.Gender)
+                                {
+                                    string btnID = "rad_Gender" + btnCount.ToString();
+
+                                    if (btnCount > 1)
+                                    {
+                                        @Html.Raw("&nbsp;&nbsp;");
+                                    }
+
+                                    <label>@Html.RadioButton("Gender", btnCount.ToString(), false, new { @id = btnID, @class = "enquiryType", required = "required", textreturn = item.Key }) @Html.Raw(item.Value)</label>
+                                    btnCount++;
+                                }
+                            }
+                        </div>
+                        <span class="k-invalid-msg" data-for="Gender" data-valmsg-for="Gender"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 field">
+                <div><label>@Html.Raw(Model.Resources.DateOfBirthLabel)</label></div>
+                <div class="row multiField dob">
+                    <div class="mfWrap">
+                        <div class="col-xs-4">
+                            <div id="con_DOBDay" class="dropdownKendo rel">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ddl_DOB")
+                                    .DataTextField("Value")
+                                    .DataValueField("Key")
+                                    .DataSource(dataSource => dataSource
+                                        .Custom()
+                                        .Transport(transport => transport
+                                            .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=date-of-birth-day"))
+                                        )
+                                    )
+                                    .OptionLabel(Model.Resources.DateOfBirth_DayLabel)
+                                    .Events(events => events.Change("ClearValidationDOB"))
+                                    .HtmlAttributes(new
+                                    {
+                                        @id = "ddl_DOBDay",
+                                        required = "required",
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        tooltip = Model.Resources.DateOfBirthTooltip1,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                            </div>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <div id="con_DOBMonth" class="dropdownKendo">
+                                @(Html.Kendo().DropDownList()
+                                    .Name("ddl_DOB")
+                                    .DataTextField("Value")
+                                    .DataValueField("Key")
+                                    .DataSource(dataSource => dataSource
+                                        .Custom()
+                                        .Transport(transport => transport
+                                            .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=date-of-birth-month"))
+                                        )
+                                    )
+                                    .OptionLabel(Model.Resources.DateOfBirth_MonthLabel)
+                                    .Events(events => events.Change("ClearValidationDOB"))
+                                    .HtmlAttributes(new
+                                    {
+                                        @id = "ddl_DOBMonth",
+                                        required = "required",
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        tooltip = Model.Resources.DateOfBirthTooltip2,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                            </div>
+                        </div>
+
+                        <div class="col-xs-4">
+                            <div class="rel clearfix">
+                                <div id="con_DOBYear" class="dropdownKendo">
+                                    @(Html.Kendo().DropDownList()
+                                        .Name("ddl_DOB")
+                                        .DataTextField("Value")
+                                        .DataValueField("Key")
+                                        .DataSource(dataSource => dataSource
+                                            .Custom()
+                                            .Transport(transport => transport
+                                                .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=date-of-birth-year"))
+                                            )
+                                        )
+                                        .OptionLabel(Model.Resources.DateOfBirth_YearLabel)
+                                        .Events(events => events.Change("ClearValidationDOB"))
+                                        .HtmlAttributes(new
+                                        {
+                                            @id = "ddl_DOBYear",
+                                            required = "required",
+                                            validmsg = Model.Resources.CommonRequiredFieldText,
+                                            tooltip = Model.Resources.DateOfBirthTooltip3,
+                                            tooltipPos = "right"
+                                        })
+                                    )
+                                    <span class="k-invalid-msg" data-for="ddl_DOB" data-valmsg-for="ddl_DOB"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="formWrap clearfix">
+            <div class="col-md-6 field">
+                <div><label>@Html.Raw(Model.Resources.NationalityLabel)</label></div>
+                <div>
+                    <div id="con_Nationality" class="dropdownKendo">
+                        @(Html.Kendo().DropDownList()
+                            .Name("ddl_Nationality")
+                            .Height(400)
+                            .DataTextField("Value")
+                            .DataValueField("Key")
+                            .DataSource(dataSource => dataSource
+                                .Custom()
+                                .Transport(transport => transport
+                                    .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=nationality"))
+                                )
+                            )
+                            .Value(Model.DefaultNationalityID)
+                            .HtmlAttributes(new
+                            {
+                                required = "required",
+                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                tooltip = Model.Resources.NationalityTooltip,
+                                tooltipPos = "right"
+                            })
+                        )
+                        <span class="k-invalid-msg" data-for="ddl_Nationality"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 field">
+                <div><label>@Html.Raw(Model.Resources.CountryResidenceLabel)</label></div>
+                <div>
+                    <div id="con_CountryResidence" class="dropdownKendo">
+                        @(Html.Kendo().DropDownList()
+                            .Name("ddl_CountryResidence")
+                            .Height(400)
+                            .DataTextField("Value")
+                            .DataValueField("Key")
+                            .DataSource(dataSource => dataSource
+                                .Custom()
+                                .Transport(transport => transport
+                                    .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=countries"))
+                                )
+                            )
+                            .Value(Model.DefaultCountryID)
+                            .Events(events => events.Change("PopulateCountryCC"))
+                            .HtmlAttributes(new
+                            {
+                                required = "required",
+                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                tooltip = Model.Resources.CountryResidenceTooltip,
+                                tooltipPos = "right"
+                            })
+                        )
+                        <span class="k-invalid-msg" data-for="ddl_CountryResidence"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="formWrap clearfix">
+            <div class="col-md-6">
+                <div class="rel field">
+                    <div><label>@Html.Raw(Model.Resources.EmailAddressLabel)</label></div>
+                    <div>
+                        @(Html.Kendo().TextBox()
+                            .Name("txt_EmailAddress")
+                            .HtmlAttributes(new
+                            {
+                                required = "required",
+                                placeholder = Model.Resources.EmailAddressPlaceholder,
+                                @maxlength = "80",
+                                validmsg = Model.Resources.CommonRequiredFieldText,
+                                notemail = Model.Resources.Validator_InvalidEmailFormat,
+                                tooltip = Model.Resources.EmailAddressTooltip,
+                                tooltipPos = "right"
+                            })
+                        )
+                        <span class="k-invalid-msg" data-for="txt_EmailAddress"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 field">
+                <div><label>@Html.Raw(Model.Resources.ContactNumberLabel)</label></div>
+                <div class="row multiField">
+                    <div class="mfWrap">
+                        <div class="col-xs-4">
+                            <div class="rel">
+                                @(Html.Kendo().TextBox()
+                                    .Name("txt_ContactNo_CC")
+                                    .HtmlAttributes(new
+                                    {
+                                        type = "text",
+                                        required = "required",
+                                        @readonly = "readonly",
+                                        validmsg = Model.Resources.CommonRequiredFieldText
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="txt_ContactNo_CC"></span>
+                            </div>
+                        </div>
+
+                        @*<div class="col-xs-4">
+                            <div class="rel">
+                                @(Html.Kendo().TextBox()
+                                    .Name("txt_ContactNo_AC")
+                                    .HtmlAttributes(new
+                                    {
+                                        @maxlength = "3",
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        placeholder = Model.Resources.ContactNumberACPlaceholder,
+                                        notnumeric = Model.Resources.Validator_NotNumeric,
+                                        tooltip = Model.Resources.ContactNumberACTooltip,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="txt_ContactNo_AC"></span>
+                            </div>
+                        </div>*@
+
+                        <div class="col-xs-8">
+                            <div class="rel">
+                                @(Html.Kendo().TextBox()
+                                    .Name("txt_ContactNo_PN")
+                                    .HtmlAttributes(new
+                                    {
+                                        @maxlength = "15",
+                                        required = "required",
+                                        min = "8",
+                                        validmsg = Model.Resources.CommonRequiredFieldText,
+                                        placeholder = Model.Resources.ContactNumberPNPlaceholder,
+                                        notnumeric = Model.Resources.Validator_NotNumericWMinimum,
+                                        tooltip = Model.Resources.ContactNumberPNTooltip,
+                                        tooltipPos = "right"
+                                    })
+                                )
+                                <span class="k-invalid-msg" data-for="txt_ContactNo_PN"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.DisplayOtherPersonFields)
+{
+    <div id="OtherPerson1" class="row" style="margin-botton:40px;">
+        <div class="col-md-12 col-xs-12">
+            <h2>
+                @Html.Raw(Model.Resources.YourContactInfoTitle)
+                <span>@Html.Raw(Model.Resources.YourContactInfoTitleSub)</span>
+            </h2>
+        </div>
+    </div>
+
+    <div class="row" id="OtherPerson2">
+        <div class="sectionShaded">
+            <div class="formWrap clearfix">
+                <div class="col-md-6">
+                    <div class="rel field">
+                        <div><label>@Html.Raw(Model.Resources.OtherNameLabel)</label></div>
+                        <div>
+                            @(Html.Kendo().TextBox()
+                                .Name("txt_OtherPerson_Name")
+                                .HtmlAttributes(new
+                                {
+                                    placeholder = Model.Resources.OtherPersonNamePlaceholder,
+                                    @maxlength = "80",
+                                    validmsg = Model.Resources.CommonRequiredFieldText,
+                                    tooltip = Model.Resources.OtherPersonNameTooltip,
+                                    tooltipPos = "right"
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="txt_OtherPerson_Name"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 field">
+                    <div><label>@Html.Raw(Model.Resources.CountryResidenceLabel)</label></div>
+                    <div>
+                        <div id="con_CountryResidence" class="dropdownKendo">
+                            @(Html.Kendo().DropDownList()
+                                .Name("ddl_OtherPerson_CountryResidence")
+                                .Height(400)
+                                .DataTextField("Value")
+                                .DataValueField("Key")
+                                .DataSource(dataSource => dataSource
+                                    .Custom()
+                                    .Transport(transport => transport
+                                        .Read(read => read.Url("/api/eServiceFormApi/GetDDLValues?ddlname=countries"))
+                                    )
+                                )
+                                .Value(Model.DefaultCountryID)
+                                .Events(events => events.Change("PopulateOtherCountryCC"))
+                                .HtmlAttributes(new
+                                {
+                                    validmsg = Model.Resources.CommonRequiredFieldText,
+                                    tooltip = Model.Resources.CountryResidenceTooltip,
+                                    tooltipPos = "right"
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="ddl_OtherPerson_CountryResidence"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="formWrap clearfix">
+                <div class="col-md-6">
+                    <div class="rel field">
+                        <div><label>@Html.Raw(Model.Resources.EmailAddressLabel)</label></div>
+                        <div>
+                            @(Html.Kendo().TextBox()
+                                .Name("txt_OtherPerson_EmailAddress")
+                                .HtmlAttributes(new
+                                {
+                                    placeholder = Model.Resources.EmailAddressPlaceholder,
+                                    @maxlength = "80",
+                                    validmsg = Model.Resources.CommonRequiredFieldText,
+                                    notemail = Model.Resources.Validator_InvalidEmailFormat,
+                                    tooltip = Model.Resources.OtherPersonEmailTooltip,
+                                    tooltipPos = "right"
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="txt_OtherPerson_EmailAddress"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 field">
+                    <div><label>@Html.Raw(Model.Resources.ContactNumberLabel)</label></div>
+                    <div class="row multiField">
+                        <div class="mfWrap">
+                            <div class="col-xs-4">
+                                <div class="rel">
+                                    @(Html.Kendo().TextBox()
+                                        .Name("txt_OtherPerson_ContactNo_CC")
+                                        .HtmlAttributes(new
+                                        {
+                                            type = "text",
+                                            @readonly = "readonly",
+                                            validmsg = Model.Resources.CommonRequiredFieldText
+                                        })
+                                    )
+                                    <span class="k-invalid-msg" data-for="txt_OtherPerson_ContactNo_CC"></span>
+                                </div>
+                            </div>
+
+                            @*<div class="col-xs-4">
+                                <div class="rel">
+                                    @(Html.Kendo().TextBox()
+                                        .Name("txt_OtherPerson_ContactNo_AC")
+                                        .HtmlAttributes(new
+                                        {
+                                            @maxlength = "3",
+                                            validmsg = Model.Resources.CommonRequiredFieldText,
+                                            placeholder = Model.Resources.ContactNumberACPlaceholder,
+                                            notnumeric = Model.Resources.Validator_NotNumeric,
+                                            tooltip = Model.Resources.ContactNumberACTooltip,
+                                            tooltipPos = "right"
+                                        })
+                                    )
+                                    <span class="k-invalid-msg" data-for="txt_OtherPerson_ContactNo_AC"></span>
+                                </div>
+                            </div>*@
+
+                            <div class="col-xs-8">
+                                <div class="rel">
+                                    @(Html.Kendo().TextBox()
+                                        .Name("txt_OtherPerson_ContactNo_PN")
+                                        .HtmlAttributes(new
+                                        {
+                                            @maxlength = "15",
+                                            min = "8",
+                                            validmsg = Model.Resources.CommonRequiredFieldText,
+                                            placeholder = Model.Resources.ContactNumberPNPlaceholder,
+                                            notnumeric = Model.Resources.Validator_NotNumericWMinimum,
+                                            tooltip = Model.Resources.ContactNumberPNTooltip,
+                                            tooltipPos = "right"
+                                        })
+                                    )
+                                    <span class="k-invalid-msg" data-for="txt_OtherPerson_ContactNo_PN"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12 col-xs-12">
+        <h2>@Html.Raw(Model.Resources.ConfirmationTitle)</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="sectionShaded bottom-notes">
+        <div class="formWrap clearfix">
+            <div class="col-md-12 clearfix">
+                <div>
+                    <span style="font-weight: normal">@Html.Raw(Model.Resources.PDPALabel1)</span><br /><br />
+                    <span style="font-weight: normal">@Html.Raw(Model.Resources.PDPALabel2)</span>
+                </div>
+            </div>
+
+            <div class="col-md-12 clearfix">
+                <div class="eservice-checkbox">
+                    <input id="chk_SubscribeUpdates" name="chk_SubscribeUpdates" type="checkbox">
+                    <span style="font-weight: normal">&nbsp;@Html.Raw(Model.Resources.MarketingMessagesLabel1)</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="eservice-captcha clearfix field">
+                    <div><label>@Html.Raw(Model.Resources.CAPTCHALabel) <b id="ebcaptchatext"></b></label></div>
+                    <div>
+                        <div class="rel">
+                            @(Html.Kendo().TextBox()
+                                .Name("txt_CaptchaAnswer")
+                                .HtmlAttributes(new
+                                {
+                                    required = "required",
+                                    validmsg = Model.Resources.CommonRequiredFieldText,
+                                    wronganswer = Model.Resources.Validator_InvalidCaptcha,
+                                    @maxlength = "3"
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="txt_CaptchaAnswer"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("hid_FutureHolidays", Model.FutureHolidays)
+@Html.Hidden("hid_FormMode", "appointment")
+@Html.Hidden("hid_DefaultCountryID", Model.DefaultCountryID)
+@Html.Hidden("hid_PreferredTimeSelect", Model.Resources.PreferredTimeSelectAM + "," + Model.Resources.PreferredTimeSelectPM)

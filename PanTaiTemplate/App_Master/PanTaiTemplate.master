@@ -1,0 +1,42 @@
+﻿<%@ Master Language="C#" %>
+<%@ Register Src="~/App_Data/Sitefinity/WebsiteTemplates/PanTaiTemplate/App_Master/InsideHeadTag.ascx" TagPrefix="uc" TagName="InsideHeadTag" %>
+<%@ Register Src="~/App_Data/Sitefinity/WebsiteTemplates/PanTaiTemplate/App_Master/BeforeBodyClosingTag.ascx" TagPrefix="uc" TagName="BeforeBodyClosingTag" %>
+<%@ Register Src="~/App_Data/Sitefinity/WebsiteTemplates/PanTaiTemplate/App_Master/AfterBodyTag.ascx" TagPrefix="uc" TagName="AfterBodyTag" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    
+    <!-- inside head tag -->
+    <uc:InsideHeadTag runat="server" ID="InsideHeadTag" />
+    <!-- inside head tag -->
+      
+
+</head>
+<body class="main-body">
+    <!-- after body tag -->
+     <uc:AfterBodyTag runat="server" ID="AfterBodyTag" />
+    <!-- after body tag -->
+    <form id="form1" runat="server">
+        <div id="wrapper">
+            <div id="header">
+                <asp:contentplaceholder id="headerPlaceholder" runat="server"/>
+            </div>
+            <div id="content">
+	            <asp:contentplaceholder id="contentPlaceholder" runat="server"/>
+            </div>
+	        <div id="footer">
+	            <asp:contentplaceholder id="footerPlaceholder" runat="server" />
+	        </div>
+        </div>
+   </form>
+
+
+    <!-- before body tag-->
+     <uc:BeforeBodyClosingTag runat="server" ID="BeforeBodyClosingTag" />
+    <!-- before body tag-->
+    
+</body>
+</html>

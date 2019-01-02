@@ -1,0 +1,59 @@
+@using SitefinityWebApp.Custom.Code;
+@using Parkway.Core.Utilities;
+@model SitefinityWebApp.Mvc.Models.HomepageHealthPlusArticlesModel
+
+@{
+    string readMore = LocalizationHelper.GetResource("HealthPlus_Homepage_ReadMore", resourcesCulture: Model.CurrentCulture);
+    string readMoreArticles = LocalizationHelper.GetResource("HealthPlus_Homepage_ReadMoreArticles", resourcesCulture: Model.CurrentCulture);
+}
+
+@if (ApplicationConfig.Instance.CurrentSite == "SHTN")
+{
+    <div id="newsslide" class="flexslider">
+        <ul class="news slides">
+            @foreach (var article in Model.Articles)
+            {
+                <li>
+                    <div class="thumb">
+                        <span class="sfImageWrapper">
+                            <a href="@article.FullUrl" title="" class="" target="_blank">
+                                <img class="lazy" src="@article.ThumbnailUrl" alt="@article.ThumbnailAlt" title="@article.ArticleTitle" data-displaymode="Original">
+                            </a>
+                        </span>
+                    </div>
+                    <article class="desc">
+                        <p class="slideCaption">@article.ArticleTitle</p>
+                        <p class="linkNav"><a href="@article.FullUrl" title="@article.ArticleTitle" class="" target="_blank">@Html.Raw(readMore) &#187;</a></p>
+                    </article>
+                </li>
+            }
+        </ul>
+    </div>
+    <h4 class="newsreadmore">
+        <a href="@Html.Raw(Model.HPlusHomepage)" title="@Html.Raw(readMoreArticles)" class="" target="_blank">@Html.Raw(readMoreArticles)</a>
+    </h4>
+}
+else
+{
+    <ul class="news">
+        @foreach (var article in Model.Articles)
+        {
+            <li>
+                <div class="thumb">
+                    <span class="sfImageWrapper">
+                        <a href="@article.FullUrl" title="" class="" target="_blank">
+                            <img class="lazy" src="@article.ThumbnailUrl" alt="@article.ThumbnailAlt" title="@article.ArticleTitle" data-displaymode="Original">
+                        </a><br>
+                    </span>
+                </div>
+                <article class="desc">
+                    <h5><a href="@article.FullUrl" title="@article.ArticleTitle" class="" target="_blank">@article.ArticleTitle</a></h5>
+                    <p><a href="@article.FullUrl" title="@article.ArticleTitle" class="" target="_blank">@Html.Raw(readMore)</a></p>
+                </article>
+            </li>
+        }
+    </ul>
+    <h4 class="text-right">
+        <a href="@Html.Raw(Model.HPlusHomepage)" title="@Html.Raw(readMoreArticles)" class="" target="_blank">@Html.Raw(readMoreArticles)</a>
+    </h4>
+}

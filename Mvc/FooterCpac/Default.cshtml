@@ -1,0 +1,75 @@
+<section class="footer">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav-foot">
+                    <li><a href="@ViewBag.PrefixLanguage/about-us" title="@ViewBag.Resource.AboutUs">@ViewBag.Resource.AboutUs</a></li>
+                    <li><a href="@ViewBag.PrefixLanguage/news-events" title="@ViewBag.Resource.NewsEvents">@ViewBag.Resource.NewsEvents</a></li>
+                    <li><a target="_blank" href="http://www.parkwaypantai.com/newsroom/media_releases/" title="@ViewBag.Resource.Media">@ViewBag.Resource.Media</a></li>
+                    <li><a href="@ViewBag.PrefixLanguage/site-map" title="@ViewBag.Resource.SiteMap">@ViewBag.Resource.SiteMap</a></li>
+                    <li><a href="@ViewBag.PrefixLanguage/terms-conditions" title="@ViewBag.Resource.TermsAndConditions">@ViewBag.Resource.TermsAndConditions</a></li>
+                    @if(ViewBag.PrefixLanguage == "")
+                    {
+                        <li><a href="@ViewBag.PrefixLanguage/terms-conditions#pdpa" title="@ViewBag.Resource.Pdpa">@ViewBag.Resource.Pdpa</a></li>
+                    }
+                </ul>
+                <div class="info-foot">
+                    <p>@ViewBag.CopyRight</p>
+                    <p>@ViewBag.Resource.AllRightsReserved</p>
+                    <p>@ViewBag.Resource.CompanyRegistration</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<section class="nav-m is-mobile">
+    <section class="wrapper">
+        <ul class="detail-nav-m">
+            <li></li>
+            <li></li>
+            <li>
+                <h6>Parkway Hospitals Singapore @ViewBag.Resource.Locations</h6>
+                <p>
+                    <a href="@ViewBag.PrefixLanguage/plan-your-visit/getting-here#collapseOne" title="Mount Elizabeth">Mount Elizabeth</a>
+                    <a href="@ViewBag.PrefixLanguage/plan-your-visit/getting-here#collapseThree" title="Gleneagles">Gleneagles</a>
+                    <a href="@ViewBag.PrefixLanguage/plan-your-visit/getting-here#collapseFour" title="Parkway East">Parkway East</a>
+                </p>
+            </li>
+            <li></li>
+        </ul>
+        <ul class="title-nav-m">
+            <li>
+                <a href="@ViewBag.PrefixLanguage/find-doctor" title="@ViewBag.Resource.FindADoctor" class="btn-inline">
+                    <span class="btn-inner">
+                        <span class="btn-txt">@ViewBag.Resource.Find<br>@ViewBag.Resource.ADoctor</span>
+                        <span class="icon icon-hear"></span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="@ViewBag.PrefixLanguage/make-appointment" title="@ViewBag.Resource.MakeAnAppointment" class="btn-inline">
+                    <span class="btn-inner">
+                        <span class="btn-txt">@ViewBag.Resource.MakeAn<br>@ViewBag.Resource.Appointment</span>
+                        <span class="icon icon-pen"></span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#" title="@ViewBag.Resource.Locations" class="btn-inline">
+                    <span class="btn-inner">
+                        <span class="btn-txt">@ViewBag.Resource.Locations</span>
+                        <span class="icon icon-location"></span>
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="@ViewBag.PrefixLanguage/contact-us" title="@ViewBag.Resource.Contact" class="btn-inline">
+                    <span class="btn-inner">
+                        <span class="btn-txt">@ViewBag.Resource.Contact</span>
+                        <span class="icon icon-phone"></span>
+                    </span>
+                </a>
+            </li>
+        </ul>
+    </section>
+</section>

@@ -1,0 +1,222 @@
+@model SitefinityWebApp.Mvc.Models.WebleadSvcModel
+
+<script type="text/javascript" src="/Sitefinity/WebsiteTemplates/ShentonTemplate/Kendo/js/kendo.custom.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="/Sitefinity/WebsiteTemplates/ShentonTemplate/Kendo/styles/kendo.common.min.css" />
+<link rel="stylesheet" type="text/css" href="/Sitefinity/WebsiteTemplates/ShentonTemplate/Kendo/styles/kendo.default.min.css" />
+
+<style type="text/css">
+    #imageFloaterBig {
+        display: inline-block; margin-left: 15px; background: #fff url(/Mvc/Content/loading/loading.gif) no-repeat center center;
+        background-size: 20px auto; width: 20px; height: 20px; margin-top: 0px;
+    }
+
+    .export-container {
+        position: relative; display: inline-block; vertical-align: middle; font-size: 13px !important;
+        zoom: 1; height: auto !important; min-height: 29px; border: 1px solid #aaa; overflow: hidden;
+        margin: 0; padding: 0; background-color: #fff; font-family: Verdana, Arial, sans-serif;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
+        background-image: -webkit-linear-gradient(#eeeeee 1%, #ffffff 15%);
+        background-image: -moz-linear-gradient(#eeeeee 1%, #ffffff 15%);
+        background-image: -o-linear-gradient(#eeeeee 1%, #ffffff 15%);
+        background-image: linear-gradient(#eeeeee 1%, #ffffff 15%);
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    .ui-widget-overlay.custom-overlay {
+        background-color: #333; background-image: none; opacity: 0.6; z-index: 1040;
+    }
+
+    .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close {
+        right: 6px; top: 16px; text-align: center; vertical-align: middle;
+    }
+
+        .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon-closethick {
+            width: 10px; height: 10px; margin-top: 6px; margin-left: 6px;
+        }
+
+    .ui-dialog-content {
+        font-size: 0.9em;
+    }
+
+    .sfForce-White {
+        color: #fff !important;
+    }
+
+    .p-block {
+        display: inline-block; position: relative;
+    }
+
+    .li-inline {
+        display: inline-block; min-width: 200px; margin-right: 25px; vertical-align: top;
+    }
+
+    .li-inline-50 {
+        display: inline-block; min-width: 120px; margin-right: 25px; vertical-align: top;
+    }
+
+    .sfBordered {
+        border-radius: 4px; border: 1px solid #aaaaaa;
+    }
+
+    .k-grid {
+        font-size: 12px;
+    }
+        .k-grid .k-grid-header {
+            background-color: #e0e0e0;
+        }
+            .k-grid .k-grid-header th {
+                font-weight: bold;
+            }
+                .k-grid .k-grid-header th[end-field="true"], .k-grid .k-grid-header th[data-title="Actions"] {
+                    text-align: center;
+                }
+
+    .modal-loading {
+        display: none; position: fixed; z-index: 1000; top: 0; left: 0; height: 100%; width: 100%; 
+        background: #333 url(/Mvc/Content/loading/loading.gif) 50% 50% no-repeat; opacity: 0.6;
+    }
+
+    body.loading .modal-loading {
+        overflow: hidden; display: block;
+    }
+
+    .sfTitleBtn {
+        text-decoration: none;
+    }
+        .sfTitleBtn:hover {
+            text-decoration: underline;
+        }
+
+    .sfNewContentForm h2 {
+        margin-bottom: 15px; font-size: 19px; color: #000; font-weight: normal; padding: 0;
+        font-family: open_sanssemibold,Arial,Verdana,sans-serif;
+    }
+
+    .sfNewContentForm .sfSeparateFieldCtrl {
+        margin-top: 15px;
+    }
+
+    .sfNewContentForm .sfTxtLbl {
+        font-size: 13px; display: block; cursor: default!important; font-weight: normal; 
+        font-family: open_sanssemibold,Arial,Verdana,sans-serif;
+    }
+
+    .sfNewContentForm p {
+        font-size: 12px; line-height: 1.2; color: #000; font-weight: normal;
+        font-family: open_sansregular,Arial,Verdana,sans-serif;
+    }
+
+    .sfNewContentForm p i.fa-stop {
+        color: #F00;
+    }
+
+    .sfNewContentForm p i.fa-play, .sfNewContentForm p i.fa-check-circle-o {
+        color: #4cb861;
+    }
+
+    .sfFormSeparator{
+        margin-top: 30px;
+    }
+    
+    .svcStart::before{
+        margin-right:5px; font-family:FontAwesome; content: "\f04b";
+    }
+        .svcStart:empty::before{
+            display: none;
+        }
+    .svcStop::before{
+        margin-right:5px; font-family:FontAwesome; content: "\f04d";
+    }
+        .svcStop:empty::before{
+            display: none;
+        }
+    .svcReload::before{
+        margin-right:5px; font-family:FontAwesome; content: "\f021";
+    }
+        .svcReload:empty::before{
+            display: none;
+        }
+    .svcLogs::before{
+        margin-right:5px; font-family:FontAwesome; content: "\f15c";
+    }
+        .svcLogs:empty::before{
+            display: none;
+        }
+
+    .p-error {
+        display: block; position: relative; color: #F00 !important; margin-top: 10px;
+    }
+</style>
+
+<div style="overflow: hidden; display: block; position: relative;">
+    <h1 class="sfBreadCrumb"><span>Scheduled Webleads Task</span></h1>
+    <div class="sfClearfix" style="margin-top: 5px; overflow: hidden; padding-bottom: 40px;">
+        <fieldset class="sfNewContentForm" style="width: 80%; padding: 0 40px 5px; overflow: hidden;">
+            <div id="mainTabs">
+                <ul>
+                    <li><a href="#tabs-1">Scheduled Task</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <h2>Details</h2>
+                    <ul class="sfSettingsSection sfInputFieldsList sfMTop10">
+                        <li class="sfSeparateFieldCtrl"></li>
+                        <li class="sfFieldsToDisplay li-inline">
+                            <label class="sfTxtLbl">Scheduled Task Name</label>
+                            <p id="txt_TaskID">@Model.TaskID</p>
+                        </li>
+                        <li class="sfFieldsToDisplay li-inline-50">
+                            <label class="sfTxtLbl">Status</label>
+                            <p id="txt_StatusNormal">@Model.StatusText_Normal</p>
+                        </li>
+                        <li id="runNowItem" class="sfFieldsToDisplay li-inline-50">
+                            <label class="sfTxtLbl">Status (Run Now)</label>
+                            <p id="txt_StatusRunNow">@Model.StatusText_RunNow</p>
+                        </li>
+                        <li id="li_DateDetailsSepr" class="sfSeparateFieldCtrl"></li>
+                        <li id="li_DateStarted" class="sfFieldsToDisplay li-inline">
+                            <label class="sfTxtLbl">Date Started</label>
+                            <p id="txt_DateStarted">@Model.DateStarted</p>
+                        </li>
+                        <li id="li_LastExecuted" class="sfFieldsToDisplay li-inline">
+                            <label class="sfTxtLbl">Last Time Executed</label>
+                            <p id="txt_LastExecuted">@Model.LastExecuted</p>
+                        </li>
+                        <li id="li_NextExecuted" class="sfFieldsToDisplay li-inline">
+                            <label class="sfTxtLbl">Next Time Scheduled</label>
+                            <p id="txt_NextExecuted">@Model.NextExecuted</p>
+                        </li>
+                    </ul>
+                    <ul style="margin-top: 16px;">
+                        <li class="sfFormSeparator">
+                            <a id="em_btnStart" class="sfLinkBtn sfSave sfForce-White" title="Start Scheduled Task" loading="Please wait..."><span class="sfLinkBtnIn svcStart">Start Scheduled Task</span></a>
+                            <a id="em_btnStop" class="sfLinkBtn sfDelete sfForce-White" title="Stop Scheduled Task" loading="Please wait..."><span class="sfLinkBtnIn svcStop">Stop Scheduled Task</span></a>
+                            <a id="em_btnRunNow" class="sfLinkBtn sfSave sfForce-White" title="Run Scheduled Task Now" loading="Please wait..."><span class="sfLinkBtnIn svcStart">Run Scheduled Task Now</span></a>
+                            <a id="em_btnReload" class="sfLinkBtn" title="Refresh" loading="Please wait..."><span class="sfLinkBtnIn svcReload">Refresh</span></a>
+                            @{bool showDownloads = (bool)ViewBag.IsAdmin;}
+                            @if (showDownloads)
+                            {
+                                <a id="em_btnLogs" class="sfLinkBtn" title="Download Logs" loading="Please wait..." style="float: right;"><span class="sfLinkBtnIn svcLogs">Download Logs</span></a>
+                                <a id="em_btnData" class="sfLinkBtn" title="Download Webleads Data" loading="Please wait..." style="float: right; margin-right: 7px;"><span class="sfLinkBtnIn svcLogs">Download Webleads Data</span></a>
+                            }
+                            <p id="errorText" class="sfError p-error">Error!</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        SetDefaultItems();
+        FieldItemDisplays(@Html.Raw(Model.IsActive.ToString().ToLower() + ", " + Model.IsRunningNow_Normal.ToString().ToLower() + ", " + Model.IsRunningNow_RunNow.ToString().ToLower()));
+    });
+</script>
+<div class="modal-loading"></div>

@@ -1,0 +1,84 @@
+﻿@using System.Web.Optimization
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+<link rel="stylesheet" href="~/Mvc/Content/chosen/chosen.min.css">
+    <div style="">
+        <h1 class="sfBreadCrumb"><span>Enquiry Export</span></h1>
+        <div class="sfClearfix" style="margin-top: 5px">
+            <fieldset class="sfNewContentForm">
+                <div class="sfClearfix">
+                    <div class="sfMainLangVersionWrp">
+                        <div>
+                            <div class="sfForm sfExpandedForm sfFirstForm">
+                                <div class="sfFormIn">
+                                    <div class="sfExpandedTarget">
+                                        <h3 class="sfBreadCrumb" style="color: black"><span>Export Filter</span></h3>
+                                        <ul>
+                                            <li>
+                                                <div class="loading" id="loading" style="display: none;">
+                                                    <img alt="Processing..." src="/Custom/Asserts/Images/loading.gif">
+                                                </div>
+                                            </li>
+
+                                            <li>
+                                                <div id="spnResult" class="sfMessage sfDialogMessage sfMsgPositive sfMsgVisible" style="display: none; background-color: rgb(211, 234, 187);"></div>
+                                            </li>
+
+                                            <li class="sfFormSeparator">
+                                                <span class="sfTxtLbl">Hospital - Language</span>
+                                                <select name="hospital" id="hospital" class="valid">
+                                                    <option value=''>--All Hospitals--</option>
+                                                    <option value='MEH'>MEH</option>
+                                                    <option value='CPAC'>CPAC</option>
+                                                    <option value='GEH'>GEH</option>
+                                                    <option value='PEH'>PEH</option>
+                                                </select>
+                                                <select name="language" id="language" class="valid">
+                                                    <option value=''>--All Languages--</option>
+                                                    <option value='en'>English</option>
+                                                    <option value='zh-SG'>Chinese</option>
+                                                    <option value='id'>Bahasa Indonesia</option>
+                                                    <option value='vi'>Vietnamese</option>
+                                                    <option value='my'>Myanmar</option>
+                                                </select>
+                                            </li>
+                                            <li>
+                                                <span class="sfTxtLbl">Submission Date</span>
+                                                <input id="FromDate" name="FromDate" type="text" readonly="readonly" /> - <input id="ToDate" name="ToDate" type="text" readonly="readonly" />
+                                            </li>
+
+                                            @*<li>
+                                                    <span class="sfTxtLbl">Specialty</span>
+                                                    <input id="Specialty" name="Specialty" class="sfTxt" type="text">
+                                                </li>
+
+                                                <li>
+                                                    <span class="sfTxtLbl">GA Source</span>
+                                                    <input id="GAsource" name="GAsource" class="sfTxt" type="text">
+                                                </li>*@
+
+                                            <li>
+                                                <span class="sfTxtLbl">Country of Residence</span>
+                                                @Html.DropDownList("ResidentialLocation", ViewBag.ResidentialLocation as IEnumerable<SelectListItem>, new { @id = "slNationality", @style = "display:none", multiple = "multiple", data_placeholder = "Select some Countries of Residence" })
+                                            </li>
+
+                                            <li class="sfFormSeparator">
+                                                <span class="sfTxtLbl">Export to Email</span>
+                                                <input id='ExportEmail' name="ExportEmail" type='text' class="sfTxt" />
+                                            </li>
+
+                                            <li class="sfFormSeparator">
+                                                <a class="sfLinkBtn sfSave" title="Export" onclick="Export()"><span class="sfLinkBtnIn Save">Export</span></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundlescript/exportenquiry")

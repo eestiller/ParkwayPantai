@@ -1,0 +1,54 @@
+﻿@model SitefinityWebApp.Mvc.Models.DataModels.C3MSBookingSearchCasesView
+
+@if (Model.OutputRows.Any())
+{
+    <div id="selectActiveCaseList" class="rel">
+        <div class="" id="ddl_PrefTourTimeSlots">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>@Html.Raw(Model.Resource.Display_MaternityBooking_ActiveCasesTitle)</label>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="rel list-6 radioWrap">
+                        @{
+                            int countDisplay = 0;
+                            foreach (var item in Model.OutputRows)
+                            {
+                                string btnID = "rad_ActiveCases_" + (countDisplay + 1).ToString();
+                                if (countDisplay > 0)
+                                {
+                                    @Html.Raw("<br /><br />");
+                                }
+
+                                <label>
+                                    @Html.RadioButton("ActiveCases", item.IdentifierText, false, new { @id = btnID, @class = "enquiryType", required = "required", textreturn = item.IdentifierText })
+                                    @Html.Raw(item.AppointmentDateTime.ToString("dd MMM yyyy, hh:mm tt", new System.Globalization.CultureInfo(Model.CurrentCulture)) + " (" + item.HospitalText + ")")
+                                </label>
+
+                                countDisplay++;
+                            }
+                        }
+
+                        <span class="k-invalid-msg" data-for="ActiveCases" data-valmsg-for="ActiveCases"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.Raw(Model.Resource.Loading_MaternityReschedule_GetFields)
+    </div>
+}
+else
+{
+    <div class="rel">
+        <p style="display: inline-block; word-break: break-word; white-space: normal;">
+            @Html.Raw(Model.Resource.Validator_MaternityBooking_NoActiveCases)
+        </p>
+        @Html.Hidden("hid_NoSelectedItems_Reschedule", "", new
+        {
+        validmsg = Model.Resource.Validator_NoSelectedBookingSlots_Reschedule
+        })
+        <span class="k-invalid-msg" data-for="hid_NoSelectedItems_Cancel" data-valmsg-for="hid_NoSelectedItems_Cancel"></span>
+    </div>
+}

@@ -1,0 +1,42 @@
+@using Kendo.Mvc.UI
+@using SitefinityWebApp.Mvc.Models.DataModels
+
+@model SitefinityWebApp.Mvc.Models.DigitalLibraryImageGalleryModel
+
+<h1>
+    @Html.Raw(Model.FolderTitle)
+</h1>
+
+<script type="text/x-kendo-tmpl" id="digital-library-image-gallery-template">
+    <div class="col-xs-12 col-md-4 vlist">
+
+        <div class="vlist-inner">
+            <div class="wrap-img">
+                @*  *@
+                <img src="#:ThumbnailImageUrl#" alt="#:Title#" class="img-responsive" />
+            </div>
+            <div class="wrap-content">
+                <h3 class="album-title" style="font-weight: bold;">#:Title#</h3>
+            </div>
+        </div>
+    </div>
+</script>
+<div id="divDigitalLibraryImageGallery">
+    @(Html.Kendo().ListView<DigitalLibraryImage>()
+        .Name("DigitalLibraryImageGallery")
+        .TagName("div")
+        .ClientTemplateId("digital-library-image-gallery-template")
+        .DataSource(dataSource =>
+        {
+            dataSource.Read(read => read.Url("/api/DigitalLibraryImageGalleryApi/GetImages").Type(HttpVerbs.Get).Data("DigitalLibraryImageGalleryParams"));
+            dataSource.PageSize(Model.ListSize);
+        })
+        .Events(events => events.DataBound("DigitalLibraryImageGalleryOnDatabound"))
+        .Pageable()
+        .HtmlAttributes(new { @class = "row form-group" })
+        .Deferred()
+    )
+</div>
+@Html.Hidden("hid_FolderId",Model.FolderId)
+
+<script src="@Url.Content("~/Mvc/Scripts/DigitalLibraryImageGallery.js")" type="text/javascript"></script>

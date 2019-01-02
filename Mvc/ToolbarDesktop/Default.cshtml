@@ -1,0 +1,93 @@
+@if (ViewBag.IsNew)
+{
+    <div class="tools-bar is-desktop">
+        <section class="container">
+            <div class="row">
+                @if (ViewBag.IsShowShareButtons || ViewBag.IsShowFontButtons)
+                {
+                    <div class="col-sm-4">
+						<!--
+                        <ul>
+                            @if (ViewBag.IsShowShareButtons)
+                            {
+                                <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                    <a class="addthis_button_whatsapp"><span class="ico ico-whatsapp-sm"></span></a>
+                                </li>
+                                <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                    <a class="addthis_button_facebook"><span class="ico ico-fb-sm"></span></a>
+                                </li>
+                                <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                    <a class="addthis_button_email"><span class="ico ico-email-sm"></span></a>
+                                </li>
+                                <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                    <a class="addthis_button_compact"><span class="ico ico-more-sm"></span></a>
+                                </li>
+                            }
+                        </ul>
+						-->
+                    </div>
+                }
+                <div class="col-sm-8">
+                    <ul>
+                        @if (ViewBag.CurrentSite != Parkway.Core.Utilities.EnumUtil.SiteName.CPAC.ToString() && ViewBag.PrefixLanguage != "/vi" && ViewBag.PrefixLanguage != "/mm")
+                        {
+                            <li><a href="@ViewBag.PrefixLanguage/search-conditions-treatments" title="@ViewBag.SearchConditionsTreatments"><span class="ico ico-book"></span><span>@ViewBag.SearchConditionsTreatments</span></a></li>
+                        }
+                        @if (ViewBag.PrefixLanguage == "/mm")
+                        {
+                            <li class="second"><a href="@ViewBag.PrefixLanguage/make-appointment" title="@ViewBag.Resource.MyanmarHomeMakeAnEnquiryOrAppointment"><span class="ico ico-pen"></span><span>@Html.Raw(ViewBag.Resource.MakeAnEnquiryOrAppointment)</span></a></li>
+                        }
+                        else
+                        {
+                            <li class="second"><a href="@ViewBag.PrefixLanguage/make-appointment" title="@ViewBag.Resource.MakeAnEnquiryOrAppointment"><span class="ico ico-pen"></span><span>@Html.Raw(ViewBag.Resource.MakeAnEnquiryOrAppointment)</span></a></li>
+                        }
+                        <li class="last"><a href="@ViewBag.PrefixLanguage/find-doctor" title="@ViewBag.Resource.FindADoctor"><span class="ico ico-hear"></span><span>@ViewBag.Resource.FindADoctor</span></a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+    </div>
+}
+else
+{
+    <div class="tools-bar is-desktop">
+        <section class="container">
+            <div class="row">
+                @if (ViewBag.IsShowShareButtons || ViewBag.IsShowFontButtons)
+                {
+                    <div class="col-sm-4">
+                        <ul>
+                            @if (ViewBag.IsShowFontButtons)
+                            {
+                                <li><a href="javascript:void(0)" rel=" nofollow" title="A" class="text-big">A</a></li>
+                                <li><a href="javascript:void(0)" rel="nofollow" title="A" class="text-mid">A</a></li>
+                                <li><a href="javascript:void(0)" rel="nofollow" title="A" class="text-sm">A</a></li>
+                                <li><a href="javascript:void(0)" rel="nofollow" title="@ViewBag.Print" class="print"><i class="ico ico-print"></i></a></li>
+                            }
+                            @if (ViewBag.IsShowShareButtons)
+                            {
+                                <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                    <a href="#" class="addthis_button_compact" rel="nofollow" title="@ViewBag.ShareLabel">
+                                        <img src="@ViewBag.ShareIconUrl" alt="@ViewBag.ShareLabel">
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+                <div class="col-sm-8">
+                    <ul>
+                        @if (ViewBag.CurrentSite != Parkway.Core.Utilities.EnumUtil.SiteName.CPAC.ToString() && ViewBag.PrefixLanguage != "/vi"
+                            && ViewBag.PrefixLanguage != "/mm")
+                        {
+                            <li><a href="@ViewBag.PrefixLanguage/search-conditions-treatments" title="@ViewBag.SearchConditionsTreatments"><span class="ico ico-book"></span><span>@ViewBag.SearchConditionsTreatments</span></a></li>
+                        }
+                        <li class="second"><a href="@ViewBag.PrefixLanguage/make-appointment" title="@ViewBag.Resource.MakeAnEnquiryOrAppointment"><span class="ico ico-pen"></span><span>@ViewBag.Resource.MakeAnEnquiryOrAppointment</span></a></li>
+                        <li class="last"><a href="@ViewBag.PrefixLanguage/find-doctor" title="@ViewBag.Resource.FindADoctor"><span class="ico ico-hear"></span><span>@ViewBag.Resource.FindADoctor</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+}

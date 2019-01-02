@@ -1,0 +1,127 @@
+﻿<div style="">
+    <h1 class="sfBreadCrumb"><span>Scheduled Sitemap</span></h1>
+    <div class="sfClearfix" style="margin-top: 5px">
+        <fieldset class="sfNewContentForm">
+            <div class="sfClearfix">
+                <div class="sfMainLangVersionWrp">
+                    <div>
+                        <div class="sfForm sfExpandedForm sfFirstForm">
+                            <div class="sfFormIn">
+                                <div class="sfExpandedTarget">
+                                    <h3 class="sfBreadCrumb" style="color: black"><span>Scheduled Settings</span></h3>
+                                    <ul>
+                                        <li class="sfFormSeparator"></li>
+                                        <li>
+                                            <div class="loading" id="loading" style="display: none;">
+                                                <img alt="Processing..." src="/Custom/Asserts/Images/loading.gif">
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div id="spnResult" class="sfMessage sfDialogMessage sfMsgPositive sfMsgVisible" style="display: none; background-color: rgb(211, 234, 187);"></div>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <a class="sfLinkBtn sfSave" title="Save"><span class="sfLinkBtnIn Save">Save</span></a>
+                                            <a class="sfLinkBtn sfItemTitle sfGoto Run" title="Run Now"><span class="sfLinkBtnIn">Run Now</span></a>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl" id="spnLatestResult"></span>
+                                            <div>@Html.Raw(ViewBag.Result)</div>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Schedule Type - Occurs</span>
+                                            @if (ViewBag.ScheduleType.IndexOf("daily") != -1)
+                                            {
+                                                <input id="daily" type="radio" name="radType" checked="checked" value="daily" /><label for="daily">Daily</label>
+                                            }
+                                            else
+                                            {
+                                                <input id="daily" type="radio" name="radType" value="daily" /><label for="daily">Daily</label>
+                                            }
+                                            @if (ViewBag.ScheduleType.IndexOf("weekly") != -1)
+                                            {
+                                                <input id="weekly" type="radio" name="radType" checked="checked" value="weekly" /><label for="weekly">Weekly</label>
+                                            }
+                                            else
+                                            {
+                                                <input id="weekly" type="radio" name="radType" value="weekly" /> <label for="weekly">Weekly</label>
+                                            }
+                                            @if (ViewBag.ScheduleType.IndexOf("monthly") != -1)
+                                            {
+                                                <input id="monthly" type="radio" name="radType" checked="checked" value="monthly" /> <label for="monthly">Monthly</label>
+                                            }
+                                            else
+                                            {
+                                                <input id="monthly" type="radio" name="radType" value="monthly" /> <label for="monthly">Monthly</label>
+                                            }
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Start at</span>
+                                            <select name="lstStartTime" id="lstStartTime" class="valid">
+                                                @foreach (var t in ViewBag.TimeRange)
+                                                {
+                                                    if (t.Checked)
+                                                    {
+                                                        <option value="@t.Link" selected="selected">@t.Title</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@t.Link">@t.Title</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <span class="" style="margin-left: 5px;margin-right:5px" id="spnCurrentStatus"></span>
+                                            <a class="sfLinkBtn" title="Stop" id="btnStop" onclick="javascript:UpdateSchedule('stop')"><span class="sfLinkBtnIn">Stop Schedule</span></a>
+                                        </li>
+
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Sitemap URL</span>
+                                        </li>
+                                        <li>
+                                            <ul class="site">
+                                                <li>
+                                                    <input id="sitemap-url" class="sfTxt" type="text" value="@ViewBag.Urls">
+                                                </li>
+                                            </ul>
+                                            <div class="sfExample">
+                                                Sitemap url to a comma-separated list
+                                            </div>
+                                        </li>
+                                       
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Notification Emails</span>
+                                            @if (@ViewBag.EnableNotify)
+                                            {
+                                                <input id="radEnableNotify" type="checkbox" name="radEnableNotify" checked="checked" />
+                                            }
+                                            else
+                                            {
+                                                <input id="radEnableNotify" type="checkbox" name="radEnableNotify" />
+                                            }
+                                            <label for="radEnableNotify">Enabled Notify</label>
+                                            <input id="txtNotificationEmail" class="sfTxt" type="text" value="@ViewBag.NotificationEmail" maxlength="150">
+                                            <div class="sfError" id="lblErrorEmail" style="display:none">This field is required!</div>
+                                            <div class="sfExample">
+                                                Email(s) get synchronization result. Email to a comma-separated list
+                                            </div>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <a class="sfLinkBtn sfSave" title="Save"><span class="sfLinkBtnIn Save">Save</span></a>
+                                            <a class="sfLinkBtn sfItemTitle sfGoto Run" title="Run Now"><span class="sfLinkBtnIn">Run Now</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+<script type="text/javascript">
+    var currentStatus = "@Html.Raw(ViewBag.CurrentStatus)";
+    var nextStartDate = "@Html.Raw(ViewBag.NextStartDate)";
+    var startDate = "@Html.Raw(ViewBag.StartDate)";
+    var latestResultFile = "@Html.Raw(ViewBag.LatestResultFile)";
+</script>
+<script type="text/javascript" src="@Url.Content("~/Mvc/Scripts/common/common.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Mvc/Scripts/view/ScheduledSitemap.js")"></script>

@@ -1,0 +1,260 @@
+﻿@using System.Web.Optimization
+<style type="text/css">
+    .fancybox-opened
+    {
+        z-index: 8030;
+    }
+
+    .fancybox-wrap
+    {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 8020;
+    }
+
+    .popup.style-1
+    {
+        padding: 80px 0;
+        font-size: 1em;
+        text-align: center;
+        min-width: 280px;
+    }
+
+    .popup
+    {
+        overflow: hidden;
+        position: relative;
+        display: none;
+    }
+
+    .fancybox-skin
+    {
+        position: relative;
+        background: #d6e4e9;
+        color: #333333;
+        text-shadow: none;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+    }
+
+    .sfEditButton
+    {
+        margin-top: 4px;
+        width: 60px;
+        height: 24px;
+        border-radius: 3px;
+        border: 1px #a5a5a5 solid;
+        color: #fff;
+        text-shadow: 1px 2px 2px #000000;
+        border-color: #285e8e;
+        background: linear-gradient(to bottom, rgba(151,151,151,1) 0%, #4c4c4c 81%, rgba(55,55,55,1) 100%);
+        background-color: black;
+    }
+
+    .sfTmbWrp
+    {
+        display: block;
+        margin-bottom: 5px;
+        width: 95px;
+        height: 95px;
+        overflow: hidden;
+        position: relative;
+        background-image: url('/Sitefinity/WebsiteTemplates/DoctorPortalTemplate/App_Themes/DoctorPortalTheme/Images/ClinicBG.PNG');
+    }
+
+    .sfMediaItemsHolder
+    {
+        margin-bottom: 5px;
+    }
+
+    .sfClearfix
+    {
+        zoom: 1;
+        content: "";
+        display: table;
+    }
+
+    .actionsMenu
+    {
+    }
+
+    .sfAsset
+    {
+        margin: 0 10px 10px 0;
+        padding-bottom: 0;
+        border: 10px solid #fff;
+        background-color: #fff;
+        position: relative;
+        float: left;
+    }
+
+    .sfInlineBlock
+    {
+        display: inline-block;
+        zoom: 1;
+    }
+
+    .sfAsset .sfTmbWrp
+    {
+        display: block;
+        margin-bottom: 5px;
+        width: 115px;
+        height: 137px;
+        border-radius: 6px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    input#shiny
+    {
+        border-radius: 7px;
+        width: 21px;
+        height: 22px;
+        margin: 4px -11px -7px 65px;
+        border: 2px outset #dad9d8;
+        font-family: Andika, Arial, sans-serif;
+        padding-bottom: 20px;
+    }
+        /****NOW STYLE THE BUTTON'S HOVER STATE***/
+        input#shiny:hover, input#shiny:focus
+        {
+            border: 2px solid #dad9d8;
+            /*background: -webkit-linear-gradient(top, #ffae00, #d67600);*/
+        }
+
+    .success
+    {
+        color: blue;
+    }
+
+    .UploadIe {
+        margin-top: 4px;
+        width: 95px;
+        height: 34px;
+        border-radius: 3px;
+        border: 1px #a5a5a5 solid;
+        color: #fff !important;
+        text-shadow: 1px 2px 2px #000000;
+        border-color: #285e8e;
+        background-color: black;
+        background-image: linear-gradient(to bottom,rgba(151,151,151,1) 0%, #4c4c4c 81%, rgba(55,55,55,1) 100%);
+    }
+</style>
+
+@Scripts.Render("~/bundlescript/popuppartial")
+
+<div id="popup-ep9" class="popup style-1" style="display: none;">
+    <h4 id="messageTitle">@Html.Raw(ViewBag.Resource.DoctorThanksYouMessage)</h4>
+    <p id="messageContent" class="style-2">@Html.Raw(ViewBag.Resource.DoctorUpdateSuccessfullyMessage)</p>
+</div>
+<a href="#popup-ep9" id="show_popupSuccess" title="Popup" style="display: none"></a>
+
+<div id="popup-resetpassword" class="popup style-2" style="display: none;">
+    <h4>@Html.Raw(ViewBag.Resource.DoctorChangePasswordLable)</h4>
+    <p>@Html.Raw(ViewBag.Resource.ResetPwdContent)</p>
+    <p class="style-4">
+        <span>
+            <label for="">@Html.Raw(ViewBag.Resource.NewPwdLabel)</label>
+        </span>
+        <span>
+            <input type="password" id="txtNewPass" placeholder="" class="form-control" maxlength="50">
+        </span>
+    </p>
+    <p class="style-4">
+        <span>
+            <label for="">@Html.Raw(ViewBag.Resource.ReNewPwdLabel)</label>
+        </span>
+        <span>
+            <input type="password" id="txtReNewPass" placeholder="" class="form-control" maxlength="50">
+        </span>
+    </p>
+    <p class="style-4">
+        <span></span>
+        <span class="text-left" id="passwordvalidate" style="color: red; display: none; font-size: 14px; padding-left: 10px;"></span>
+    </p>
+    <p class="text-center">
+        <a href="javascript:void(0);" id="btnSubChagngePass" title="Submit" class="btn btn-primary">Submit</a>
+    </p>
+</div>
+
+<div id="popup-resetsuccess" class="popup style-1" style="display: none;">
+    <h4>Change password successfully</h4>
+    <p class="style-2">You can login with new password</p>
+</div>
+<a href="#popup-resetsuccess" id="show_popupresetsuccess" title="Popup" style="display: none">a</a>
+
+@*Popup change Clinic Information*@
+<div id="changeClinicInfo" class="popup style-1" style="display: none; width: 100%; padding: 20px 0;">
+    <p id="message" class="error" style="margin-bottom: 5px;"></p>
+    <select id="ddpClinicItems" onchange="GetClinicInfo();" class="form-control">
+    </select>
+    <p id="clinicItem" style="display: none">
+        <input id="clinicText" readonly="readonly" class="form-control" />
+        @Html.Hidden("hidClinicId")
+    </p>
+    <br />
+    <div id="clinicArea" style="width: auto; height: auto;" class="form-control">
+        <ul id="listClinicPhoto" class="sfMediaItemsHolder sfClearfix actionsMenu clickMenu ui-sortable">
+        </ul>
+    </div>
+    <div id="noClinicPhotoFound" class="error" style="display: none; float: left !important;">No photos found</div>
+    <div id="uploadNonIE" style="margin-top: 25px">
+        <input type="file" name="file_upload" id="uploadClinicPhoto" />
+    </div>
+    @*   Upload File*@
+    <div id="uploadOnIE" style="margin-top: 25px; display: none;">
+        @*<input id ="btnhandleUploadIe" type="button" value="Upload" class="sfEditButton" style="width: 120px; height: 30px;" />*@
+        <input type="file" size="1024" name="file_upload" id="file_upload_Ie" onchange="updateFile(this);" style="width: 30%;" class="filestyle UploadIe" data-input="false" data-buttonText="Upload"/>
+    </div>
+    @*  End Upload File*@
+    <div>
+        <p style="float: left;">*For ultimate presence of clinic photos, please upload photos with ration 6x4.</p>
+    </div>
+</div>
+
+<a href="#changeClinicInfo" id="showChangeClinicInfo" title="Popup" style="display: none">a</a>
+
+<script id="clinicPhoto" type="text/x-jquery-tmpl">
+
+    <li id="" class="sfAsset sfInlineBlock"><span class=""></span>
+        <div class="sfTmbWrp">
+            <input id="shiny" type="submit" value="X" data-value="${Id}" onclick="deleteClinicImage(this);" />
+            <!--the text in the quotes after value will appear on the button-->
+            <img id="" src="${RealImageUrl}" width="95" height="71" style="margin: 5px 10px;">
+        </div>
+    </li>
+</script>
+
+@* Fill Data For Clinic Info*@
+<script id="clinicPhotoMore3" type="text/x-jquery-tmpl">
+    <li style="width: 258px; float: left; display: block;">
+        <a href="${RealImageUrl}" title="Image" class="fancybox-gallery" data-fancybox-group="gallery">
+            <img src="${ThumbnailUrl}" alt="" draggable="false" style="width: 258px; height: 171px;">
+        </a>
+    </li>
+</script>
+
+<script id="clinicPhotosLess3" type="text/x-jquery-tmpl">
+    <li style="width: 258px; float: left; display: block; margin: 0 20px 0 0;">
+        <a class="fancybox-gallery" title="Image">
+            <img src="${ThumbnailUrl}" alt="" style="width: 258px; height: 171px;">
+        </a>
+    </li>
+</script>
+
+<div id="txtElementNull" style="display: none;">@Html.Raw(ViewBag.Resource.DoctorElementNullError)</div>
+<div id="txtEmailNotCorrectFormat" style="display: none;">@Html.Raw(ViewBag.Resource.DoctorEmailWrongFormatError)</div>
+<div id="txtDateOfBirthInvalid" style="display: none;">@Html.Raw(ViewBag.Resource.DoctorDateOfBirthInvaildError)</div>
+<span id="exceptionMessageGeneral" style="display: none;">@Html.Raw(ViewBag.ResourceCommon.ExceptionMessageGeneral)</span>
+<span id="changePwdFail" style="display: none;">@Html.Raw(ViewBag.Resource.ChangePwdFail)</span>
+<span id="pwdRequire" style="display: none;">@Html.Raw(ViewBag.Resource.PwdRequire)</span>
+<span id="pwdMinLenght" style="display: none;">@Html.Raw(ViewBag.Resource.PwdMinLenght)</span>
+<span id="pwdNotMatch" style="display: none;">@Html.Raw(ViewBag.Resource.PwdNotMatch)</span>
+
+
+
+
+
+

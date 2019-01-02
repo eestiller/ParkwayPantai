@@ -1,0 +1,25 @@
+﻿<article class="box-news widget-doctor-qa">
+    <div class="intro">
+        <h2>
+            <a href="@ViewBag.ViewAllUrl" title="@ViewBag.Resource.ViewAllButton" style="text-decoration:none">@ViewBag.Resource.QuestionAnswerDoctor</a>
+        </h2>
+        <p>
+            @ViewBag.Resource.QuestionAnswerDoctorSubmit
+        </p>
+        <a href="@ViewBag.ViewAllUrl" title="@ViewBag.Resource.ViewAllButton">
+            <img src="~/Custom/Asserts/Images/bg-w-doctor-qa.png" alt="@ViewBag.Resource.ViewAllButton" />
+        </a>
+    </div>
+    <ul class="list-doctor-qa">
+        @foreach (var item in Model)
+        {
+            <li class="doctorItem">
+                <a href="@item.DoctorUrl" class="name">@Html.Raw(item.Name)</a>
+                <p class="philosophy">@Html.Raw(item.Philosophy)</p>
+            </li>
+        }
+    </ul>
+    <p class="btn-all">
+        <a href="@ViewBag.ViewAllUrl" title="@ViewBag.Resource.ViewAllButton">@ViewBag.Resource.ViewAllButton</a>
+    </p>
+</article>

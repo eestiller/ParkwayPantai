@@ -1,0 +1,214 @@
+﻿@using Telerik.Sitefinity.Taxonomies.Model
+@using SitefinityWebApp.Mvc.Models.DataModels
+@using SitefinityWebApp.Custom.Helpers
+@model SitefinityWebApp.Mvc.Models.DataModels.Clinic
+
+@{
+    var isOpen = ClinicHelper.IsClinicOpen(Model.Id, Model.Is24Hrs, DateTime.Now);
+    <h3> @Model.Name</h3>
+
+    if (!string.IsNullOrEmpty(Model.Announcements))
+    {
+        <div class="lrow announcement">
+            <p><strong>Announcements:</strong> @Model.Announcements</p><br />
+        </div>
+    }
+
+    <div class="details-view-icons">
+        <div>
+
+            @if (Model.Distance != null)
+            {
+                <span class="list-distance">@Model.DistanceDisplay</span>
+            }
+
+
+            @if (isOpen)
+            {
+                <span class="is_open true"></span><span>Open Now</span>
+            }
+            else
+            {
+                <span class="is_open false"></span><span>Closed</span> <span> @ClinicHelper.ClosingReason(Model.Id, DateTime.Now)</span> 
+            }
+        </div>
+
+    </div>
+    <hr />
+
+    @*if (!string.IsNullOrEmpty(Model.WebImageUrl))
+        {
+            <div class="hidden-xs img-desktop">
+                <img src="@Model.WebImageUrl" alt="@Model.Name" class="img-responsive center" />
+            </div>
+        }
+
+        if (!string.IsNullOrEmpty(Model.MobileImageUrl))
+        {
+            <div class="hidden-sm hidden-md hidden-lg img-mobile">
+                <img src="@Model.MobileImageUrl" alt="@Model.Name" class="img-responsive center" />
+            </div>
+        }*@
+
+    if (Model.WebImageUrls.Any())
+    {
+        <div class="hidden-xs img-desktop">
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators"></ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    @foreach (string url in Model.WebImageUrls)
+                    {
+                        <div class="item @(url == Model.WebImageUrls.First() ? "active" : string.Empty)">
+                            <img src="@url" alt="@Model.Name" class="img-responsive">
+                        </div>
+                    }
+                </div>
+
+                @if (Model.WebImageUrls.Count > 1)
+                {
+                <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    if (Model.MobileImageUrls.Any())
+    {
+        <div class="hidden-sm hidden-md hidden-lg img-mobile">
+            <div id="carousel-example-generic-mobi" class="carousel slide" data-ride="carousel">
+                <!-- Indicators -->
+                <ol class="carousel-indicators"></ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    @foreach (string url in Model.MobileImageUrls)
+                    {
+                        <div class="item @(url == Model.MobileImageUrls.First() ? "active" : string.Empty)">
+                            <img src="@url" alt="@Model.Name" class="img-responsive">
+                        </div>
+                    }
+                </div>
+
+                @if (Model.MobileImageUrls.Count > 1)
+                {
+                <!-- Controls -->
+                    <a class="left carousel-control" href="#carousel-example-generic-mobi" role="button" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-generic-mobi" role="button" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                }
+            </div>
+        </div>
+    }
+
+    <div class="details-other">
+        <div class="lrow clearfix"><strong class="spr-address">Address</strong> <div class="prow">@Model.Address</div></div>
+        <div class="lrow clearfix"><strong class="spr-contact">Contact No</strong><div class="prow"><a href="tel:@Model.ContactNo">@Model.ContactNo</a></div></div>
+        <div class="lrow clearfix"><strong class="spr-nearmrt">Nearest MRT</strong><div class="prow">@Model.NearestMrt</div></div>
+        <div class="lrow clearfix"><strong class="spr-nearbus">Nearest Bus Stop</strong><div class="prow">@Html.Raw(Model.NearestBusStop)</div></div>
+
+        @if (!string.IsNullOrEmpty(Model.TypeTitle))
+        {
+            <div class="lrow clearfix"><strong class="spr-nearbus">Clinic Type</strong> <div class="prow">@Model.TypeTitle</div></div>
+        }
+
+    </div>
+
+
+    <div class="lrow clearfix">
+        <strong class="spr-schedule">Clinic Schedule</strong>
+        <p>
+            @if (!string.IsNullOrEmpty(Model.ClinicScheduleSummary))
+            {
+                @Html.Raw(Model.ClinicScheduleSummary);
+            }
+            else
+            {
+                List<ClinicSchedules> clinicSchedules = ClinicHelper.GetClinicSchedules(@Model.Id, @Model.Is24Hrs);
+                if (clinicSchedules.Any())
+                {
+                    foreach (ClinicSchedules schedule in clinicSchedules)
+                    {
+                        <strong>@schedule.ScheduleLabel: </strong><br /><span>@Html.Raw(schedule.OperatingHoursDisplay)</span><br />
+                    }
+                }
+            }
+        </p>
+    </div>
+
+
+
+    @*List<ClinicSchedules> clinicSchedules = ClinicHelper.GetClinicSchedules(@Model.Id, @Model.Is24Hrs);
+        if (clinicSchedules.Any())
+        {
+            <div class="lrow clearfix">
+                <strong class="spr-schedule">Clinic Schedule</strong>
+                <p>
+                    @foreach (ClinicSchedules schedule in clinicSchedules)
+                    {
+                        <strong>@schedule.ScheduleLabel: </strong><br /><span>@Html.Raw(schedule.OperatingHoursDisplay)</span><br />
+                    }
+                </p>
+            </div>
+        }*@
+
+
+    @*if (Model.ServiceTitles.Any())
+        {
+            <div class="lrow clearfix">
+                <strong class="spr-services">Clinic Services</strong>
+                <p>
+                    @foreach (string title in Model.ServiceTitles)
+                    {
+                        <span>@title</span><br />
+                    }
+                </p>
+            </div>
+        }*@
+
+    if (Model.ServiceTitlesGroupedByParent != null && Model.ServiceTitlesGroupedByParent.Any())
+    {
+        <div class="lrow clearfix">
+            <strong class="spr-services">Clinic Services</strong>
+            <p>
+                @foreach (ClinicServiceTag item in Model.ServiceTitlesGroupedByParent)
+                {
+                    <span>@item.ParentName</span><br />
+                    foreach (string child in item.Children)
+                    {
+                        <span style="margin-left: 10px">@child</span><br />
+                    }
+                }
+            </p>
+        </div>
+    }
+
+    if (Model.Accreditations.Any())
+    {
+        <div class="lrow clearfix accreditation">
+            <h5>Clinic Accreditations</h5>
+            <div>
+                @foreach (Taxon accreditation in Model.Accreditations)
+                {
+                    string accreditationImageUrl = string.Format("/images/librariesprovider2/clinic-accreditations/{0}.png", accreditation.UrlName);
+                    <img src=@accreditationImageUrl alt=@accreditation.Name />
+                }
+            </div>
+        </div>
+    }
+}

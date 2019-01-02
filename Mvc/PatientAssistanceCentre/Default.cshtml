@@ -1,0 +1,117 @@
+@model List<SitefinityWebApp.Mvc.Models.PatientAssistanceCentre>
+
+<style type="text/css">
+    .assistant-centres .announcement{background-color:#FFF8BA;color:#333;padding:15px 20px;margin-top:0px;}
+    .list-13 > li {margin-bottom:25px;}
+    .list-13 > li:last-child {margin-bottom:0px;}
+
+    @@media only screen and (max-width:990px){
+	    .list-13 > li {margin-bottom:0;}
+	    .list-13 > li .row .col-md-6 {margin-bottom:20px;}
+    }
+</style>
+
+@if (Model.Any() && !Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    string hospitalType = ViewBag.HospitalType as string;
+
+    @Html.Raw(hospitalType == "PHS" ? "<div class=\"sfContentBlock\">" : "");
+    <section class="@Html.Raw(hospitalType == "PHS" ? "container " : "")assistant-centres" style="margin-top: 5px;">
+	<div class="row">
+    <div class="col-md-12"><ul class="panel-group" id="accordionPAC">
+    @foreach (SitefinityWebApp.Mvc.Models.PatientAssistanceCentre item in Model)
+    {
+        if (item.CountryCentres.Any())
+        {
+            string itemID = "item_" + item.CountryURL;
+
+            <li class="panel panel-default">
+                <h2 class="panel-heading"><a data-toggle="collapse" data-parent="#accordionPAC" href="#@itemID" title="@item.CountryName" class="collapsed">@item.CountryName</a></h2>
+                <article id="@itemID" class="panel-collapse collapse">
+                    <ul class="list-13">
+                    @{int rowCount = 0;}
+                    @foreach (SitefinityWebApp.Mvc.Models.PatientAssistanceCentreItem office in item.CountryCentres)
+                    {
+                        if (item.CountryCentres.Count() == 1 && office.Title.ToLower().Trim().Contains("standalone"))
+                        {
+                            string announcement = !string.IsNullOrEmpty(office.Announcement) ? "<div class=\"row\"><div class=\"announcement\">" + office.Announcement + "</div></div>" : "";
+                            @Html.Raw("<li>" + office.Details + announcement + "</li>");
+                        }
+                        else
+                        {
+                            if (rowCount % 2 == 0)
+                            {
+                                @Html.Raw("<li><div class=\"row\">");
+                            }
+
+                            <div class="col-md-6">
+                                <address>
+                                    <p><strong>@office.Title</strong></p>
+                                    <div>@Html.Raw(office.Details)</div>
+
+                                    @if (!string.IsNullOrEmpty(office.Announcement))
+                                    {
+                                        <div class="announcement">@Html.Raw(office.Announcement)</div>
+                                    }
+                                </address>
+                            </div>
+
+                            rowCount++;
+                            if (rowCount % 2 == 0 || item.CountryCentres.Count == rowCount)
+                            {
+                                @Html.Raw("</div></li>");
+                            }
+                        }
+                    }
+                    </ul>
+                </article>
+            </li>
+        }
+    }
+    </ul></div>
+    </div>
+	</section>
+    @Html.Raw(hospitalType == "PHS" ? "</div>" : "");
+
+    <script type="text/javascript">
+        $('#accordionPAC').find('h3').each(function (index) {
+            var el = $(this);
+            if (el.html() == '&nbsp') {
+                el.addClass('hideMobile');
+            }
+        });
+
+        $('#accordionPAC .panel-heading').find('a').bind('click', function () {
+            var $t = $(this);
+            var t = setTimeout(function () {
+                $('html, body').animate({
+                    scrollTop: ($t.offset().top - 10)
+                }, 300);
+            }, 500);
+            setTimeout(function () {
+                editheight();
+            }, 500);
+            setTimeout(function () {
+                var slider = $('.flexslider-1').data('flexslider');
+                if (slider) slider.resize();
+            }, 100);
+        });
+
+        $('.panel-direct').on('click', function (event) {
+            event.preventDefault();
+            var tab = $(this).attr("href");
+            $(tab).addClass('in');
+            $(tab).siblings().find('a').addClass('active');
+            $('#accordion li.panel:first-child h2 a').addClass('active');
+            $('#accordionPAC li.panel:first-child h2 a').addClass('active');
+            var ofsettop = $(tab).siblings('h2').height() + 12;
+            $(tab).css('height', 'auto');
+            $('html, body').animate({
+                scrollTop: $(tab).offset().top - ofsettop
+            }, 1000);
+        });
+    </script>
+}
+else if(Telerik.Sitefinity.Services.SystemManager.IsDesignMode){
+    <p>Patient Assistance Centre Widget</p>
+}

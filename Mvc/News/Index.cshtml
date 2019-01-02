@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SitefinityWebApp.Mvc.Models.NewsModel>
+@using Parkway.Core.Utilities
+
+<div class="col-md-12">
+    <h3><a href="@ApplicationConfig.Instance.PrefixLang/news-events" title="@Html.Raw(ViewBag.Resource.NewsAndEventsLabel)">@Html.Raw(ViewBag.Resource.NewsAndEventsLabel)</a></h3>
+</div>
+<div class="col-md-8">
+    <ul class="news">
+        @foreach (var item in Model)
+        {
+            <li>
+                <div class="thumb">
+                    <a href="@item.DetailUrl" title="@item.Tooltip">
+                        <img class="lazy" src="@item.Photos" alt="@item.Photos">
+                    </a>
+                </div>
+                <article class="desc">
+                    <h5><a href="@item.DetailUrl" title="@item.Tooltip">@item.Title</a></h5>
+                    <p><a href="@item.DetailUrl" title="@Html.Raw(ViewBag.Resource.ReadMoreLabel)">@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></p>
+                </article>
+            </li>
+        }
+    </ul>
+    <p class="text-right"><a href="@ApplicationConfig.Instance.PrefixLang/news-events" title="@Html.Raw(ViewBag.Resource.ReadMoreArticlesLabel)">@Html.Raw(ViewBag.Resource.ReadMoreArticlesLabel)</a></p>
+</div>
+
+
+
+

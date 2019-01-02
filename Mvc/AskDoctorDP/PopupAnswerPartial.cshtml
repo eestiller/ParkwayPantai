@@ -1,0 +1,45 @@
+﻿<a id="btnActionPopupEP6" href="#popup-ep6" title="Popup" style="display: none"></a>
+
+<div id="popup-ep6" class="popup style-2 no-padd">
+    <h3 id="AskedByUser"></h3>
+    <p id="questionContent"></p>
+    <h5>@Html.Raw(ViewBag.Resource.AskDoctorYourAnswerLabel)<span id="QuestionPostedDate"></span></h5>
+    <p>
+        <textarea id="txtContentAnswer" name="" placeholder="Please fill your answer."></textarea>
+    </p>
+    <p id="txtMessageError" style="color: red; display: none">You can't leave this empty.</p>
+    <p class="text-center">
+        <a href="javascript:void(0);" id="btnSubmitAnswer" title="Submit" class="btn btn-primary">@Html.Raw(ViewBag.Resource.AskDoctorSubmitLabel)</a>
+    </p>
+    @Html.Hidden("hidQuestionId", string.Empty)
+    @Html.Hidden("hidAnsweredId", string.Empty)
+    @Html.Hidden("answerCode", "")
+    @Html.Hidden("isNew", false)
+    @Html.Hidden("hidSiteName")
+
+</div>
+
+<div id="popup-ep9" class="popup style-1" style="display: none;">
+    <h4 id="messageTitleContent"></h4>
+    <p class="style-2" id="messageContent"></p>
+</div>
+<a href="#popup-ep9" id="btnPopupEP9" title="Popup" style="display: none"></a>
+@*Submit answer form*@
+
+<span id="askedBy" style="display: none;">@Html.Raw(ViewBag.Resource.AskedByLabel)</span>
+<span id="answer" style="display: none;">@Html.Raw(ViewBag.Resource.AnswerLabel)</span>
+<span id="askDoctorPendingLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorPendingLabel)</span>
+<span id="askDoctorRequestUpdateLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorRequestUpdateLabel)</span>
+<span id="askDoctorSubmitLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorSubmitLabel)</span>
+<span id="askDoctorNoLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorNoLabel)</span>
+<span id="askDoctorYesLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorYesLabel)</span>
+<span id="askDoctorResubmitLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorResubmitLabel)</span>
+<span id="askDoctorModeratorCommentLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorModeratorCommentLabel)</span>
+<span id="askDoctorStatusLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorStatusLabel)</span>
+<span id="askDoctorNonewquestionsLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorNonewquestionsLabel)</span>
+<span id="askDoctorTherearenonewquestionsLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorTherearenonewquestionsLabel)</span>
+<span id="askDoctorSubmmitSuccessLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorSubmmitSuccessLabel)</span>
+<span id="askDoctorThanksYouTitle" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorThanksYouTitle)</span>
+<span id="askDoctorElementNullLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorElementNullLabel)</span>
+<span id="askDoctorQuotaErrorLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorQuotaErrorLabel)</span>
+<span id="exceptionMessageGeneral" style="display: none;">@Html.Raw(ViewBag.ResourceCommon.ExceptionMessageGeneral)</span>

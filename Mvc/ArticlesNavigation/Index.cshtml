@@ -1,0 +1,102 @@
+@using SitefinityWebApp.Mvc.Controllers;
+@using SitefinityWebApp.Custom.Code;
+@using Telerik.Sitefinity.Configuration;
+@using SitefinityWebApp.Custom.Configs;
+
+@model ArticlesNavigationViewModel
+
+<nav>
+    <div class="menu-logo">
+        <figure><a href="@Model.LogoNavigateUrl"><img src="/healthplusassets/images/mobile-menu.png" alt="logo"></a></figure>
+    </div>
+
+    <h4 class="">
+        <a href="/" target="_blank">@Html.Raw(Model.BroughtToYouByText)</a>
+    </h4>
+
+    <div class="search-block hidden-lg" id="mobilesearch">
+        <div class="full-seacrh">
+            <input class="field" type="text" value="@Html.Resource("SearchBoxPlaceholder", resourcesCulture: Model.CurrentCulture)"
+                   onkeyup="searchOnEnterMobile(event)"
+                   onclick="if (this.value == '@Html.Resource("SearchBoxPlaceholder", resourcesCulture: Model.CurrentCulture)') { this.value = '' }"
+                   onblur="if (this.value == '') { this.value = '@Html.Resource("SearchBoxPlaceholder", resourcesCulture: Model.CurrentCulture)' }">
+            <button class="search-icon arrow-search" type="button" onclick="searchMobile()">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
+
+    <ul class="clearfix desktop-only">
+        @foreach (var item in Model.DesktopMenuItems)
+        {
+            <li><a href="@item.Url">@item.Title</a></li>
+        }
+        <li class="menuitem-popular"><a href="#">@Html.Resource("MenuItemPopular", resourcesCulture: Model.CurrentCulture)</a></li>
+        <li class="menuitem-a2z"><a href="#">@Html.Resource("MenuItemA2Z", resourcesCulture: Model.CurrentCulture)</a></li>
+    </ul>
+
+    <ul class="clearfix mobile-only">
+        @if (!Model.ResponsiveMenuItemLanguages.IsNullOrEmpty())
+        {
+            <li class="menuitem-languages">
+                <a href="#">@Html.Resource("MasterpageMenuLabel_Languages", resourcesCulture: Model.CurrentCulture)</a>
+            </li>
+        }
+        @foreach (var item in Model.ResponsiveMenuItems)
+        {
+            <li>
+                <a href="@item.Url">@item.Title</a>
+            </li>
+        }
+        <li class="menuitem-popular"><a href="#">@Html.Resource("MenuItemPopular", resourcesCulture: Model.CurrentCulture)</a></li>
+        <li class="menuitem-a2z"><a href="#">@Html.Resource("MenuItemA2Z", resourcesCulture: Model.CurrentCulture)</a></li>
+    </ul>
+</nav>
+<nav id="menu-popular">
+    <ul>
+        <li class="menuitem-back"><a href="#">@Html.Resource("MenuItemBack", resourcesCulture: Model.CurrentCulture)</a></li>
+        @foreach (var item in Model.TagsByPopularity)
+        {
+            <li><a href="@item.Url">@Html.Raw(item.Title + (item.Title != item.Title_En ? " (" + item.Title_En + ")" : ""))</a></li>
+        }
+    </ul>
+</nav>
+<nav id="menu-a2z">
+    <ul>
+        <li class="menuitem-back"><a href="#">@Html.Resource("MenuItemBack", resourcesCulture: Model.CurrentCulture)</a></li>
+        @foreach (var item in Model.TagsByPopularity.OrderBy(a => a.Title_En))
+        {
+            <li><a href="@item.Url">@Html.Raw(item.Title + (item.Title != item.Title_En ? " (" + item.Title_En + ")" : ""))</a></li>
+        }
+    </ul>
+</nav>
+@if (!Model.ResponsiveMenuItemLanguages.IsNullOrEmpty())
+{
+    <nav id="menu-languages">
+        <ul>
+            <li class="menuitem-back"><a href="#">@Html.Resource("MenuItemBack", resourcesCulture: Model.CurrentCulture)</a></li>
+            @Html.Raw(Model.ResponsiveMenuItemLanguages)
+        </ul>
+    </nav>
+}
+
+<script type="text/javascript">
+    function searchMobile() {
+        var query = $("#mobilesearch input").val();
+        query = htmlEncode(query);
+
+        if (query && query != '@Html.Resource("SearchBoxPlaceholder", resourcesCulture: Model.CurrentCulture)') {
+            location.href = '@Html.Raw(Model.SearchResultsBaseUrl)?hplusq=' + query;
+        }
+    }
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function searchOnEnterMobile(e) {
+        if (e.keyCode == 13) {
+            searchMobile();
+        }
+    }
+</script>

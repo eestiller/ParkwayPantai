@@ -1,0 +1,29 @@
+@model SitefinityWebApp.Mvc.Models.HealthArticlesHomePageModel
+
+<h3><a href="javascript:void(0)" title="Health Articles" id="lblTitle">@Html.Raw(ViewBag.Resource.HealthArticlesLabel)</a></h3>
+<ul class="news" id="listArticle">
+</ul>
+<p class="text-right"><a href="javascript:void(0)" title="View All" id="btnViewAll">@Html.Raw(ViewBag.Resource.ViewAllButton)</a></p>
+<script id="articleItem" type="text/x-jquery-tmpl">
+    <li>
+        <div class="thumb-img">
+            <a href="${ArticleUrl}" title="${ArticleTitle}" target="_blank">
+                <img class="lazy" data-original="${ArticleImage}" alt="${ArticleTitle}" src="${ArticleImage}"/></a>
+        </div>
+        <article class="desc">
+            <h5><a href="${ArticleUrl}" title="${ArticleTitle}" target="_blank">${ArticleTitle}</a></h5>
+            <p><a href="${ArticleUrl}" title="@Html.Raw(ViewBag.Resource.ReadMoreLabel)" target="_blank">@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></p>
+        </article>
+    </li>
+</script>
+
+<script>
+    var pageId = "@Html.Raw(ViewBag.PageId)";
+    var editKey = "@Html.Raw(ViewBag.SitefinityUrlEditKey)";
+    var templateKey = "@Html.Raw(ViewBag.SitefinityUrlTemplateKey)";
+    var listAPI = "@Html.Raw(ViewBag.ListAPI)";
+</script>
+
+<script type="text/javascript" src="@Url.Content("~/Mvc/Scripts/common/common.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Mvc/Scripts/lib/jquery.tmpl.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Mvc/Scripts/view/HealthArticlesHomPage.js")"></script>

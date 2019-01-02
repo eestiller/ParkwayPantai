@@ -1,0 +1,78 @@
+﻿@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.QuestionDetailsModel
+<h1 class="title">@Html.Raw(Model.Resource.AskDoctorTitle)</h1>
+<div class="form-group">
+    @if (!string.IsNullOrEmpty(Model.SpecialtyPageUrl))
+    {
+        <a href="@Model.SpecialtyPageUrl" title="@Html.Raw(Model.Resource.AskDoctorLabel)" class="btn btn-primary">@Html.Raw(Model.Resource.AskDoctorLabel)</a>
+    }
+    else
+    {
+        <a href="javascript:void(0);" title="@Html.Raw(Model.Resource.AskDoctorLabel)" class="btn btn-primary">@Html.Raw(Model.Resource.AskDoctorLabel)</a>
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <span id="AreaQuestionDetailsMessage" style="display: none;">
+            @Html.Raw(Model.Resource.AskDoctorNoQuestionFoundMessage)
+    </span>
+</div>
+<div id="AreaQuestionDetails" class="col-md-12 margin-1">
+</div>
+</div>
+
+<script id="question" type="text/x-jquery-tmpl">
+    <div class="post-main">
+        <div class="post-content">
+            <h4>${Content}</h4>
+            <p><strong>@Html.Raw(Model.Resource.AskedByLabel)</strong> <span class="style-2"> ${AskedBy} </span> <span>${PostedDate}</span></p>
+            <ul id='detailSpecialty' class='style-2'>
+                <li><a id="pageTitleUrl" href='${ConditionPageLink}' title='${PageTitle}'>${PageTitle}</a></li>
+            </ul>
+            <p class="style-2"><a href="#" title="@Html.Raw(Model.Resource.AskDoctorDisclaimerLabel)">@Html.Raw(Model.Resource.AskDoctorDisclaimerLabel)</a></p>
+            <div class="fck">
+                @Html.Raw(Model.Disclaimer)
+            </div>
+        </div>
+        <div class='post-sub' questionid="${Id}">
+        </div>
+    </div>
+</script>
+
+<script id="answer" type="text/x-jquery-tmpl">
+    <div class='post-sub-content'>
+        <div class='thumb'>
+            <a href="${DoctorUrl}" title="${DoctorName}">
+                <img src='${Photo}' alt="Dr ${DoctorName}">
+            </a>
+        </div>
+        <div class='detail'>
+            <h6>
+                <a href='${DoctorUrl}' style='text-decoration: none;'>${DoctorName}</a>
+                <div class="specialties" answertid="${AnswerId}" doctorid="${DoctorId}">
+                </div>
+            </h6>
+            <p class='style-3'>${RepliedDate}</p>
+            <p>${Content}</p>
+        </div>
+    </div>
+    <p class="style-2"><a href="#" title="@Html.Raw(Model.Resource.AskDoctorDisclaimerLabel)">@Html.Raw(Model.Resource.AskDoctorDisclaimerLabel)</a></p>
+    <div class="fck">
+        @Html.Raw(Model.Disclaimer)
+    </div>
+</script>
+
+<script id="specialtiesList" type="text/x-jquery-tmpl">
+    {{if Link}}
+    <span><a href="${Link}" style="text-decoration: none;">${Title}</a></span>
+    <br />
+    {{else}}
+    <span>${Title}</span>
+    {{/if}}
+</script>
+
+@Scripts.Render("~/bundlescript/questiondetails")
+<script type="text/javascript">
+    var questionId = "@Model.QuestionId";
+</script>

@@ -1,0 +1,17 @@
+﻿@model IEnumerable<SitefinityWebApp.Mvc.Models.NewsModel>
+@using Parkway.Core.Utilities
+<section class="container list-news">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3">
+                <div class="news-item">
+                    <a href="@item.DetailUrl" title="@item.Tooltip">
+                        <img class="lazy" data-original="@item.Photos" alt="@item.Photos"></a>
+                    <h4><a href="@item.DetailUrl" title="@item.Tooltip" >@item.Title</a></h4>
+                    <p>@item.Summary</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,48 @@
+@using System.Web.Optimization
+<p class="text-right">
+    <span id="info_result"></span>
+</p>
+
+<ul id="divList" class="list-item style-2"></ul>
+<ul class="paging" style="display: none">
+    <li id="page-first"><a href="#" title="|&lt;&lt;">|&lt;&lt;</a></li>
+    <li id="page-previous"><a href="#" title="&lt; Previous">&lt; Previous</a></li>
+    <li id="page-next"><a href="#" title="Next >">Next &gt;</a></li>
+    <li id="page-last"><a href="#" title="&gt;&gt;|">&gt;&gt;|</a></li>
+</ul>
+
+<script id="chdClinic" type="text/x-jquery-tmpl">
+    <li>
+        <div class="thumb">
+            <a href="${PhotoBig}" title="${Title}" class="fancybox-gallery">
+                <img src="${Photo}" alt="${Title}">
+            </a>
+        </div>
+        <div class="desc">
+            <h4>
+                <a href="${PhotoBig}" title="${Title}" class="fancybox-gallery">${Title}</a>
+            </h4>
+            <p class="shortdescription">${ShortDescription}</p>
+        </div>
+    </li>
+</script>
+<script id="chdClinicYoutube" type="text/x-jquery-tmpl">
+    <li>
+        <div class="thumb">
+            <a class="fancybox-media" href="${YoutubeLink}" title="${Title}">
+                <img src="${Photo}" alt="${Title}" />
+                <span class="icon-play"></span>
+            </a>
+        </div>
+        <div class="desc">
+            <h4>
+                <a class="fancybox-media" href="${YoutubeLink}" title="${Title}">${Title}</a>
+            </h4>
+            <p class="shortdescription">${ShortDescription}</p>
+        </div>
+    </li>
+</script>
+
+@Scripts.Render("~/bundlescript/media")
+
+

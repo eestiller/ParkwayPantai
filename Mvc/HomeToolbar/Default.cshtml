@@ -1,0 +1,21 @@
+<ul>
+    <li>
+        <a href='@ViewBag.PrefixLanguage/find-doctor'><i class="ico ico-hear"></i><span>@ViewBag.Resource.FindADoctor</span></a>
+    </li>
+    <li>
+        @if (ViewBag.PrefixLanguage == "/mm")
+        {
+            <a href='@ViewBag.PrefixLanguage/make-appointment'><i class="ico ico-pen"></i><span>@ViewBag.Resource.MyanmarHomeMakeAnEnquiryOrAppointment</span></a>
+        }
+        else
+        {
+            <a href='@ViewBag.PrefixLanguage/make-appointment'><i class="ico ico-pen"></i><span>@ViewBag.Resource.MakeAnEnquiryOrAppointment</span></a>
+        }
+    </li>
+    @if (ViewBag.CurrentSite != Parkway.Core.Utilities.EnumUtil.SiteName.CPAC.ToString() && ViewBag.PrefixLanguage != "/vi" && ViewBag.PrefixLanguage != "/mm")
+    {
+        <li>
+            <a href='@ViewBag.PrefixLanguage/search-conditions-treatments'><i class="ico ico-book"></i><span>@ViewBag.Resource.SearchConditionsTreatments</span></a>
+        </li>
+    }
+</ul>

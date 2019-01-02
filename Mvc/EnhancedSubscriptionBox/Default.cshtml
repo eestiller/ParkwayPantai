@@ -1,0 +1,172 @@
+@model SitefinityWebApp.Mvc.Models.EnhancedSubscriptionBoxViewModel
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    if (Model.ShowFields)
+    {
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+        <style type="text/css">
+            /* Subscription Box */
+            .enhSubscription-overlay {
+                position: fixed; right: 0; bottom: 5px; z-index: 99999; display: none; padding: 0 5px; width: 100%; max-width: 420px;
+            }
+
+                .enhSubscription-overlay.thanks {
+                    max-width: inherit; top: 0; left: 0; top: 32vh; bottom: auto;
+                }
+
+                    .enhSubscription-overlay.thanks .enhSubscription-wrap {
+                        box-border: 0px 3px 4px rgba(0,0,0,0.4);
+                    }
+
+            .enhSubscription {
+                background-color: #FFF; margin: 0 auto 0; text-align: center; border-radius: 5px; padding: 20px 0 20px;
+                max-width: 420px; position: relative; box-shadow: 0 0 6px rgba(0,0,0,0.2);
+            }
+
+                .enhSubscription * {
+                    font-family: Lato,sans-serif;
+                }
+
+                .enhSubscription .enhSubscription-wrap {
+                    padding: 0;
+                }
+
+                .enhSubscription .ehsSubscriptionLogo {
+                    /* background: url(/healthplus/images/enhsubscription-icon.png) no-repeat center center; */
+                    display: block; height: 45px; clear: both; background-size: auto 100%; margin: 5px 0 10px;
+                }
+
+                .enhSubscription #SubsBox_Display > h2 {
+                    color: #0F7DA3; font-size: 24px; font-family: 'Lato',sans-serif; font-weight: bold; margin-top: 0px;
+                }
+
+                .enhSubscription #SubsBox_Display > p {
+                    font-size: 13px; margin-bottom: 10px; line-height: 23px; color: #9b9b9b;
+                }
+
+                .enhSubscription .formInput {
+                    margin-bottom: 15px;
+                }
+
+                    .enhSubscription .formInput #email {
+                        display: inline-block; vertical-align: middle; border-radius: 4px; border: solid 1px #E2E2E2;
+                        padding: 4px 6px; height: 32px; margin: 0; width: 220px; color: #333; font-size: 12px;
+                    }
+
+                    .enhSubscription .formInput #btnSubmit {
+                        display: inline-block; vertical-align: middle; border-radius: 4px; background: #0F7DA2;
+                        color: #FFF; padding: 0px 22px; margin: 0; box-shadow: none; border: 0; height: 32px;
+                        margin-left: 4px; font-size: 12px;
+                    }
+
+                        .enhSubscription .formInput #btnSubmit:hover {
+                            background: #0A617E;
+                        }
+
+                        .enhSubscription .formInput #btnSubmit:disabled {
+                            background: url(/Mvc/Content/loading/loading.gif) no-repeat center #ffffff;
+                            background-size: 20px auto; color: transparent;
+                        }
+
+                .enhSubscription .error-block {
+                    font-size: 12px; color: #ff0000; max-width: 340px; margin: 0 auto; padding: 0 10px;
+                    line-height: 18px; display: none;
+                }
+
+                .enhSubscription .enSubsterms {
+                    font-style: italic; font-size: 12px; color: #333333; margin-bottom: 10px; max-width: 340px;
+                    margin: 0 auto; padding: 0 10px; line-height: 18px;
+                }
+
+                    .enhSubscription .enSubsterms a {
+                        color: #333333; text-decoration: underline;
+                    }
+
+                .enhSubscription .enhSubsClose {
+                    display: inline-block; position: absolute; top: 0; right: 8px; font-size: 30px;
+                    background-color: transparent; border: 0; font-weight: bold; color: #000;
+                    line-height: 30px; padding: 0;
+                }
+
+                    .enhSubscription .enhSubsClose:hover {
+                        color: #666;
+                    }
+
+                .enhSubscription #SubsBox_ThankYou {
+                    padding: 20px 5px 30px;
+                }
+
+                    .enhSubscription #SubsBox_ThankYou > h2 {
+                        color: #0F7DA3; margin-bottom: 5px; font-size: 30px; margin-top: 10px;
+                    }
+
+                    .enhSubscription #SubsBox_ThankYou > p {
+                        font-size: 15px;
+                    }
+
+            .sfPageEditor .enhSubscription {
+                margin: 0;
+            }
+
+            .sfPageEditor .enhSubscription-overlay {
+                position: relative; display: block;
+            }
+        </style>
+
+        <div class="enhSubscription-overlay">
+            <div class="enhSubscription-wrap">
+                <div class="enhSubscription">
+                    <button class="enhSubsClose" type="button" title="Close">&times;</button>
+                    <div id="SubsBox_Display">
+                        @if (!string.IsNullOrEmpty(ViewBag.SubscriptionImageURL))
+                        {
+                            <span class="ehsSubscriptionLogo" style="background: url(@Html.Raw(ViewBag.SubscriptionImageURL)) no-repeat center center;"></span>
+                        }
+
+                        <h2>@Html.Raw(ViewBag.LabelTitle)</h2>
+                        <p>@Html.Raw(ViewBag.LabelSubTitle)</p>
+                        <div class="formInput">
+                            <div class="clearfix">
+                                <input type="text" id="email" placeholder="@Html.Raw(ViewBag.LabelEmailPlaceholder)"
+                                       data-required-error="@Html.Raw(ViewBag.ValidLabelEmailRequired)" required maxlength="100"
+                                       data-pattern-error="@Html.Raw(ViewBag.ValidLabelEmailInvalid)" pattern="^(?:([^]+[^]+\.[a-zA-Z]{2,6}))$">
+                                <input type="button" id="btnSubmit" value="@Html.Raw(ViewBag.LabelSubmitButton)" defvalue="@Html.Raw(ViewBag.LabelSubmitButton)">
+                            </div>
+                            <div id="errorMsg" class="error-block"></div>
+                        </div>
+                        <div class="enSubsterms">@Html.Raw(ViewBag.LabelPDPA)</div>
+                    </div>
+                    <div id="SubsBox_ThankYou" class="enhSubsMessage">
+                        <h2>@Html.Raw(ViewBag.LabelThankYouTitle)</h2>
+                        <p>@Html.Raw(ViewBag.LabelThankYouSubTitle)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Html.Hidden("hid_SubscriptionDisplay", Model.SubscriptionDisplay)
+        @Html.Hidden("hid_FormID", Model.FormID)
+        @Html.Hidden("hid_FormField", Model.FormField)
+        @Html.Hidden("hid_FormFieldURL", Model.FormFieldURL)
+        @Html.Hidden("hid_AckEmailTemplateID", Model.AcknowledgeEmailTemplateID)
+        @Html.Hidden("hid_AcknowledgeEmailSender", Model.AcknowledgeEmailSender)
+        @Html.Hidden("hid_AdminEmailTemplateID", Model.AdminEmailTemplateID)
+        @Html.Hidden("hid_AdminEmailRecipients", Model.AdminEmailRecipients)
+        @Html.Hidden("hid_BasicErrorMessageLong", ViewBag.ErrorMessage as string)
+        @Html.Hidden("hid_SiteID", ViewBag.SiteID as string)
+        @Html.Hidden("hid_MailingListID", ViewBag.MailingListID as string)
+
+        <script src="~/Mvc/Scripts/lib/mobile-detect.min.js"></script>
+        <script src="~/Mvc/Scripts/EnhancedSubscriptionsBox.js?v=5.0"></script>
+    }
+    else
+    {
+        string itemError = ViewBag.ExceptionMessage as string;
+        @Html.Raw(!string.IsNullOrEmpty(itemError) ? "<span id=\"enhSubsError\" style=\"display: none;\">" + itemError + "</span>" : "");
+    }
+}
+else
+{
+    <span>Enhanced Subscription Form</span>
+}

@@ -1,0 +1,108 @@
+﻿@using System.Web.Optimization
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<style>
+    ul#site li {
+        display: inline;
+        padding: 5px;
+    }
+
+    ul#section li {
+        display: inline;
+        padding: 5px;
+    }
+
+    ul#language li {
+        display: inline;
+        padding: 5px;
+    }
+</style>
+<div style="">
+    <h1 class="sfBreadCrumb"><span>Update Session</span></h1>
+    <div class="sfClearfix" style="margin-top: 5px">
+        <fieldset class="sfNewContentForm">
+            <div class="sfClearfix">
+                <div class="sfMainLangVersionWrp">
+                    <div>
+                        <div class="sfForm sfExpandedForm sfFirstForm">
+                            <div class="sfFormIn">
+                                <div class="sfExpandedTarget">
+                                    <h3 class="sfBreadCrumb" style="color: black"><span>Update Session</span></h3>
+                                    <ul>
+                                        <li>
+                                            <div class="loading" id="loading" style="display: none;">
+                                                <img alt="Processing..." src="/Custom/Asserts/Images/loading.gif">
+                                            </div>
+                                        </li>
+
+                                        <li>
+                                            <div id="spnResult" class="sfMessage sfDialogMessage sfMsgPositive sfMsgVisible" style="display: none; background-color: rgb(211, 234, 187);"></div>
+                                        </li>
+
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl" style="float: left;">Section: </span>
+                                            <ul id="section" style="margin-left: 80px;">
+                                                <li>
+                                                    <input type="checkbox" name="navigation" value="navigation"> Navigation
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="footer" value="footer"> Footer
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <span class="sfTxtLbl" style="float: left;">Site: </span>
+                                            <ul id="site" style="margin-left: 80px;">
+                                                <li>
+                                                    <input type="checkbox" name="MEH" value="MEH"> MEH
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="GEH" value="GEH"> GEH
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="PEH" value="PEH"> PEH
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="CPAC" value="CPAC"> CPAC
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="DPP" value="DPP"> DPP
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <span class="sfTxtLbl" style="float: left;">Language: </span>
+                                            <ul id="language" style="margin-left: 80px; ">
+                                                <li>
+                                                    <input type="checkbox" name="en" value="en"> English
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="zh-SG" value="zh-sg"> Chinese
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="id" value="id"> Bahasa Indonesia
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="vi" value="vi"> Vietnamese
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" name="my" value="my"> ဗမာ
+                                                </li><br/>
+						<li>
+                                                    <input type="checkbox" name="ru" value="ru"> Russian
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <a class="sfLinkBtn sfSave" title="Update" onclick="UpdateSession()"><span class="sfLinkBtnIn Save">Update</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+@Scripts.Render("~/bundlescript/updatesession")

@@ -1,0 +1,85 @@
+@using SitefinityWebApp.Custom.Code;
+
+@model SitefinityWebApp.Mvc.Models.PersonaliseControllerViewModel
+
+<div class="personal-details">
+    <h5><i class="fa fa-user" aria-hidden="true"></i>@Html.Resource("Personalise", resourcesCulture: Model.CurrentCulture)</h5>
+    <div class="steps-holder">
+        <ul class="bx-steps" style="display:none;">
+        </ul>
+    </div>
+    <div class="redo-step" style="display:none;">
+        <h4>@Html.Raw(Html.Resource("RedoQuestions", resourcesCulture: Model.CurrentCulture))</h4>
+        <div class="step-buttons clearfix">
+            <a class="butt active" onclick="redo(event);"><span>@Html.Resource("Redo", resourcesCulture: Model.CurrentCulture)</span></a>
+        </div>
+    </div>
+    <span class="cookie-link"><a href="@Html.Raw(Model.CookiePolicyUrl)" target="_blank">@Html.Resource("CookiePolicy", resourcesCulture: Model.CurrentCulture)</a></span>
+</div>
+
+@if (Model.IncludeCommonScripts)
+{
+    <script type="text/template" id="outer-tpl">
+        <% _.each(data, function(question) { %>
+        <li class="q">
+            <section class="our-personals step1 clearfix redo-step">
+                <h4><%= question.Title %></h4>
+                <% if(question.Answers.length > 0) { %> 
+                <ul class="ul-question">
+                    <% _.each(question.Answers, function(answer) { %>
+                    <li>
+                        <div class="radio-buttons <%= answer.Css %>">
+                            <input id='<%= answer.Synonym %>' class="chk" name='<%= answer.Synonym %>' type="radio" data-id='<%= answer.Synonym.replace("=", "equals") %>'
+                                   value='<%= answer.Synonym %>' onclick="onAnswer(this, '<%= answer.Synonym %>')" />
+                            <label for='<%= answer.Synonym %>'><%= answer.Title %></label>
+                        </div>
+                    </li>
+                    <% }); %>
+                </ul>
+                <% } %>
+                <% if(question.Synonym == "REDO") { %> 
+                <div class="step-buttons clearfix">
+                    <a class="butt active" onclick="redo(event);"><span>@Html.Resource("Redo", resourcesCulture: Model.CurrentCulture)</span></a>
+                </div>
+                <% } %>
+            </section>
+        </li>
+        <% }); %>
+    </script>
+
+    <script type="text/template" id="redo-tpl">
+        <li class="q redo">
+            <section class="our-personals step1 clearfix">
+                <h4>@Html.Raw(Html.Resource("RedoQuestions", resourcesCulture: Model.CurrentCulture))</h4>
+                <ul class="ul-question">
+                    <li>
+                        <div class="radio-buttons"></div>
+                        <div class="step-buttons clearfix">
+                            <a class="butt active" onclick="redo(event);"><span>@Html.Resource("Redo", resourcesCulture: Model.CurrentCulture)</span></a>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+        </li>
+    </script>
+
+    <script>
+        var persCookieName = '@PersonalizationHelper.PERSONALIZATION_COOKIE_NAME';
+        var persCriteria = ['@CustomFieldNameHPlus.PersData_Gender', '@CustomFieldNameHPlus.PersData_Age', '@CustomFieldNameHPlus.PersData_PatientCaregiver',
+                            '@CustomFieldNameHPlus.PersData_Exercise', '@CustomFieldNameHPlus.PersData_FamilyHistoryCancer',
+                            '@CustomFieldNameHPlus.PersData_HaveChildren', '@CustomFieldNameHPlus.PersData_HealthInsurance',
+                            '@CustomFieldNameHPlus.PersData_Smoker', '@CustomFieldNameHPlus.PersData_Weight', 'REDO'];
+
+        var cookie_expireDays = @PersonalizationHelper.Number_Of_Years_To_Keep_Cookie * 365;
+
+        var $persData = $(@Html.Raw(Model.PersonalisationData));
+        var $persDataOrig = $persData;
+        var $stepsParent = $('ul.bx-steps');
+        var sliderSettings = {auto: false,pager: false};
+
+        var localStorageKey = "lastPersQ";
+
+        var arrAnswered = [];
+        var arrNotAnswered = [];
+    </script>
+}

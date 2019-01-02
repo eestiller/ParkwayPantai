@@ -1,0 +1,16 @@
+﻿@model IEnumerable<SitefinityWebApp.Mvc.Models.DataModels.HealthPackage>
+
+<h3 class="health-package-header">We Recommend:</h3>
+@foreach (var package in Model)
+{
+    <div class="package-list col-md-6">
+        <h4>@package.Title</h4>
+        <strong class="price">@package.DisplayPrice <span>(Inclusive of GST)</span></strong>
+        <p>@Html.Raw(@package.ShortDesc)</p>
+        <button name="PackageDetails" class="package-details" type="button" value="@package.Id||@package.DetailsPageUrl">Learn More <span class=" glyphicon glyphicon-menu-right"></span></button>
+        @if (!string.IsNullOrEmpty(package.EhsFormUrl))
+        {
+            <a href='@package.EhsFormUrl'>Book Now <span class=" glyphicon glyphicon-menu-right"/></a>
+        }
+    </div>
+}

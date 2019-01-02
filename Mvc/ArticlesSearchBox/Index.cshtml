@@ -1,0 +1,30 @@
+@model SitefinityWebApp.Mvc.Controllers.ArticlesSearchBoxViewModel
+
+<div class="full-seacrh" id="desktopsearch">
+    <input class="field" type="text" value="@Html.Raw(Model.SearchResultsPlaceholder)" 
+           onkeyup="searchOnEnter(event)"
+           onclick="if (this.value == '@Html.Raw(Model.SearchResultsPlaceholder)') { this.value = '' }" 
+           onblur="if (this.value == '') { this.value = '@Html.Raw(Model.SearchResultsPlaceholder)' }">
+    <button class="search-icon arrow-search" type="button" onclick="search()"><i class="fa fa-angle-right" aria-hidden="true"></i></button>
+</div>
+<button class="search-icon search-click" type="button" onclick="search()"><i class="fa fa-search" aria-hidden="true"></i></button>
+<script>
+    function search() {
+        var query = $("#desktopsearch input").val();
+        query = htmlEncode(query);
+
+        if (query && query != '@Html.Raw(Model.SearchResultsPlaceholder)') {
+            location.href = '@Html.Raw(Model.SearchResultsBaseUrl)?hplusq=' + query;
+        }
+    }
+
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function searchOnEnter(e) {
+        if (e.keyCode == 13) {
+            search();
+        }
+    }
+</script>

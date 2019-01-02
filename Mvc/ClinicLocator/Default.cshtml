@@ -1,0 +1,144 @@
+@using SitefinityWebApp.Mvc.Models.DataModels
+@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.ClinicLocatorModel
+
+<input type="hidden" value="@Model.ClinicLocatorRadius" name="ClinicLocatorRadius" id="ClinicLocatorRadius">
+<input type="hidden" value="@Model.NearbyClinicsListSize" name="NearbyClinicsListSize" id="NearbyClinicsListSize">
+
+<div class="clinic-locator">
+    <div class="row">
+        <div class="col-md-4 center" id="locatorNav">
+            <div class="affixLocationNav" data-offset-top="90" data-offset-bottom="230">
+                <div class="locator-buttons clearfix">
+                    <div class="searchWrap clearfix">
+                        <div class="searchbar">
+                            <input id="pac-input" class="controls txtInput" type="text" placeholder="Search Location" />
+                            <button type="button" id="ClearSearchbox">&times;</button>
+                            <button type="button" id="SearchButton"><span class=" glyphicon glyphicon-search"></span></button>
+                        </div>
+                    </div>
+
+                    <div id="FiltersSection" class="clearfix" style="display: none">
+                        <div class="filterOpening" id="filterOpening">
+                            @*@(Html.Kendo().MultiSelect()
+                                  .Name("OperatingSchedulesFilter")
+                                        //.AutoClose(false)
+                                  .TagMode(TagMode.Single)
+                                  .Placeholder("Open During")
+                                  .DataTextField("Title")
+                                  .DataValueField("Id")
+                                  .BindTo(Model.ClinicOperatingSchedules)
+                                  .Events(events => events.Change("processPlacesSearch"))
+                                  .Deferred()
+
+                                )*@
+                            @(Html.Kendo().DropDownList()
+                            .Name("OperatingSchedulesFilter")
+                            .DataTextField("Title")
+                            .DataValueField("Id")
+                            .BindTo(Model.ClinicOperatingSchedules)
+                            .Events(events => events.Change("processPlacesSearch"))
+                            .Deferred()
+
+
+                            )
+                        </div>
+                        <div class="filterServices" id="filterServices">
+                            @(Html.Kendo().MultiSelect()
+                          .Name("ServicesFilter")
+                                    //.AutoClose(false)
+                          .TagMode(TagMode.Single)
+                          .Placeholder("Services Available")
+                          .DataTextField("Title")
+                          .DataValueField("Id")
+                          .BindTo(Model.ClinicServices)
+                          .Events(events => events.Change("processPlacesSearch"))
+                          .Deferred()
+
+                            )
+                        </div>
+                    </div>
+
+                    <div class="row btnNav">
+
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+                            <div role="tab" id="headingOne">
+                                <a class="btnNavLnk" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+
+
+
+                                    More Options
+                                </a>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <div class="col-xs-12">
+                                        <button type="button" id="SearchByCurrentLocationButton">View Nearby Clinic</button>
+                                        <button type="button" id="ViewAllClinics">View All Clinics</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div id="find-clinic-float"></div>
+
+                <div id="preloader" class="text-center">
+                    <img src="/Sitefinity/WebsiteTemplates/ShentonTemplate/App_Themes/ShentonTheme/Images/preloader_6.gif" alt="Loading..." style="width:60px;height:auto;" />
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-md-8">
+            <div id="SearchResultSection">
+
+
+
+                <div class="clinic-results">
+
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="pull-left"><div id="resultMessage"></div></li>
+                        <li role="presentation"><a href="#map-tab" aria-controls="map-tab" role="tab" data-toggle="tab" class="map-tab"><span></span><strong>Map</strong></a></li>
+                        <li role="presentation" class="active"><a href="#result" aria-controls="map-tab" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-list"></span><strong>List</strong></a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="result">
+                            <div id="ClinicResultList">
+                                @Html.Partial("_clinicList", Model)
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="map-tab" style="height: 400px; width: 100%">
+                            <div id="MapSection">
+                                <div id="map" style="height: 400px;position:relative"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div id="DetailsContainer">
+        <div class="detailsWrap clearfix">
+            <button type="button" class="close" id="CloseDetails">&times;</button>
+            <div id="ClinicDetailsSection"></div>
+        </div>
+    </div>
+</div>

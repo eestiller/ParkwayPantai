@@ -1,0 +1,22 @@
+﻿@model IEnumerable<SitefinityWebApp.Mvc.Models.NewsModel>
+@using Parkway.Core.Utilities
+<div class="col-md-8">
+    <h3><a href="@ApplicationConfig.Instance.PrefixLang/news-events" title="@Html.Raw(ViewBag.Resource.NewsAndEventsLabel)">@Html.Raw(ViewBag.Resource.NewsAndEventsLabel)</a></h3>
+    <ul class="news">
+        @foreach (var item in Model)
+        {
+            <li>
+                <div class="thumb">
+                    <span class="mm">@item.MonthPublish</span>
+                    <span class="dd">@item.DatePublish</span>
+                    <span class="yy">@item.YearPublish</span>
+                </div>
+                <article class="desc">
+                    <h5><a href="@item.DetailUrl" title="@item.Title">@item.Title</a></h5>
+                    <p><a href="@item.DetailUrl" title="@Html.Raw(ViewBag.Resource.ReadMoreLabel)">@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></p>
+                </article>
+            </li>
+        }
+    </ul>
+    <p class="text-right"><a href="@ApplicationConfig.Instance.PrefixLang/news-events" title="@Html.Raw(ViewBag.Resource.ViewAllArticlesLabel)">@Html.Raw(ViewBag.Resource.ViewAllArticlesLabel)</a></p>
+</div>

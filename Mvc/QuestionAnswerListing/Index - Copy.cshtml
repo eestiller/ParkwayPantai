@@ -1,0 +1,67 @@
+﻿@using System.Web.Optimization
+<section class="wrap-bg">
+    <section class="list-doctor">
+        <section class="container search-content form-horizontal">
+            <h1 class="title">@ViewBag.Resource.QuestionAnswerDoctor</h1>
+            <p class="description">@Html.Raw(ViewBag.Resource.QuestionAnswerListingBlurb)</p>
+            <div class="row">
+                <div class="col-md-1 search control-label">
+                    <label>@ViewBag.Resource.SpecialityLabel</label>
+                </div>
+                <div class="col-md-6 col-sm-9 search">
+                    <select class="form-control selectpicker" name="SpecialtiesList" id="SpecialtiesList" multiple="multiple" noneselectedtext="@ViewBag.Resource.SelectLabel"></select>
+                </div>
+                <div class="col-md-3 col-sm-3 our-specialists"><a href="/our-doctors" class="btn btn-primary viewourspecialists">@ViewBag.Resource.SeeAllSpecialists</a></div>
+                    
+            </div>
+        </section>
+        <section class="container result-list">
+            <h4 class="description" id="info_result" style="display:none"><span></span></h4>
+            <ul class="list-12 style-2" id="listDoctorQA"></ul>
+        </section>
+    </section>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="paging" style="display: none">
+                <li id="page-first"><a href="#" title="@Html.Raw(ViewBag.Resource.PagingFirstLabel)">|&lt;&lt;</a></li>
+                <li id="page-previous"><a href="#" title="&lt; @Html.Raw(ViewBag.Resource.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.Resource.PagingPreviousLabel)</a></li>
+                <li id="page-next"><a href="#" title="@Html.Raw(ViewBag.Resource.PagingNextLabel) >">@Html.Raw(ViewBag.Resource.PagingNextLabel) &gt;</a></li>
+                <li id="page-last"><a href="#" title="@Html.Raw(ViewBag.Resource.PagingLastLabel)">&gt;&gt;|</a></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var culture = '@Html.Raw(ViewBag.CurrentCulture)';
+    var selectedSpecialtyPageId = '@Html.Raw(ViewBag.SelectedSpecialtyPageId)';
+    var specialtyPageId = '@Html.Raw(ViewBag.SpecialtyPageId)';
+    var emptyMessage = '@Html.Raw(ViewBag.EmptyMessage)';
+    var selectLabel = '@Html.Raw(ViewBag.SelectLabel)';
+    var specialtyName = '@Html.Raw(ViewBag.SpecialtiesName)';
+</script>
+
+<script type="text/x-jquery-tmpl" id="tplDoctorQA">
+    <li>
+        <div class="thumb">
+            <a href="${DoctorUrl}" title="${DoctorName}" class="viewdoctorcv">
+                <img src="${Photo}" alt="${DoctorName}">
+            </a>
+        </div>
+        <div class="desc-2">
+            <h3><a href="${DoctorUrl}" title="${Name}" class="viewdoctorcv">${Name}</a></h3>
+            <p class="philosophy"><i>"{{html Philosophy}}"</i></p>
+            <p><a href="${DoctorUrl}" class="btn btn-primary viewdoctorcv">@ViewBag.Resource.ViewMore</a></p>
+        </div>
+    </li>
+</script>
+
+<script type="text/x-jquery-tmpl" id="scriptListBox">
+    {{if Checked}}
+    <option value="${Name}" url="${UrlName}" selected="selected">${Title}</option>
+    {{else}}
+    <option value="${Name}" url="${UrlName}">${Title}</option>
+    {{/if}}
+</script>
+
+@Scripts.Render("~/bundlescript/questionanswerlisting")

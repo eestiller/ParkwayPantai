@@ -1,0 +1,572 @@
+@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.eServiceReportsModel
+
+<script type="text/javascript" src="/Sitefinity/WebsiteTemplates/ShentonTemplate/Kendo/js/kendo.custom.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="~/Mvc/Content/chosen/chosen.min.css">
+<link rel="stylesheet" type="text/css" href="/Sitefinity/WebsiteTemplates/ShentonTemplate/Kendo/styles/kendo.common.min.css" />
+<link rel="stylesheet" type="text/css" href="/Sitefinity/WebsiteTemplates/ShentonTemplate/Kendo/styles/kendo.default.min.css" />
+
+@Html.Hidden("hid_ExportMode", Model.ExportMode)
+@Html.Hidden("hid_ECFormTypes", Model.FormTypes1.Count)
+@Html.Hidden("hid_ECHospitals", Model.Hospitals.Count)
+@Html.Hidden("hid_ECLanguages", Model.Languages1.Count)
+
+<style type="text/css">
+    #imageFloaterBig {
+        display: inline-block;
+        margin-left: 6px;
+        background: #fff url(/Mvc/Content/loading/loading.gif) no-repeat bottom;
+        background-size: 20px auto;
+        width: 20px;
+        height: 30px;
+    }
+
+    .export-container {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 13px !important;
+        zoom: 1;
+        height: auto !important;
+        min-height: 29px;
+        border: 1px solid #aaa;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        font-family: Verdana, Arial, sans-serif;
+        background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(1%, #eeeeee), color-stop(15%, #ffffff));
+        background-image: -webkit-linear-gradient(#eeeeee 1%, #ffffff 15%);
+        background-image: -moz-linear-gradient(#eeeeee 1%, #ffffff 15%);
+        background-image: -o-linear-gradient(#eeeeee 1%, #ffffff 15%);
+        background-image: linear-gradient(#eeeeee 1%, #ffffff 15%);
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    .ui-widget-overlay.custom-overlay {
+        background-color: #333;
+        background-image: none;
+        opacity: 0.6;
+        z-index: 1040;
+    }
+
+    .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close {
+        right: 6px;
+        top: 16px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+        .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close .ui-icon-closethick {
+            width: 10px;
+            height: 10px;
+            margin-top: 6px;
+            margin-left: 6px;
+        }
+
+    .ui-dialog-content {
+        font-size: 0.9em;
+    }
+
+    .sfForce-White {
+        color: #fff !important;
+    }
+
+    .p-block {
+        display: inline-block;
+        position: relative;
+    }
+
+    .p-error {
+        display: inline-block;
+        position: relative;
+        color: #F00;
+        font-size: 0.8em;
+    }
+
+    .li-inline {
+        display: inline-block;
+        margin-right: 25px;
+        vertical-align: top;
+    }
+
+    .li-inline-50 {
+        display: inline-block;
+        width: 47%;
+        padding-right: 20px;
+        vertical-align: top;
+    }
+
+    .sfBordered {
+        border-radius: 4px;
+        border: 1px solid #aaaaaa;
+    }
+
+    .k-grid {
+        font-size: 12px;
+    }
+
+        .k-grid .k-grid-header {
+            background-color: #e0e0e0;
+        }
+
+            .k-grid .k-grid-header th {
+                font-weight: bold;
+            }
+
+                .k-grid .k-grid-header th[end-field="true"], .k-grid .k-grid-header th[data-title="Actions"] {
+                    text-align: center;
+                }
+
+    .ScheduleActionsGroup {
+        width: 100%;
+        text-align: center;
+    }
+
+        .ScheduleActionsGroup a {
+            font-size: 11px;
+            padding-right: 7px;
+            padding-left: 7px;
+        }
+
+        .ScheduleActionsGroup .sfSchedUpdate::before {
+            margin-right: 5px;
+            font-family: FontAwesome;
+            content: "\f040";
+            vertical-align: middle;
+            line-height: 1.1;
+        }
+
+        .ScheduleActionsGroup .sfSchedUpdate:empty::before {
+            display: none;
+        }
+
+        .ScheduleActionsGroup .sfSchedStop::before {
+            margin-right: 5px;
+            font-family: FontAwesome;
+            content: "\f04c";
+            vertical-align: middle;
+            line-height: 1.1;
+        }
+
+        .ScheduleActionsGroup .sfSchedStop:empty::before {
+            display: none;
+        }
+
+        .ScheduleActionsGroup .sfSchedRun::before {
+            margin-right: 5px;
+            font-family: FontAwesome;
+            content: "\f04b";
+            vertical-align: middle;
+            line-height: 1.1;
+        }
+
+        .ScheduleActionsGroup .sfSchedRun:empty::before {
+            display: none;
+        }
+
+        .ScheduleActionsGroup .sfSchedDelete::before {
+            margin-right: 5px;
+            font-family: FontAwesome;
+            content: "\f014";
+            vertical-align: middle;
+            line-height: 1.1;
+        }
+
+        .ScheduleActionsGroup .sfSchedDelete:empty::before {
+            display: none;
+        }
+
+    .sfSelectAll::before {
+        margin-right: 5px;
+        font-family: FontAwesome;
+        content: "\f03a";
+        vertical-align: middle;
+        line-height: 1.1;
+    }
+
+    .sfSelectAll:empty::before {
+        display: none;
+    }
+
+    .modal-loading {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: #333 url(/Mvc/Content/loading/loading.gif) 50% 50% no-repeat;
+        opacity: 0.6;
+    }
+
+    body.loading .modal-loading {
+        overflow: hidden;
+    }
+
+    body.loading .modal-loading {
+        display: block;
+    }
+
+    .sfTitleBtn {
+        text-decoration: none;
+    }
+
+        .sfTitleBtn:hover {
+            text-decoration: underline;
+        }
+
+    .sfSchedReload::before {
+        margin-right: 5px;
+        font-family: FontAwesome;
+        content: "\f021";
+        vertical-align: middle;
+        line-height: 1.1;
+    }
+
+    .sfSchedReload:empty::before {
+        display: none;
+    }
+
+    .noteColor {
+        color: #006cd9;
+        text-decoration: none;
+    }
+</style>
+
+<div style="overflow: hidden; display: block; position: relative;">
+    <h1 class="sfBreadCrumb"><span>eService Form Report</span></h1>
+    <div class="sfClearfix" style="margin-top: 5px; overflow: hidden; padding-bottom: 40px;">
+        <fieldset class="sfNewContentForm" style="width: 80%; padding: 0 40px 5px; overflow: hidden;">
+            <div id="mainTabs">
+                <ul>
+                    <li id="tabControl001"><a href="#tabs-1">Schedule Form Report</a></li>
+                    <li id="tabControl002"><a href="#tabs-2">Generate Report Now</a></li>
+                    <li id="tabControl003"><a href="#tabs-3">Edit Scheduled Form Report</a></li>
+                </ul>
+                <div id="tabs-1">
+                    <div class="sfForm sfFormIn">
+                        <ul>
+                            <li class="sfFormSeparator">
+                                @Html.TextBox("em_scheduleName", null, new
+                                {
+                                    @class = "export-container",
+                                    @style = "padding-left: 7px; width: 47%;",
+                                    placeholder = "Schedule Name"
+                                })
+                                <p id="error_scheduleName01" class="sfError">Error</p>
+                            </li>
+                        </ul>
+                        <h2 style="margin-bottom: 15px;">Data</h2>
+                        <ul>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Forms</span>
+                                @Html.DropDownList("em_formtypeSelect", Model.FormTypes1, new
+                                {
+                                    @class = "valid export-container",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Form Type"
+                                })
+                            </li>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Hospital</span>
+                                @Html.DropDownList("em_hospitals", Model.Hospitals, new
+                                {
+                                    @id = "em_hospital",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Hospitals"
+                                })
+                            </li>
+                        </ul>
+                        <ul>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Language</span>
+                                @Html.DropDownList("em_languages", Model.Languages1, new
+                                {
+                                    @id = "em_allLanguage",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Languages"
+                                })
+                            </li>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Country of Residence&nbsp;&nbsp;<a id="countryNote1" onclick="DisplayMessage('note-country'); return false;"><i class="fa fa-info-circle noteColor"></i></a></span>
+                                @Html.DropDownList("em_residentialLocation", Model.Countries, new
+                                {
+                                    @id = "em_country",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Countries of Residence"
+                                })
+                            </li>
+                        </ul>
+                        <h2 style="margin-top: 15px; margin-bottom: 15px;">Timing</h2>
+                        <ul>
+                            <li class="li-inline">
+                                <span class="sfTxtLbl">Select Frequency</span>
+                                <p class="p-block">Every&nbsp;&nbsp;</p>
+                                @Html.DropDownList("em_mainfrequency", Model.TimingFrequency, new
+                                {
+                                    @id = "em_mainfrequency",
+                                    @class = "valid export-container",
+                                    @style = "width: 100px;"
+                                })
+                                <p id="custom001" class="p-block">&nbsp;&nbsp;on&nbsp;&nbsp;</p>
+                                <select id="em_customfreqweek" class="valid export-container" style="width: 120px;"></select>
+                                <p id="custom002" class="p-block">&nbsp;&nbsp;on the&nbsp;&nbsp;</p>
+                                <select id="em_customfreqmonth" class="valid export-container" style="width: 80px;"></select>
+                                <p class="p-block">&nbsp;at&nbsp;&nbsp;</p><select id="em_frequencyhour" class="valid export-container"></select>
+                                <p class="p-block">:&nbsp;</p><select id="em_frequencyminute" class="valid export-container"></select>
+                            </li>
+                        </ul>
+                        <h2 style="display: block; margin-top: 15px; margin-bottom: 15px;">Recipients</h2>
+                        <ul>
+                            <li class="sfFormSeparator">
+                                <span class="sfTxtLbl">Select Group</span>
+                                @Html.DropDownList("em_exportgroups", Model.ExportGroups, new
+                                {
+                                    @id = "em_exportgroups",
+                                    @class = "valid export-container",
+                                    @style = "width: 300px;"
+                                })
+                                <p id="error_exportgroups01" class="sfError">Error</p>
+                            </li>
+                        </ul>
+                        <ul style="margin-top: 16px;">
+                            <li class="sfFormSeparator">
+                                <a id="em_btnSave" class="sfLinkBtn sfSave sfForce-White" title="Create New Schedule" commontext="Create New Schedule" loading="Please wait..."><span class="sfLinkBtnIn Save">Create New Schedule</span></a>
+                                <a id="em_btnClear" class="sfLinkBtn sfLinkBtn" title="Clear"><span class="sfLinkBtnIn Save">Clear</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="tabs-2">
+                    <div class="sfForm sfFormIn">
+                        <h2 style="margin-bottom: 15px;">Data</h2>
+                        <ul>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Forms</span>
+                                @Html.DropDownList("gr_formtypeSelect", Model.FormTypes2, new
+                               {
+                                   @class = "valid export-container",
+                                   @style = "display:none",
+                                   multiple = "multiple",
+                                   data_placeholder = "Select Form Type"
+                               })
+                            </li>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Hospital</span>
+                                @Html.DropDownList("gr_hospitals", Model.Hospitals, new
+                               {
+                                   @id = "gr_hospital",
+                                   @style = "display:none",
+                                   multiple = "multiple",
+                                   data_placeholder = "Select Hospitals"
+                               })
+                            </li>
+                        </ul>
+                        <ul>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Language</span>
+                                @Html.DropDownList("gr_languages", Model.Languages2, new
+                                {
+                                    @id = "gr_allLanguage",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Languages"
+                                })
+                            </li>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Country of Residence&nbsp;&nbsp;<a id="countryNote2" onclick="DisplayMessage('note-country'); return false;"><i class="fa fa-info-circle noteColor"></i></a></span>
+                                @Html.DropDownList("gr_residentialLocation", Model.Countries, new
+                                {
+                                    @id = "gr_country",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Countries of Residence"
+                                })
+                            </li>
+                        </ul>
+                        <ul>
+                            <li class="sfFormSeparator">
+                                <span class="sfTxtLbl">Submission Date</span>
+                                @Html.TextBox("gr_FromDate", null, new
+                                {
+                                    @readonly = "readonly",
+                                    @class = "export-container",
+                                    @style = "padding-left: 7px;",
+                                    placeholder = "Select 'Date From'"
+
+                                })
+                                &nbsp;-&nbsp;
+                                @Html.TextBox("gr_ToDate", null, new
+                                {
+                                    @readonly = "readonly",
+                                    @class = "export-container",
+                                    @style = "padding-left: 7px;",
+                                    placeholder = "Select 'Date To'"
+
+                                })
+                                <p id="error_FromDate" class="sfError">Error</p>
+                            </li>
+                            <li class="sfFormSeparator">
+                                <a id="gr_btnExport" class="sfLinkBtn sfSave sfForce-White" title="Export" default-title="Download XLSX" loading-title="Please wait..."><span class="sfLinkBtnIn Save">Download XLSX</span></a>
+                                <a id="gr_btnClear" class="sfLinkBtn sfLinkBtn" title="Clear"><span class="sfLinkBtnIn Save">Clear</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="tabs-3">
+                    @Html.Hidden("hid_EditedScheduleID", "")
+                    <div class="sfForm sfFormIn">
+                        <ul>
+                            <li class="sfFormSeparator">
+                                @Html.TextBox("ed_scheduleName", null, new
+                                {
+                                    @class = "export-container",
+                                    @style = "padding-left: 7px; width: 47%;",
+                                    placeholder = "Schedule Name"
+                                })
+                                <p id="error_scheduleName02" class="sfError">Error</p>
+                                @Html.Hidden("hid_editScheduleName", "")
+                            </li>
+                        </ul>
+                        <h2 style="margin-bottom: 15px;">Data</h2>
+                        <ul>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Forms</span>
+                                @Html.DropDownList("ed_formtypeSelect", Model.FormTypes1, new
+                                {
+                                    @class = "valid export-container",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Form Type"
+                                })
+                                @Html.Hidden("hid_editFormtypeSelect", "")
+                            </li>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Hospital</span>
+                                @Html.DropDownList("ed_hospitals", Model.Hospitals, new
+                                {
+                                    @id = "ed_hospital",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Hospitals"
+                                })
+                                @Html.Hidden("hid_editHospitals", "")
+                            </li>
+                        </ul>
+                        <ul>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Language</span>
+                                @Html.DropDownList("ed_languages", Model.Languages1, new
+                                {
+                                    @id = "ed_allLanguage",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Languages"
+                                })
+                                @Html.Hidden("hid_editLanguages", "")
+                            </li>
+                            <li class="li-inline-50">
+                                <span class="sfTxtLbl">Select Country of Residence&nbsp;&nbsp;<a id="countryNote3" onclick="DisplayMessage('note-country'); return false;"><i class="fa fa-info-circle noteColor"></i></a></span>
+                                @Html.DropDownList("ed_residentialLocation", Model.Countries, new
+                                {
+                                    @id = "ed_country",
+                                    @style = "display:none",
+                                    multiple = "multiple",
+                                    data_placeholder = "Select Countries of Residence"
+                                })
+                                @Html.Hidden("hid_editResidentialLocation", "")
+                            </li>
+                        </ul>
+                        <h2 style="margin-top: 15px; margin-bottom: 15px;">Timing</h2>
+                        <ul>
+                            <li class="li-inline">
+                                <span class="sfTxtLbl">Select Frequency</span>
+                                <p class="p-block">Every&nbsp;&nbsp;</p>
+                                @Html.DropDownList("ed_mainfrequency", Model.TimingFrequency, new
+                                {
+                                    @id = "ed_mainfrequency",
+                                    @class = "valid export-container",
+                                    @style = "width: 100px;"
+                                })
+                                <p id="custom101" class="p-block">&nbsp;&nbsp;on&nbsp;&nbsp;</p>
+                                <select id="ed_customfreqweek" class="valid export-container" style="width: 120px;"></select>
+                                <p id="custom102" class="p-block">&nbsp;&nbsp;on the&nbsp;&nbsp;</p>
+                                <select id="ed_customfreqmonth" class="valid export-container" style="width: 80px;"></select>
+                                @Html.Hidden("hid_editMainFrequency", "")
+                                @Html.Hidden("hid_editMainFrequencySec", "")
+                                <p class="p-block">&nbsp;at&nbsp;&nbsp;</p><select id="ed_frequencyhour" class="valid export-container"></select>
+                                <p class="p-block">:&nbsp;</p><select id="ed_frequencyminute" class="valid export-container"></select>
+                                @Html.Hidden("hid_editFrequencyHour", "0")
+                                @Html.Hidden("hid_editFrequencyMinute", "0")
+                            </li>
+                        </ul>
+                        <h2 style="display: block; margin-top: 15px; margin-bottom: 15px;">Recipients</h2>
+                        <ul>
+                            <li class="sfFormSeparator">
+                                <span class="sfTxtLbl">Select Group</span>
+                                @Html.DropDownList("ed_exportgroups", Model.ExportGroups, new
+                                {
+                                    @id = "ed_exportgroups",
+                                    @class = "valid export-container",
+                                    @style = "width: 300px;"
+                                })
+                                <p id="error_exportgroups02" class="sfError">Error</p>
+                                @Html.Hidden("hid_editExportGroups", "")
+                            </li>
+                        </ul>
+                        <ul style="margin-top: 16px;">
+                            <li class="sfFormSeparator">
+                                <a id="ed_btnSave" class="sfLinkBtn sfSave sfForce-White" title="Edit Schedule" commontext="Edit Schedule" loading="Please wait..."><span class="sfLinkBtnIn Save">Edit Schedule</span></a>
+                                <a id="ed_btnReset" class="sfLinkBtn sfLinkBtn" title="Reset"><span class="sfLinkBtnIn Save">Reset</span></a>
+                                <a id="ed_btnCancel" class="sfLinkBtn sfLinkBtn" title="Cancel"><span class="sfLinkBtnIn Save">Cancel</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <h1 id="listSchedules001" class="sfBreadCrumb" style="padding-top: 0px;"><span>List of Schedules</span>&nbsp;&nbsp;<a class="sfLinkBtn sfSaved" onclick="SchedulesFunction('', 'table-reload'); return false;"><span class="sfLinkBtnIn sfSchedReload">Reload</span></a>&nbsp;&nbsp;<span id="imageFloaterBig" style="display: none;">&nbsp;</span></h1>
+    <div id="listSchedules002" class="sfClearfix" style="margin-top: 5px; margin-bottom: 40px;">
+        <div id="allSchedules" class="sfNewContentForm sfBordered" style="width: 92%; height: 100%; margin: 0px 60px 5px; padding: 0 0 0px; overflow: hidden;">
+            <div id="grid_AllSchedules"></div>
+            <script id="itemTitleTemplate" type="text/x-kendo-tmpl">
+                <a class="sfTitleBtn" onclick="SchedulesFunction('#: ScheduleKey#|#: ScheduleName#', 'show-times'); return false;">#: ScheduleName#</a>
+                <input id="hid_DC_#: ScheduleKey#" type="hidden" value="#: DateCreated#|#: LastExecTime#|#: NextExecTime#" />
+            </script>
+            <script id="itemActionTemplate" type="text/x-kendo-tmpl">
+                <div class="ScheduleActionsGroup">
+                    <a class="sfLinkBtn sfButton01" onclick="SchedulesFunction('#: ItemID#', 'export-edit'); return false;"><span class="sfLinkBtnIn sfSchedUpdate">Update</span></a>
+
+                    #if(IsActive){#
+                    <a class="sfLinkBtn sfButton02" onclick="SchedulesFunction('#: ItemID#', 'schedule-stop'); return false;"><span class="sfLinkBtnIn sfSchedStop">Stop</span></a>
+                    #} else {#
+                    <a class="sfLinkBtn sfButton03" onclick="SchedulesFunction('#: ItemID#', 'schedule-run'); return false;"><span class="sfLinkBtnIn sfSchedRun">Run</span></a>
+                    #}#
+
+                    <a class="sfLinkBtn sfButton04" onclick="SchedulesFunction('#: ItemID#', 'schedule-runnow'); return false;"><span class="sfLinkBtnIn sfSchedRun">Run Now</span></a>
+                    <a class="sfLinkBtn sfButton05" onclick="SchedulesFunction('#: ItemID#', 'export-delete'); return false;"><span class="sfLinkBtnIn sfSchedDelete">Delete</span></a>
+                </div>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(window).on('load', function () {
+        ReloadEService_Default();
+    });
+</script>
+<div class="modal-loading"></div>

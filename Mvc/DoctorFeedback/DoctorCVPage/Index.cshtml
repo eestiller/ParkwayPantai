@@ -1,0 +1,342 @@
+﻿@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.DoctorCVPageModel
+@using Parkway.Core.Utilities
+
+<section class="wrap-bg">
+    <section class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ol itemscope="" itemtype="http://schema.org/BreadcrumbList" class="breadcrumb">
+                    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                        <a itemprop="item" href="@Html.Raw(ViewBag.HomeUrl)"
+                           title="@Html.Raw(ViewBag.HomeLabel)"><span itemprop="name">@Html.Raw(ViewBag.HomeLabel)</span></a><span itemprop="position" content="1"></span>
+                    </li>
+                    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem"><a itemprop="item" href="@Html.Raw(ViewBag.OurDoctorsUrl)" title="@Html.Raw(ViewBag.OurDoctors)"><span itemprop="name">@Html.Raw(ViewBag.OurDoctors)</span></a><span itemprop="position" content="2"></span></li>
+                    <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="active"><span itemprop="name">@Model.DoctorName</span><span itemprop="position" content="3"></span></li>
+                </ol>
+            </div>
+        </div>
+    </section>
+    <section class="container dr-info">
+        <h1 class="title">@Model.DoctorName</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <img src="@Model.UrlImage" alt="@Model.DoctorName" />
+            </div>
+            <div class="col-md-6">
+                @{
+                    var videoUrl = (string)ViewBag.VideoThumbnailUrl;
+                    if (!string.IsNullOrEmpty(videoUrl))
+                    {
+                        <a class="fancybox-media" href="@Model.UrlVideo">
+                            <img src="@Url.Content(videoUrl)" alt="@Model.DoctorName" width="450px" height="268px" />
+                        </a>
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/img-video.jpg")" alt="@Model.DoctorName" width="450px" height="268px" />
+                    }
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-16">
+                    @foreach (var c in Model.Clinics)
+                    {
+                        <li>
+                            <h3>@c.Name</h3>
+                            <div class="col-md-5">
+                                <p><strong>@Html.Raw(ViewBag.Resource.AddressLabel)</strong></p>
+                                <p>@Html.Raw(c.Address)</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div>
+                                    <div class="title_cnumber"><strong>@Html.Raw(ViewBag.Resource.TelLabel)</strong></div>
+                                    <div class="contact_cnumber">@Html.Raw(c.ContactNumber)</div>
+                                </div>
+                                <div style="clear:both"></div>
+                                <div>
+                                    <div class="title_cnumber"><strong>@Html.Raw(ViewBag.Resource.FaxLabel)</strong></div>
+                                    <div class="contact_cnumber">@Html.Raw(c.ContactFax)</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                @if (c.IsOnline)
+                                {
+                                    <a href='@c.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)' target='_blank'>@Html.Raw(ViewBag.ResourceCommon.BookAppointmentButton)</a>
+                                }
+                                else
+                                {
+                                    <a href='@c.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)'>@Html.Raw(ViewBag.ResourceCommon.MakeAppointmentButton)</a>
+                                }
+                            </div>
+                        </li>
+                    }
+                </ul>
+                <ul class="dr-detail">
+                    <li>
+                        <h3>@Html.Raw(ViewBag.Resource.Key_Specialties_Interests)</h3>
+                        <ul>
+                            @foreach (var s in Model.Specialties.Where(c => !string.IsNullOrEmpty(c.SpecialtyName)).OrderBy(o => o.SpecialtyName))
+                            {
+                                if (s.Link == null || s.Link == "")
+                                {
+                                    <li>@s.SpecialtyName</li>
+                                }
+                                else
+                                {
+                                    <li><a href="@s.Link">@s.SpecialtyName</a></li>
+                                }
+                            }
+                        </ul>
+                    </li>
+
+                    @if (Model.SubSpecialties.Any(c => !string.IsNullOrEmpty(c.SubSpecialtyName)))
+                    {
+                        <li>
+                            <h3>@Html.Raw(ViewBag.Resource.SubSpecialties)</h3>
+                            <ul>
+                                @foreach (var s in Model.SubSpecialties.Where(c => !string.IsNullOrEmpty(c.SubSpecialtyName)).OrderBy(o => o.SubSpecialtyName))
+                                {
+                                    if (s.Link == null || s.Link == "")
+                                    {
+                                        <li>@s.SubSpecialtyName</li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="@s.Link">@s.SubSpecialtyName</a></li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+
+                    @if (Model.Specialties.Where(c => !string.IsNullOrEmpty(c.SubSpecialtyName)).Any())
+                    {
+                        <li>
+                            <h3>@Html.Raw(ViewBag.Resource.Areas_of_Interest)</h3>
+                            <ul>
+                                @foreach (var s in Model.Specialties.Where(c => !string.IsNullOrEmpty(c.SubSpecialtyName)).OrderBy(o => o.SubSpecialtyName))
+                                {
+                                    if (s.Link == null || s.Link == "")
+                                    {
+                                        <li>@s.SubSpecialtyName</li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="@s.Link">@s.SubSpecialtyName</a></li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (Model.Qualifications != null && Model.Qualifications.Any())
+                    {
+                        <li>
+                            <h3>@Html.Raw(ViewBag.Resource.Qualifications)</h3>
+                            <ul class="style-2">
+                                @foreach (var q in Model.Qualifications)
+                                {
+                                    <li>@q</li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (Model.Languages != null && Model.Languages.Any())
+                    {
+                        <li>
+                            <h3>@Html.Raw(ViewBag.Resource.Languages_Spoken)</h3>
+                            <ul>
+                                @foreach (var l in Model.Languages.OrderBy(o => o))
+                                {
+                                    <li>@l</li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+
+                @if (Model.Backgrounds != null && Model.Backgrounds.Any())
+                {
+                    <h3>@Html.Raw(ViewBag.Resource.Background)</h3>
+                    <ul class="list-2">
+                        @foreach (var b in Model.Backgrounds)
+                        {
+                            <li>@b</li>
+                        }
+                    </ul>
+                }
+                @if (Model.Awards != null && Model.Awards.Any())
+                {
+                    <h3>@Html.Raw(ViewBag.Resource.Awards)</h3>
+                    <ul class="list-2">
+                        @foreach (var a in Model.Awards)
+                        {
+                            <li>@a</li>
+                        }
+                    </ul>
+                }
+                @if (Model.Clinics != null && Model.Clinics.SelectMany(s => s.Photos).Any())
+                {
+                    <h3>@Html.Raw(ViewBag.Resource.Clinic_Photos)</h3>
+                    <div class="wrap-slider">
+                        <div class="list-17 flexslider-2">
+                            @{
+                    var clinicImages = Model.Clinics.SelectMany(s => s.Photos).ToList();
+                    <ul class="slides">
+                        @foreach (var p in clinicImages)
+                        {
+                            <li>
+                                <a href="@p.RealImageUrl" title="Image" class="fancybox-gallery" data-fancybox-group="gallery">
+                                    <img src="@p.ThumbnailUrl" alt="" style="width: 258px; height: 171px;">
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                                @Html.Hidden("hidTotalClinicPhoto", clinicImages.Count)
+                            }
+                        </div>
+                    </div>
+                }
+                <div class="list-dr-article">
+                    <h3 class="style-2">
+                        @if (ViewBag.PrefixLang == "my")
+                        {
+                            @Model.DoctorName<span> </span> @ViewBag.SharedArticlesResource.HealthArticlesSharedByLabel 
+                        }
+                        else
+                        {
+                            @ViewBag.SharedArticlesResource.HealthArticlesSharedByLabel<span> </span> @Model.DoctorName
+                        }
+                        @if (Model.SharedArticles != null && Model.SharedArticles.Count > 0)
+                        {
+                            <a href="@ApplicationConfig.Instance.PrefixLang/shared-articles-by-doctor?id=@ViewBag.DoctorId" title="@Html.Raw(ViewBag.ResourceCommon.ViewAllButton)" class="btn btn-primary float-r">@Html.Raw(ViewBag.ResourceCommon.ViewAllButton)</a>
+                        }
+                    </h3>
+                    @if ((ViewBag.AllowShareArtilce != null && !ViewBag.AllowShareArtilce) || (Model.SharedArticles != null && Model.SharedArticles.Count <= 0))
+                    {
+                        @ViewBag.SharedArticlesResource.ShareArticleMessage
+                    }
+                    @foreach (var s in Model.SharedArticles)
+                    {
+                        <article class="article">
+                            <div class="intro-article">
+                                <div class="clearfix">
+                                    <div class="float-l">
+                                        <img src="@Model.DoctorArticleImageUrl" alt="Avatar">
+                                    </div>
+                                    <div class="user" style="float: left;">
+                                        <h4>
+                                            @Model.DoctorName<br>
+                                            @foreach (var docSpec in s.DoctorSpecialties)
+                                            {
+                                                <span>@docSpec.Title</span><br />
+                                            }
+                                        </h4>
+                                        <p>@s.PublishedDate</p>
+                                    </div>
+                                </div>
+                                <p>@s.Comments</p>
+                            </div>
+                            <div class="content-article">
+                                <div class="float-l">
+                                    <a target="_blank" href="@s.ArticleUrl" title="@s.ArticleTitle">
+                                        <img src="@s.ArticleImage" alt="@s.ArticleTitle" style="height: 131px; width: 175px;">
+                                    </a>
+                                </div>
+                                <div class="context-article">
+                                    <h3><a target="_blank" href="@s.ArticleUrl" title="Article title">@s.ArticleTitle</a></h3>
+                                    <p>@s.ArticleDescription</p>
+                                    <p><a target="_blank" href="@s.ArticleUrl" title="@s.ArticleUrl">@s.ArticleUrl</a></p>
+                                    <div class="clearfix">
+                                        <div class="rate" articleid="@s.ArticleId" data-rating="@s.AverageRating">
+                                        </div>
+                                        <div class="number" articleid="@s.ArticleId">(@s.NumberUserRating)</div>
+                                    </div>
+                                    <ul class="action-group">
+                                        <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                                            <a href="#" class="addthis_button_compact" rel="nofollow" addthis:url="@s.ArticleUrl" addthis:title="@s.ArticleTitle" title="Share">
+                                                <span>Share This</span>
+                                                <img src="@Url.Content("/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/share-ico.png")" alt="Share" />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                </div>
+
+                <div class="list-dr-post">
+                    <h3 class="style-2">
+                        @if (ViewBag.PrefixLang == "my")
+                        {
+                            @Model.DoctorName<span> </span> @Html.Raw(ViewBag.Resource.DoctorQuestionsAnsweredByDoctorLabel)
+                        }
+                        else
+                        {
+                            @Html.Raw(ViewBag.Resource.DoctorQuestionsAnsweredByDoctorLabel)<span> </span>@Model.DoctorName
+                        }
+                        <a href="@ApplicationConfig.Instance.PrefixLang/answered-questions?id=@ViewBag.DoctorId" id="btnAskADoctor" title="@Html.Raw(ViewBag.Resource.DoctorViewAllButton)" class="btn btn-primary float-r" style="display: none;">@Html.Raw(ViewBag.Resource.DoctorViewAllButton)</a>
+                    </h3>
+                    <span id="spanNoQuestions" style="display: none;">@ViewBag.AskedResource.AskDoctorNoQuestionFoundMessage</span>
+                    <div id="AreaQuestionByDoctor" class="post-main">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script id="answeredQuestion" type="text/x-jquery-tmpl">
+        <p>${PostedDate}</p>
+        <div class='post-content'>
+            <h4>${Content}</h4>
+            <p><strong>@Html.Raw(ViewBag.Resource.AskedByLabel)</strong><span class="style-2"> ${AskedBy} </span><span>${PostedDate}</span></p>
+            <ul id='detailSpecialty' class='style-2'>
+                <li><a href='${ConditionPageLink}' title='${PageTitle}'>${PageTitle}</a></li>
+            </ul>
+            <p class="style-2"><a href="#" title="@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)">@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)</a></p>
+            <div class="fck">
+                @Html.Raw(ViewBag.Disclaimer)
+            </div>
+        </div>
+        <div class='post-sub' questionid="${Id}">
+        </div>
+    </script>
+
+    <script id="answeredQuestionDetails" type="text/x-jquery-tmpl">
+
+        <div class='post-sub-content'>
+            <div class='thumb'>
+                <img src='${Photo}' alt=''>
+            </div>
+            <div class='detail'>
+                <h6>
+                    ${DoctorName}
+                    <div class="specialties" answertid="${AnswerId}" doctorid="${DoctorId}"></div>
+                    {{if DoctorSpecialties}}
+                    {{each DoctorSpecialties}} <span>${$Title}</span> {{/each}}
+                    {{/if}}
+                </h6>
+                <p class='style-3'>${RepliedDate}</p>
+                <p>${Content}</p>
+            </div>
+        </div>
+        <p class="style-2"><a href="#" title="@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)">@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)</a></p>
+        <div class="fck">
+            @Html.Raw(ViewBag.Disclaimer)
+        </div>
+    </script>
+
+    <script id="specialtiesList" type="text/x-jquery-tmpl">
+        <span>${Title}</span>
+    </script>
+    <span id="askedBy" style="display: none;">@Html.Raw(ViewBag.Resource.AskedByLabel)</span>
+    <span id="askDoctorDisclaimerLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)</span>
+    <script type="text/javascript">
+        var prefixLang = "@ViewBag.PrefixLang";
+    </script>
+    @Scripts.Render("~/bundlescript/doctorcv")
+</section>

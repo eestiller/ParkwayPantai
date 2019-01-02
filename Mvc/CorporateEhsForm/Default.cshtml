@@ -1,0 +1,337 @@
+@using Kendo.Mvc.UI
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@model SitefinityWebApp.Mvc.Models.CorporateEhsFormModel
+
+<div id="ehs_form" class="parkway_form">
+    <div>
+        <div id="PatientsParticulars" class="formGroup clearfix">
+            <h2>Personal Particular</h2>
+
+            <div class="PatientNameDiv formInput">
+                <label for="PatientName">@Html.Resource("PatientNameLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.PatientName)
+            .Name("PatientName")
+            .HtmlAttributes(new
+            {
+                required = "required",
+                data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources")
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="DateOfBirthDiv formInput">
+                <label for="DateOfBirth">@Html.Resource("DateOfBirthLabel", "EhsFormResources")</label>
+                @(Html.Kendo().DropDownListFor(model => model.DobYear)
+            .Name("DobYear")
+            .BindTo(Model.DobYear)
+            .Events(events => events.Change("DobYearEvent"))
+            .OptionLabel("Year")
+            .Deferred()
+                )
+
+                @(Html.Kendo().DropDownListFor(model => model.DobMonth)
+            .Name("DobMonth")
+            .DataTextField("Key")
+            .DataValueField("Value")
+            .BindTo(Model.DobMonth)
+            .Events(events => events.Change("DobMonthEvent"))
+            .Enable(false)
+            .OptionLabel("Month")
+            .Deferred()
+                )
+
+                @(Html.Kendo().DropDownList()
+            .Name("DobDay")
+            .Enable(false)
+            .OptionLabel("Day")
+            .HtmlAttributes(new
+            {
+                data_val_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources")
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="GenderDiv formInput">
+                <label for="Gender">@Html.Resource("GenderLabel", "EhsFormResources")</label>
+                @(Html.Kendo().DropDownListFor(model => model.Gender)
+            .Name("Gender")
+            .BindTo(new List<string>() {
+                "Male",
+                "Female"
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="NationalityDiv formInput">
+                <label for="Nationality">@Html.Resource("NationalityLabel", "EhsFormResources")</label>
+                @(Html.Kendo().DropDownListFor(model => model.Nationality)
+            .Name("Nationality")
+            .BindTo(Model.NationalitySelection)
+            .Deferred()
+                )
+                <label for="IsPassHolder">
+                    @Html.CheckBoxFor(model => model.IsPassHolder)
+                    @Html.Resource("CorporatePassHolderLabel", "EhsFormResources")
+                </label>
+            </div>
+
+            <div class="NricDiv formInput">
+                <label for="Nric">@Html.Resource("NricLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.Nric)
+            .Name("Nric")
+            .HtmlAttributes(new
+            {
+                required = "required",
+                data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources")
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="PassportNoDiv formInput">
+                <label for="PassportNo">@Html.Resource("PassportLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.PassportNo)
+            .Name("PassportNo")
+            .Deferred()
+                )
+            </div>
+            <div class="PatientMobileNoDiv formInput">
+                <label for="PatientMobileNo">@Html.Resource("PatientMobileNoLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.PatientMobileNo)
+                    .Name("PatientMobileNo")
+            .HtmlAttributes(new
+            {
+                type = "text",
+                required = "required",
+                data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources"),
+                pattern = "[0-9]{6,20}",
+                data_pattern_msg = @Html.Resource("MobileNumberErrorMessage", "EhsFormResources"),
+                maxlength = 20,
+                minlength = 6
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="PatientAltContactNoDiv formInput">
+                <label for="PatientAltContactNo">@Html.Resource("PatientAltContactNoLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.PatientAltContactNo)
+            .Name("PatientAltContactNo")
+            .HtmlAttributes(new
+            {
+                type = "text",
+                pattern = "[0-9]{6,20}",
+                data_pattern_msg = @Html.Resource("MobileNumberErrorMessage", "EhsFormResources"),
+                maxlength = 20,
+                minlength = 6
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="PatientEmailDiv formInput">
+                <label for="PatientEmail">@Html.Resource("PatientEmailLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.PatientEmail)
+                    .Name("PatientEmail")
+                    .HtmlAttributes(new
+                    {
+                        type = "email",
+                        required = "required",
+                        data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources"),
+                        data_email_msg = @Html.Resource("EmailErrorMessage", "EhsFormResources")
+                    })
+                    .Deferred()
+                )
+            </div>
+            <div class="CompanyDiv formInput">
+                <label for="Company">@Html.Resource("FullCompanyLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.Company)
+                    .Name("Company")
+                    .HtmlAttributes(new
+                    {
+                        required = "required",
+                        data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources")
+                    })
+                    .Deferred()
+                )
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <div id="CpParticulars" class="formGroup clearfix">
+            <h2>Contact Person's Particulars, If Different From The Above</h2>
+            <div class="CpNameDiv formInput">
+                <label for="CpName">@Html.Resource("CpNameLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.CpName)
+            .Name("CpName")
+            .Deferred()
+                )
+            </div>
+            <div class="CpMobileNoDiv formInput">
+                <label for="CpMobileNo">@Html.Resource("CpMobileNoLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.CpMobileNo)
+            .Name("CpMobileNo")
+            .HtmlAttributes(new
+            {
+                type = "text",
+                pattern = "[0-9]{6,20}",
+                data_pattern_msg = @Html.Resource("MobileNumberErrorMessage", "EhsFormResources"),
+                maxlength = 20,
+                minlength = 6
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="CpAltContactNoDiv formInput">
+                <label for="CpAltContactNo">@Html.Resource("CpAltContactNoLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.CpAltContactNo)
+            .Name("CpAltContactNo")
+            .HtmlAttributes(new
+            {
+                type = "text",
+                pattern = "[0-9]{6,20}",
+                data_pattern_msg = @Html.Resource("MobileNumberErrorMessage", "EhsFormResources"),
+                maxlength = 20,
+                minlength = 6
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="CpEmailDiv formInput">
+                <label for="CpEmail">@Html.Resource("CpEmailLabel", "EhsFormResources")</label>
+                @(Html.Kendo().TextBoxFor(model => model.CpEmail)
+            .Name("CpEmail")
+            .Deferred()
+                )
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div id="AppointmentDetails" class="formGroup clearfix">
+            <h2>Appointment Details</h2>
+            <div class="HealthScreeningPackageDiv formInput">
+                <label for="HealthScreeningPackage">@Html.Resource("HealthScreeningPackageLabel", "EhsFormResources")</label>
+                @*@(Html.Kendo().DropDownListFor(model => model.HealthScreeningPackage)
+            .Name("HealthScreeningPackage")
+            .DataTextField("Key")
+            .DataValueField("Value")
+            .BindTo(Model.HealthScreeningPackageSelection)
+            .Events(events => events.Change("UpdateClinicLocationOptions"))
+            .Deferred()
+                )*@
+                @(Html.Kendo().TextBoxFor(model => model.HealthScreeningPackage)
+                    .Name("HealthScreeningPackage")
+            .HtmlAttributes(new
+            {
+                required = "required",
+                data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources"),
+                placeholder = @Html.Resource("CorporateHealthScreeningPackagePlaceholder", "EhsFormResources"),
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="PreferredAppointmentDateDiv formInput">
+                <label for="PreferredAppointmentDate">@Html.Resource("PreferredAppointmentDateLabel", "EhsFormResources")</label>
+                @(Html.Kendo().DatePickerFor(model => model.PreferredAppointmentDate)
+            .Name("PreferredAppointmentDate")
+            .Min(DateTime.Now.AddDays(1))
+            .Format("MM/dd/yyyy")
+            .HtmlAttributes(new
+            {
+                required = "required",
+                data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources")
+            })
+            .Events(e =>
+            {
+                e.Close("ValidatePad");
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="ClinicLocationDiv formInput" id="ClinicLocationDiv">
+                <label for="ClinicLocation">@Html.Resource("ClinicLocationLabel", "EhsFormResources")</label>
+                @*@(Html.Kendo().DropDownListFor(model => model.ClinicLocation)
+            .Name("ClinicLocation")
+            .BindTo(Model.ClinicLocationSelection)
+            .Deferred()
+                )*@
+                @(Html.Kendo().TextBoxFor(model => model.ClinicLocation)
+                    .Name("ClinicLocation")
+            .HtmlAttributes(new
+            {
+                required = "required",
+                data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources")
+            })
+            .Deferred()
+                )
+            </div>
+            <div class="AlternativeAppointmentDateDiv formInput">
+                <label for="AlternativeAppointmentDate">@Html.Resource("AlternativeAppointmentDateLabel", "EhsFormResources")</label>
+                @(Html.Kendo().DatePickerFor(model => model.AlternativeAppointmentDate)
+            .Name("AlternativeAppointmentDate")
+            .Min(DateTime.Now.AddDays(1))
+            .Format("MM/dd/yyyy")
+            .Deferred()
+                )
+            </div>
+            <div id="ClinicLocationPreloader" style="display: none">
+                <img src="/Sitefinity/WebsiteTemplates/ShentonTemplate/App_Themes/ShentonTheme/Images/preloader_6.gif" alt="Loading..." style="width:60px;height:auto;" />
+            </div>
+            <div class="RemarksDiv formInput">
+                <label for="Remarks">@Html.Resource("RemarksLabel", "EhsFormResources")</label>
+                @Html.TextAreaFor(model => model.Remarks, new { @class = "textarea", style = "resize: none;" })
+            </div>
+            <div class="TncDiv formInput">
+                <label for="Tnc">
+                    @*@Html.CheckBoxFor(model => model.Tnc, new { required = "required", data_required_msg = @Html.Resource("RequiredFieldErrorMessage", "EhsFormResources") })
+                        <span class="k-invalid-msg" data-for="Tnc"></span>
+                        @Html.Resource("TncLabel", "EhsFormResources")*@
+                    @Html.Raw(Html.Resource("TncLabel", "EhsFormResources"))
+                </label>
+
+            </div>
+            <div class="SubscribedToUpdatesDiv formInput">
+                <label for="SubscribedToUpdates">
+                    @Html.CheckBoxFor(model => model.SubscribedToUpdates)
+                    @Html.Resource("SubscribedToUpdatesLabel", "EhsFormResources")
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="formGroup captcha clearfix">
+            @*<div class="g-recaptcha" data-sitekey="6LdgticUAAAAAP3QGQoHzfOqNuQY_ll6HzVTwH-K" data-callback="onReturnCallback"></div>
+
+                <div id="g-recaptcha" style="display:none;">Please validate recaptcha</div>
+                <input id="captcha" name="captcha" class="form-control" type="text" ng-model="txtCaptcha" style="display:none;" />*@
+            <div>
+                <div class="col-md-4">
+                    <label>Answer this math equation: </label>
+                    <label id="ebcaptchatext"></label>
+                </div>
+                <div class="col-md-2">
+                    <input id="ebcaptchainput" type="text" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <span id="valRecaptcha" class="field-validation-error" style="display: none">Invalid Entry.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix text-center">
+        <button type="button" id="btnSubmit">Submit</button>
+        <div id="SubmitPreloader" style="display: none;text-align:center;">
+            <img src="/Sitefinity/WebsiteTemplates/ShentonTemplate/App_Themes/ShentonTheme/Images/preloader_6.gif" alt="Loading..." style="width:60px;height:auto;" />
+        </div>
+    </div>
+
+</div>
+
+
+
+<div id="SuccessDiv" class="successDiv" style="display:none">
+    <p>Thank you for submitting your online appointment request. We will be in touch with you within the next 2 working days about your request.</p>
+    <span>Click <a href="/">here</a> to go back to the homepage.</span>
+</div>

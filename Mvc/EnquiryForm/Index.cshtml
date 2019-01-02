@@ -1,0 +1,438 @@
+﻿@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.EnquiryFormModel
+
+<section class="container form-3">
+
+    @Html.Hidden("hidCurrentCulture", (string)ViewBag.currentCulture)
+
+    <h1 class="title">@Html.Raw(ViewBag.Resource.Title1)</h1>
+    <div class="row make-appointment">
+        @*<div class="col-md-12 col-xs-12">
+                <h3 style="color: black; font-weight: bold; border-top: none; padding: 0px">@Html.Raw(ViewBag.Title2)</h3>
+            </div>
+            <div class="col-md-12 col-xs-12">
+                <h3 style="color: black; border-top: none; padding: 0px">@Html.Raw(ViewBag.Title3)</h3>
+            </div>*@
+        <div class="col-md-12 col-xs-12">
+            <label><span style="color: red">*&nbsp;</span>@Html.Raw(ViewBag.Resource.MandatoryHint)</label>
+        </div>
+    </div>
+    <div style="width: 100%; height: 0; border-top: 1px #999999 dotted; margin: 15px 0px;"></div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.EnquiryType)</label>
+            </div>
+            <div class="col-md-6">
+                <div id="EnquiryType" class="list">
+                    <ul class="list-6">
+                        @if (ViewBag.EnquiryTypes != null)
+                        {
+                            foreach (var enquiryType in ViewBag.EnquiryTypes)
+                            {
+                                <label>
+                                    @if (enquiryType.Checked)
+                                    {
+                                        <input type="radio" class="enquiryType" name="EnquiryType" value="@enquiryType.Name" checked="checked" style="margin-right: 5px; margin-left: 5px">@enquiryType.Title
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" class="enquiryType" name="EnquiryType" value="@enquiryType.Name" style="margin-right: 5px; margin-left: 5px">@enquiryType.Title
+                                    }
+                                </label>
+                            }
+                        }
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 clear" id="divDoctor" style="overflow: inherit;">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.PreferredDoctor)</label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.PreferredDoctorText, new { @id = "PreferredDoctorText", placeholder = @Html.Raw(ViewBag.Resource.FindaDoctorPlaceholder), @class = "typeahead form-control", @Value = @Html.Raw(ViewBag.PreferredDoctorText), @maxlength = 100 })
+                @Html.HiddenFor(m => m.DoctorId, new { @id = "doctorid", @Value = @Html.Raw(ViewBag.DoctorId) })
+            </div>
+            <div class="col-md-3">
+                <p class="text-right">
+                    <a href="@Parkway.Core.Utilities.ApplicationConfig.Instance.PrefixLang/find-doctor" title="@Html.Raw(ViewBag.AppointmentResource.FindaDoctorLabel)" target="_blank">@Html.Raw(ViewBag.AppointmentResource.FindaDoctorLabel)</a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="divHospital">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.Hospital)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-9">
+                <div id="Hospital" class="list">
+                    <ul class="list-6">
+                        @{
+                            if (ViewBag.Hospitals != null)
+                            {
+                                var flag = true;
+                                foreach (var hopital in ViewBag.Hospitals)
+                                {
+                                    var disabled = string.Empty;
+                                    var selected = string.Empty;
+
+                                    if (Model.HospitalIds != null)
+                                    {
+                                        if ((Model.HospitalIds.Count() == 1 && !Model.HospitalIds.Contains(hopital.Id)))
+                                        {
+                                            disabled = "disabled";
+                                        }
+                                        else if ((Model.HospitalIds.Count() > 1 && !Model.HospitalIds.Contains(hopital.Id) && hopital.Id != Guid.Empty))
+                                        {
+                                            disabled = "disabled";
+                                        }
+                                        else
+                                        {
+                                            selected = "checked";
+                                            // flag = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ((string.IsNullOrEmpty(disabled) && flag && hopital.Id != Guid.Empty) || (string.IsNullOrEmpty(disabled) && hopital.Id == Guid.Empty))
+                                        {
+                                            selected = "checked";
+                                            flag = false;
+                                        }
+                                    }
+                                    <li>
+                                        <label>
+                                            <input type="radio" class="Hospital" name="Hospital" value="@hopital.Id" id="@hopital.Id" key="@hopital.Name" title="@hopital.Title" style="margin-right: 5px; margin-left: 5px" @disabled @selected>@hopital.Title
+                                        </label>
+                                    </li>
+                                }
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <p id="valHospital" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="divOffice">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.Office)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" id="Office" name="Office">
+                    @if (ViewBag.Offices != null)
+                    {
+                        foreach (var office in ViewBag.Offices)
+                        {
+                            if (office.Checked)
+                            {
+                                <option value="@office.Id" selected="selected" id="@office.Id" class="@office.Name">@office.Title</option>
+                            }
+                            else
+                            {
+                                <option value="@office.Id" id="@office.Id" class="@office.Name">@office.Title</option>
+                            }
+                        }
+                    }
+                </select>
+                <label id="lblOfficeSelect" style="margin-top: 5px"></label>
+                <p id="valOffice" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.Nationality)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" id="Nationality" name="Nationality"></select>
+                <p id="valNationality" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.Gender)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-3">
+                <div id="Gender" class="list">
+                    <ul class="list-6">
+                        @if (ViewBag.Genders != null)
+                        {
+                            foreach (var gender in ViewBag.Genders)
+                            {
+                                <label>
+                                    @if (gender.Checked)
+                                    {
+                                        <input type="radio" name="Gender" value="@gender.Id" checked="checked" style="margin-right: 5px; margin-left: 5px">@gender.Title
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="Gender" value="@gender.Id" style="margin-right: 5px; margin-left: 5px">@gender.Title
+                                    }
+                                </label>
+                            }
+                        }
+                    </ul>
+                </div>
+                <p id="valGender" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.PatientName)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.PatientName, new { @id = "PatientName", placeholder = @Html.Raw(ViewBag.Resource.PatientNamePlaceholder), @class = "form-control", @maxlength = 80 })
+                <p id="valPatientName" class="validation-error" style="display: none">@Html.Raw(ViewBag.Resource.PatientNameRule)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.DOB)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.DOB, new { @id = "DOB", placeholder = @Html.Raw(ViewBag.Resource.DOBPlaceholder), @class = "form-control datepicker", @maxlength = 10 })
+
+                <p id="valDOB" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.NRIC)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.NRIC, new { @id = "NRIC", placeholder = @Html.Raw(ViewBag.Resource.NRICPlaceholder), @class = "form-control", @maxlength = 20 })
+                <p id="valNRIC" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.CountryOfResidence)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" id="Country" name="Country"></select>
+                <p id="valCountry" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.ContactNumber)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.CountryCode, new { @id = "CountryCode", @class = "form-control numeric", @maxlength = 3, @placeholder = Html.Raw(ViewBag.Resource.CountryCode), @readonly = true })
+                <p id="valCountryCode" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+            <div class="col-md-2">
+                @Html.TextBoxFor(m => m.AreaCode, new { @id = "AreaCode", @class = "form-control numeric", @maxlength = 3, @placeholder = @Html.Raw(ViewBag.Resource.AreaCode) })
+                <p id="valAreaCode" class="validation-error" style="display: none">@Html.Raw(ViewBag.Resource.InvalidNumber)</p>
+            </div>
+            <div class="col-md-4">
+                @Html.TextBoxFor(m => m.ContactNumber, new { @id = "ContactNumber", @class = "form-control", @maxlength = 15, @placeholder = @Html.Raw(ViewBag.Resource.ContactNumber) })
+                <p id="valContactNumber" class="validation-error" style="display: none">@Html.Raw(ViewBag.Resource.ContactNumberRule)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-3">
+                <label>@Html.Raw(ViewBag.Resource.Email)<span style="color: red">&nbsp;*</span></label>
+            </div>
+            <div class="col-md-6">
+                @Html.TextBoxFor(m => m.Email, new { @id = "Email", @placeholder = @Html.Raw(ViewBag.Resource.EmailPlaceholder), @class = "form-control", @maxlength = 80 })
+                <p id="valEmail" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-12 col-xs-12">
+                <label id="lblCondition">@Html.Raw(ViewBag.Resource.Condition)</label>
+                @Html.TextAreaFor(m => m.Condition, new { @id = "Condition", @class = "form-control", @maxlength = 4000 })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="divDate">
+            <div class="col-md-4">
+                <label>@Html.Raw(ViewBag.Resource.Date)</label>
+            </div>
+            <div class="col-md-3">
+                @Html.TextBoxFor(m => m.Date, new { @id = "Date", @placeholder = @Html.Raw(ViewBag.Resource.DatePlaceholder), @class = "form-control datepicker", @maxlength = 10 })
+                <p id="invDate" class="validation-error" style="display: none">@Html.Raw(ViewBag.ValidateResource.DateFormatLabel)</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="divTime">
+            <div class="col-md-4">
+                <label>@Html.Raw(ViewBag.Resource.Time)</label>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="Time" name="Time">
+                    @if (ViewBag.TimeRanges != null)
+                    {
+                        foreach (var timeRange in ViewBag.TimeRanges)
+                        {
+                            if (timeRange.Checked)
+                            {
+                                <option value="@timeRange.Id" selected="selected">@timeRange.Title</option>
+                            }
+                            else
+                            {
+                                <option value="@timeRange.Id">@timeRange.Title</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="display:none">
+        <div class="col-md-12 col-xs-12">
+            <div class="col-md-12 col-xs-12">
+                <label id="lblHearingChenal">@Html.Raw(ViewBag.Resource.HearingChenal)</label>
+                <div id="HearingChenal" class="list">
+                    <ul class="list-6">
+                        @if (ViewBag.HearingChenals != null)
+                        {
+                            foreach (var hearingChenal in ViewBag.HearingChenals)
+                            {
+                                <li>
+                                    <input type="checkbox" name="HearingChenal" class="HearingChenal" value="@hearingChenal.Id" id="@hearingChenal.Id" style="margin-right: 5px; margin-left: 5px"><label for="@hearingChenal.Id">@hearingChenal.Title</label>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<div class="form-field clearfix">
+		<div class="col-md-12">
+			<div>
+                <label id="chkDisclaimer">
+                    @*<input type="checkbox" name="Disclaimer" id="Disclaimer">*@
+                    <span style="font-weight: normal">@Html.Raw(ViewBag.Disclaimer)</span>
+                </label>
+                @*<p id="valDisclaimer" class="validation-error" style="display: none">@Html.Raw(ViewBag.Resource.RequireTerm)</p>*@
+            </div>
+			
+			<div>
+				<label class="style-2">
+					<input type="checkbox" name="OptIn" id="OptIn"><span>@Html.Raw(ViewBag.Resource.OptIn)</span>
+				</label>
+			</div>
+			
+		</div>
+	</div>
+	
+<div class="section-shaded">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+				<div class="col-md-4" style="display:none">
+                    <label id="lblThingsToNote">@Html.Raw(ViewBag.Resource.ThingsToNoteLabel)</label>
+                </div>
+            <div class="col-md-12 col-xs-12">
+                <span style="font-weight: normal">@Html.Raw(ViewBag.Resource.ThingsToNote.Replace("<helpline>",ViewBag.HelplineNumber))</span>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="row ef-captcha">
+                    <div class="col-md-12 col-xs-12">
+                        <div class="col-md-4">
+                            <label>@ViewBag.Resource.CaptchaDescription</label>
+                            <label id="ebcaptchatext"></label>
+                        </div>
+                        <div class="col-md-2">
+                            <input id="ebcaptchainput" type="text" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <p id="valRecaptcha" class="validation-error" style="display: none">@Html.Raw(ViewBag.Resource.CaptchaRule)</p>
+                        </div>
+                    </div>
+                </div>
+		
+                <div class="row">
+                    <div class="col-md-12 col-xs-12">
+                        <div class="text-center col-md-12">
+                            <p>
+                                <input type="button" value="@Html.Raw(ViewBag.Resource.SubmitLabel)" title="@Html.Raw(ViewBag.Resource.SubmitLabel)" id="btnSave" class="btn btn-primary">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+</section>
+
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script type="text/javascript">
+    var required = '@Html.Raw(ViewBag.ValidateResource.RequiredLabel)';
+    var validateEmail = '@Html.Raw(ViewBag.ValidateResource.EmailFormatLabel)';
+    var validateDate = '@Html.Raw(ViewBag.ValidateResource.DateFormatLabel)';
+    var invalidNumber = '@Html.Raw(ViewBag.Resource.InvalidNumber)';
+    var parkwayHospitalLabel = '@Html.Raw(ViewBag.Resource.ParkwayHospitals)';
+    var hearingChenalLabel = '@Html.Raw(ViewBag.Resource.HearingChenal)';
+    var lblAppointmentLabel = '@Html.Raw(ViewBag.Resource.Condition)';
+    var lblEnquiryLabel = '@Html.Raw(ViewBag.Resource.Enquiry)';
+    var officeSelectLabel = '@Html.Raw(ViewBag.Resource.OfficeSelect)';
+    var contactNumberRule = '@Html.Raw(ViewBag.Resource.ContactNumberRule)';
+    var alertDate = '@Html.Raw(ViewBag.AlertDateMessage)';
+
+    var prefixLang = '@Html.Raw(ViewBag.PrefixLang)';
+    var currentSite = '@Html.Raw(ViewBag.CurrentSite)';
+    var selectedHospitalId = '@Html.Raw(ViewBag.SelectedHospitalId)';
+    var selectedHospitalTitle = '@Html.Raw(ViewBag.SelectedHospitalTitle)';
+    var previousUrl = '@Html.Raw(ViewBag.PreviousUrl)';
+    var currentUrl = '@Html.Raw(ViewBag.CurrentUrl)';
+    var pwsrc = '@Html.Raw(ViewBag.Pwsrc)';
+    var specialty = '@Html.Raw(ViewBag.Specialty)';
+    var ip = '@Html.Raw(Model.Ip)';
+    var macAddress = '@Html.Raw(Model.MacAddress)';
+</script>
+@Scripts.Render("~/bundlescript/enquiryform")
+
+<script id="location" type="text/x-jquery-tmpl">
+    {{if Checked}}
+    <option value="${Id}" selected="selected" id="${Id}" des="${Description}">${Title}</option>
+    {{else}}
+    <option value="${Id}" id="${Id}" des="${Description}">${Title}</option>
+    {{/if}}
+</script>
+
+<script id="NationalityItem" type="text/x-jquery-tmpl">
+    {{if Checked}}
+    <option value="${Id}" selected="selected">${Title}</option>
+    {{else}}
+    <option value="${Id}">${Title}</option>
+    {{/if}}
+</script>
+

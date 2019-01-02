@@ -1,0 +1,103 @@
+﻿@using System.Web.Optimization
+@using Parkway.Core.Utilities
+<h1 class="title">@Html.Raw(ViewBag.Resource.SharedArticlesLabel)</h1>
+<div class="form-group">
+    <select class="form-control style-3" id="ddpFilter" onchange="ChangeRating();" name="">
+        <option value="">@Html.Raw(ViewBag.ResourceCommon.FilterbycategoryLabel)</option>
+        @foreach (var item in ViewBag.SharedArticalsCategories)
+        {
+            <option value="@item.Id">@item.Title</option>
+        }
+    </select>
+    <select class="form-control style-3" id="ddpSort" onchange="ChangeRating();" name="">
+        <option value="0">@Html.Raw(ViewBag.ResourceCommon.SortbyLabel)</option>
+        <option value="1">@Html.Raw(ViewBag.ResourceCommon.DateLatestToOldestLabel)</option>
+        <option value="2">@Html.Raw(ViewBag.ResourceCommon.DateOldestToLatestLabel)</option>
+        <option value="3">@Html.Raw(ViewBag.ResourceCommon.RatingHighestToLowestLabel)</option>
+        <option value="4">@Html.Raw(ViewBag.ResourceCommon.RatingLowestToHighestLabel)</option>
+        <option value="5">@Html.Raw(ViewBag.ResourceCommon.AlphabeticalAToZLabel)</option>
+        <option value="6">@Html.Raw(ViewBag.ResourceCommon.AlphabeticalZToALabel)</option>
+    </select>
+</div>
+<div class="row">
+    <span id="AreaRelatedMessage" class="col-md-12" style="display: none;">@Html.Raw(ViewBag.Resource.ShareArticleMessage)
+    </span>
+    <div class="col-md-12" id="listarticle">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="paging" style="display: none">
+                <li id="page-first"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel)">|&lt;&lt;</a></li>
+                <li id="page-previous"><a href="#" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                <li id="page-next"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                <li id="page-last"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script id="articleItemList" type="text/x-jquery-tmpl">
+    <article class="article">
+        <div class="intro-article">
+            <div class="clearfix">
+                <div class="float-l">
+                    <a href="${DoctorUrl}" title=''>
+                        <img src="${Photo}" alt="${DoctorName}">
+                    </a>
+                </div>
+                <div class="user" style="float: left;">
+                    <h4><a href="${DoctorUrl}" style='text-decoration: none;'>${DoctorName}</a><br>
+                        <div class="specialties" artid="${ArticleId}" doctorid="${DoctorId}">
+                        </div>
+                    </h4>
+                    <p>${PostedDate}</p>
+                </div>
+            </div>
+            <p>${Comments}</p>
+        </div>
+        <div class="content-article">
+            <div class="float-l">
+                <a href="${UpdateViewsUrl}" title="${ArticleTitle}" target="_blank">
+                    <img src="${ArticleImage}" alt="${ArticleTitle}"></a>
+            </div>
+            <div class="context-article">
+                <h3><a href="${UpdateViewsUrl}" title="${ArticleTitle}" target="_blank">${ArticleTitle}</a></h3>
+                <p>${ArticleShortContent}</p>
+                <p><a href="${UpdateViewsUrl}" title="${ArticleUrl}" target="_blank">${ArticleUrl}</a></p>
+                <div class="clearfix">
+                    <div class="rate" articleid="${ArticleId}" data-rating="${AverageRating}">
+                    </div>
+                    <div class="number" articleid="${ArticleId}">(${NumberUserRating})</div>
+                </div>
+                <ul class="action-group">
+                    <li class="addthis_toolbox addthis_default_style addthis_32x32_style">
+                        <a href="#" class="addthis_button_compact" rel="nofollow" addthis:url="${ArticleUrl}" addthis:title="${ArticleTitle}" title="Share">
+                            <span>Share This</span>
+                            <img src="@Url.Content("/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/share-ico.png")" alt="Share">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </article>
+</script>
+
+<script id="sharedUrl" type="text/x-jquery-tmpl">
+    <li>
+        <a href="@ApplicationConfig.Instance.BaseUrl@ApplicationConfig.Instance.CurrentCulture${UrlPage}" 
+           title="">@ApplicationConfig.Instance.BaseUrl@ApplicationConfig.Instance.CurrentCulture${UrlPage}
+        </a><span>12 Views</span>
+    </li>
+</script>
+<script id="specialtiesList" type="text/x-jquery-tmpl">
+    {{if Link}}
+    <span><a href="${Link}" style="text-decoration: none;">${Title}</a></span><br />
+    {{else}}
+      <span>${Title}</span><br />
+    {{/if}}
+</script>
+<script type="text/javascript">
+    var RelatedHealthArticlesId = "@Html.Raw(ViewBag.RelatedHealthArticlesId)";
+</script>
+@Scripts.Render("~/bundlescript/relatedarticles")

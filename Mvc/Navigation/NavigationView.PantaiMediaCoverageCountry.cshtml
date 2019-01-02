@@ -1,0 +1,51 @@
+@model Telerik.Sitefinity.Frontend.Navigation.Mvc.Models.INavigationModel
+
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@using Telerik.Sitefinity.Frontend.Navigation.Mvc.Models;
+@using Telerik.Sitefinity.Modules.Pages;
+
+@*Add scripts and stylesheets*@
+
+<div class="btn-group @Model.CssClass">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="selected-dropdown-menu-label">Select Country</span>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+      @foreach (var node in Model.Nodes)
+        {
+             @RenderSubLevelsRecursive(node);
+        }
+  </ul>
+</div>
+
+@*Here is specified the rendering for the sub levels*@
+@helper RenderSubLevelsRecursive(NodeViewModel node)
+{
+    
+    <li>
+        <a href="@node.Url">@node.Title</a>
+        @if (node.ChildNodes.Count > 0)
+        {
+            <ul class="dropdown-menu">
+                @foreach (var childNode in node.ChildNodes)
+                {
+                    @RenderSubLevelsRecursive(childNode)
+                }
+            </ul>
+        }
+    </li>
+}
+
+@*Resolves the class that will be added for each node depending whether it is selected*@
+@helper GetClass(NodeViewModel node)
+{
+    if (node.IsCurrentlyOpened)
+    {
+        @Html.Raw("active");
+    }
+    else if (node.HasChildOpen)
+    {
+        @Html.Raw("active");
+    }
+}

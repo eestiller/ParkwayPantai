@@ -1,0 +1,520 @@
+﻿@using System.Web.Optimization
+@using SitefinityWebApp.Custom.Configs
+@using SitefinityWebApp.Mvc.Models
+@using Telerik.Sitefinity.Configuration
+@model DoctorProfileModel
+
+@Scripts.Render("~/bundlescript/doctorprofile")
+@Styles.Render("~/Mvc/Content/uploadify/uploadifycss")
+
+<script type="text/javascript">
+    $(function () {
+        $("#file_upload").uploadify({
+            'method': 'post',
+            'formData': { 'action': 'DoctorAvarta' },
+            'fileTypeDesc': 'Image Files',
+            'fileTypeExts': '*.jpg; *.png',
+            'fileSizeLimit': '1024KB',
+            'swf': '@Url.Content("~/Mvc/Content/uploadify/uploadify.swf")',
+            //'uploader': '/api/DoctorProfileApi/AddAttachment?doctorMcr=' + doctorMcr,
+            'uploader': '/AjaxFileUploader.ashx',
+            'onUploadSuccess': function (file, data, response) {
+                debugger;
+                if (response) {
+                    //data = data.replace('"', '');
+                    //data = data.replace('"', '');
+                    var newFileName = window.JSON.parse(data).FileName;
+                    var url = $('#uploadDoctorFolder').val() + newFileName;
+                    document.getElementById('doctorPhoto').setAttribute('src', url);
+                    $("#hidUploadFileName").val(newFileName);
+                }
+            }
+        });
+
+
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function ($) {
+        var firstLoad = true;
+        $('#tabAccordion a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+        fakewaffle.responsiveTabs(['xs', 'sm']);
+
+        $('#collapse-tabAccordion').on('hidden.bs.collapse', function (e) {
+            var div = $(this).find('.panel-collapse:not(.in)');
+            div.each(function () {
+                var id = $(this).attr('id');
+                $('#collapse-tabAccordion .panel-heading a[href="#' + id + '"]').removeClass('active');
+            });
+
+        });
+        $('#collapse-tabAccordion').on('shown.bs.collapse', function (e) {
+            $('#collapse-tabAccordion .panel-title > a').removeClass('active');
+            var div = $(this).find('.panel-collapse.in');
+            var anchor = $('#collapse-tabAccordion .panel-title > a[href="#' + div.attr('id') + '"]');
+            anchor.addClass('active')
+            if (!firstLoad) $('html,body').animate({ scrollTop: anchor.offset().top }, 600);
+        });
+
+        setTimeout(function () {
+            $($('#collapse-tabAccordion').children()[0]).find('.panel-title a').click();
+        }, 600);
+    })
+</script>
+
+@Html.Hidden("hidUploadFileName")
+@Html.Hidden("uploadDoctorFolder", HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority) + Config.Get<ParkwayConfig>().TempFolder.Replace("~", ""))
+
+@Html.ValidationSummary(true)
+
+<h1 class="title">@Model.DoctorName</h1>
+<p>@Html.Raw(ViewBag.Resource.DoctorMCRBNumberLable) @Model.MCRBNumber</p>
+@Html.HiddenFor(m => m.DoctorName)
+@Html.HiddenFor(m => m.MCRBNumber)
+<div class="form-group">
+    <a href="#popup-resetpassword" id="btnChangePassword" class="btn btn-primary fancybox" title="Popup">@Html.Raw(ViewBag.Resource.DoctorChangePasswordLable)</a>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="edit-dr-info" id="contentDiv">
+            @if (Model.HasPendingChanges)
+            {
+                <p>@Html.Raw(ViewBag.Resource.DoctorPendingChangesLabel)</p>
+            }
+            
+            <p>@Html.Raw(ViewBag.Resource.DoctorInformationLable)</p>
+            <div class="fields">
+                <div id="emailRow" class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-2">
+                        <label for="">@Html.Raw(ViewBag.Resource.DoctorPersonalEmailLable)<span>*</span></label>
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Email, new { @id = "txtEmail", @class = "form-control", @maxlength = 255, @required = "required" })
+                        <label id="errorEmailMessageArea" class="error" style="display: none"></label>
+                    </div>
+                </div>
+                <div id="mobileRow" class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-2">
+                        <label for="">@Html.Raw(ViewBag.Resource.DoctorMobileNumberLable)<span>*</span></label>
+                    </div>
+                    <div class="col-sm-6">
+                        @Html.TextBoxFor(m => m.Mobilephone, new { @id = "txtMobile", @class = "form-control", @maxlength = 8, @required = "required" })
+                        <label id="errorMobileMessageArea" class="error" style="display: none">@Html.Raw(ViewBag.Resource.DoctorElementNullError)</label>
+                    </div>
+                </div>
+                <div id="birthDayRow" class="row" style="margin-bottom: 0px !important;">
+                    @Html.Partial("~/Mvc/Views/DoctorProfile/DateOfBirthPartial.cshtml", Model)
+                </div>
+                <div class="row" id="dateOfBirthError" style="display: none">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-6">
+                        <label id="errorDayOfBirthMessageArea" class="error"></label>
+                    </div>
+                </div>
+
+                <div id="contactUsRow" class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-4">
+                        <label for="">@Html.Raw(ViewBag.Resource.DoctorPreferredModeofCommunicationLable)<span>*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        @for (var i = 0; i < Model.Communications.Count; i++)
+                        {
+                            <label class="style-2">
+                                @Html.CheckBoxFor(m => m.Communications[i].Checked, new { @id = Model.Communications[i].Title.Replace(" ", "").Trim(), @name = "ContactUs" })
+                                @Html.DisplayFor(m => m.Communications[i].Title)
+                                @Html.HiddenFor(m => m.Communications[i].Id, new { @id = "hid" + Model.Communications[i].Title.Replace(" ", "").Trim() })
+                            </label>
+                        }
+                    </div>
+                </div>
+                <div class="row" id="contactUsError" style="display: none">
+                    <div class="col-sm-4">
+                    </div>
+                    <div class="col-sm-6">
+                        <label id="errorContactUsMessageArea" class="error">@Html.Raw(ViewBag.Resource.DoctorElementNullError)</label>
+                    </div>
+                </div>
+
+                @Html.Hidden("hidTotalContactUs", Model.Communications.Count)
+                <div class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-8">
+                        <label>
+                            @Html.Raw(ViewBag.Resource.DoctorAskDoctorLable)
+                        </label>
+                    </div>
+                    <div class="col-sm-4">
+
+                        @if (@Model.AskDoctor)
+                        {
+                            <label for="" class="style-2">
+                                @Html.RadioButton("AskDoctor", Model.AskDoctor, new { @checked = "checked", @name = "AskDoctor" })
+                                @Html.Raw(ViewBag.Resource.DoctorAskDoctorYesLable)
+                            </label>
+                            <label for="" class="style-2">
+                                <input type="radio" name="AskDoctor" />
+                                @Html.Raw(ViewBag.Resource.DoctorAskDoctorNoLable)
+                            </label>
+                        }
+                        else
+                        {
+                            <label for="" class="style-2">
+                                @Html.RadioButtonFor(m => m.AskDoctor, Model.AskDoctor, new { @name = "AskDoctor" })
+                                @Html.Raw(ViewBag.Resource.DoctorAskDoctorYesLable)
+                            </label>
+                            <label for="" class="style-2">
+                                <input type="radio" name="AskDoctor" checked="checked" />
+                                @Html.Raw(ViewBag.Resource.DoctorAskDoctorNoLable)
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="fields">
+                <div id="activityRow" class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-12">
+                        <p>
+                            <label for="">@Html.Raw(ViewBag.Resource.DoctorActivityLable)<span>*</span></label>
+                        </p>
+                        <ul class="list-20">
+                            @for (var i = 0; i < Model.Activity.Count; i++)
+                            {
+                                <li>
+                                    <label class="style-2">
+                                        @Html.CheckBoxFor(m => m.Activity[i].Checked, new { @id = "Activity" + i, @name = "Activity", @onchange = "CheckingActivityElement();" })
+                                        @Html.DisplayFor(m => m.Activity[i].Title)
+                                        @Html.HiddenFor(m => m.Activity[i].Id, new { @id = "hidActivity" + i })
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <label id="errorActivityMessageArea" class="error" style="display: none">@Html.Raw(ViewBag.Resource.DoctorElementNullError)</label>
+                @Html.Hidden("hidTotalActivity", Model.Activity.Count)
+            </div>
+            <p>@Html.Raw(ViewBag.Resource.DoctorPublicInforLable)</p>
+            <div class="fields">
+                <div class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-2">
+                        <label for="">@Html.Raw(ViewBag.Resource.DoctorPublicInforGenderLable)</label>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="list-3">
+                            @for (var i = 0; i < Model.Genders.Count; i++)
+                            {
+                                var isChecked = Model.Genders[i].Checked;
+                                if (isChecked)
+                                {
+                                <label for="" class="style-2">
+                                    @Html.RadioButton(Model.Genders[i].Id.ToString(), Model.Genders[i].Checked, new { @id = Model.Genders[i].Id.ToString(), @checked = "checked", @Name = "Genders", @onclick = "SetCheckedCheckBox(this);" })
+                                    @Html.DisplayFor(m => m.Genders[i].Title)
+                                </label>
+                                }
+                                else
+                                {
+                                <label for="" class="style-2">
+                                    @Html.RadioButton(Model.Genders[i].Id.ToString(), Model.Genders[i].Checked, new { @id = Model.Genders[i].Id.ToString(), @Name = "Genders", @onclick = "SetCheckedCheckBox(this);" })
+                                    @Html.DisplayFor(m => m.Genders[i].Title)
+                                </label>
+                                }
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.GenderId)
+
+            <div class="fields">
+                <p>
+                    <label for="">@Html.Raw(ViewBag.Resource.DoctorLanguagesSpokenLable)</label>
+                </p>
+                <ul class="list-20" id="language-list-display">
+                    @{
+                        var listLanguageSelected = Model.Languages.Where(m => m.Checked).ToList();
+                        for (var i = 0; i < listLanguageSelected.Count(); i++)
+                        {
+                        <li>
+                            <label for='' class='style-2'>
+                                @listLanguageSelected[i].Title
+                            </label>
+                        </li>
+                        }
+                    }
+
+                </ul>
+                <p><a id="chooseLanguagesLink" href="javascript:void(0);" title="Choose more languages" class="style-2 view-more">Choose more languages</a></p>
+                <div id="spokenLanguageRow" class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-12">
+                        <ul class="list-20" id="language-list">
+                            @for (var i = 0; i < Model.Languages.Count; i++)
+                            {
+                                var title = Model.Languages[i].Title;
+                                <li>
+                                    <label class="style-2">
+                                        @Html.CheckBoxFor(m => m.Languages[i].Checked, new { @id = "SpokenLanguage" + i, @name = "Languages", @onchange = "AddLanguageSelected(this,'" + title + "'); CheckingSpokenElement();" })
+                                        @Html.DisplayFor(m => m.Languages[i].Title)
+                                        @Html.HiddenFor(m => m.Languages[i].Id, new { @id = "hidSpokenLanguage" + i })
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <label id="errorSpokenLanguageMessageArea" class="error" style="display: none">@Html.Raw(ViewBag.Resource.DoctorElementNullError)</label>
+            </div>
+            @Html.Hidden("hidTotalSpokenLanguage", Model.Languages.Count)
+
+            <div class="fields dr-info">
+                <div class="row" style="margin-bottom: 0px !important;">
+                    <div class="col-sm-3">
+                        <h4>@Html.Raw(ViewBag.Resource.DoctorProfilePhotoLable)</h4>
+                        <img id="doctorPhoto" src="@Model.UrlImage" alt="@Model.DoctorName" style="width: 197px; height: 270px;" />
+                        @*   Upload File*@
+                        <div id="uploadAvartaNonIE" style="margin-top: 10px">
+                            <input type="file" name="file_upload" id="file_upload" />
+                        </div>
+                        <div id="uploadAvartaOnIE" style="margin-top: 10px; display: none;">
+                            <input type="file" size="1024" name="file_upload" id="upload_Avarta_Ie" onchange="updateAvarta(this);" style="width: 30%;"
+                                class="filestyle" data-input="false" data-buttontext="Upload" />
+                        </div>
+                        @*  End Upload File*@
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>@Html.Raw(ViewBag.Resource.DoctorProfileVideoLable)</h4>
+                        @{
+                            var videoUrl = (string)ViewBag.VideoThumbnailUrl;
+                            if (!string.IsNullOrEmpty(videoUrl))
+                            {
+                            <a class="fancybox-media" href="@Model.UrlVideo">
+                                <img src="@Url.Content(videoUrl)" alt="@Model.DoctorName" width="450px" height="268px" /></a>
+                            }
+                            else
+                            {
+                            <img src="@Url.Content("/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/img-video.jpg")" alt="@Model.DoctorName" width="450px" height="268px" />
+                            }
+                        }
+
+                        @Html.TextBox("txtVideoUrl", @Model.UrlVideo, new { @class = "form-control", @maxlength = 255, style = "margin-top: 10px", @placeholder = "Please enter a YouTube link here" })
+                        <label id="errorVideoMessage" class="error" style="display: none">@Html.Raw(ViewBag.Resource.UrlVideoInvalidLabel)</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        @Html.Partial("~/Mvc/Views/DoctorProfile/ClinicPhotosPartial.cshtml", Model)
+
+                        <h4>Background & Awards</h4>
+                        <div class="tabs-section">
+                            <ul class="nav-tabs responsive" id="tabAccordion">
+                                <li class="active"><a href="#en">English</a></li>
+                                <li><a href="#cn">Simplified Chinese</a></li>
+                                <li><a href="#id">Bahasa Indonesian</a></li>
+                            </ul>
+                            <div class="tab-content responsive">
+                                <div class="tab-pane active" id="en">
+                                    <h3>@Html.Raw(ViewBag.Resource.DoctorBackgroundsLable)</h3>
+                                    <ul class="list-2" id="backgroundView">
+                                        @{
+                                            var backgrounds = Model.Background.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                                            foreach (var text in backgrounds)
+                                            {
+                                            <li>
+                                                @text
+                                            </li>
+                                            }
+                                        }
+                                    </ul>
+                                    @Html.TextAreaFor(m => m.Background, new { @id = "backgroundEdit", @style = "width : 100%;min-height : 85px; height: auto;display: none;", @class = "form-control" })
+                                    <p id="backgroundTooltip" style="display: none; margin-top: 5px;">Separate backgrounds with semicolon.</p>
+                                    <input id="btnEditBackground" type="button" value="Edit" class="sfEditButton" />
+                                    <div id="preview"></div>
+                                    <h3>@Html.Raw(ViewBag.Resource.DoctorAwardsLable)</h3>
+                                    <ul class="list-2" id="awardsView">
+                                        @{
+                                            var awards = Model.Awards.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                                            foreach (var text in awards)
+                                            {
+                                            <li>
+                                                @text
+                                            </li>
+                                            }
+                                        }
+                                    </ul>
+                                    @Html.TextAreaFor(m => m.Awards, new { @id = "awardsEdit", @style = "width : 100%;min-height : 85px; height: auto;display: none", @class = "form-control" })
+                                    <p id="awardsTooltip" style="display: none; margin-top: 5px;">Separate awards with semicolon.</p>
+                                    <input id="btnEditawards" type="button" value="Edit" class="sfEditButton" />
+                                </div>
+
+                                <div class="tab-pane" id="cn">
+                                    <h3>@Html.Raw(ViewBag.Resource.DoctorBackgroundsLable)</h3>
+                                    <ul class="list-2" id="backgroundViewCN">
+                                        @{
+                                            var backgroundsCN = Model.BackgroundCN.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                                            foreach (var bcn in backgroundsCN)
+                                            {
+                                            <li>
+                                                @bcn
+                                            </li>
+                                            }
+                                        }
+                                    </ul>
+                                    @Html.TextAreaFor(m => m.BackgroundCN, new { @id = "backgroundCNEdit", @style = "width : 100%;min-height : 85px; height: auto;display: none;", @class = "form-control" })
+                                    <p id="backgroundTooltipCN" style="display: none; margin-top: 5px;">Separate backgrounds with semicolon.</p>
+                                    <input id="btnEditBackgroundCN" type="button" value="Edit" class="sfEditButton" />
+                                    <div id="previewCN"></div>
+                                    <h3>@Html.Raw(ViewBag.Resource.DoctorAwardsLable)</h3>
+                                    <ul class="list-2" id="awardsViewCN">
+                                        @{
+                                            var awardsCN = Model.AwardsCN.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                                            foreach (var aCN in awardsCN)
+                                            {
+                                            <li>
+                                                @aCN
+                                            </li>
+                                            }
+                                        }
+                                    </ul>
+                                    @Html.TextAreaFor(m => m.AwardsCN, new { @id = "awardsCNEdit", @style = "width : 100%;min-height : 85px; height: auto;display: none", @class = "form-control" })
+                                    <p id="awardsTooltipCN" style="display: none; margin-top: 5px;">Separate awards with semicolon.</p>
+                                    <input id="btnEditawardsCN" type="button" value="Edit" class="sfEditButton" />
+                                </div>
+
+                                <div class="tab-pane" id="id">
+                                    <h3>@Html.Raw(ViewBag.Resource.DoctorBackgroundsLable)</h3>
+                                    <ul class="list-2" id="backgroundViewID">
+                                        @{
+                                            var backgroundsID = Model.BackgroundID.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                                            foreach (var bid in backgroundsID)
+                                            {
+                                            <li>
+                                                @bid
+                                            </li>
+                                            }
+                                        }
+                                    </ul>
+                                    @Html.TextAreaFor(m => m.BackgroundID, new { @id = "backgroundIDEdit", @style = "width : 100%;min-height : 85px; height: auto;display: none;", @class = "form-control" })
+                                    <p id="backgroundTooltipID" style="display: none; margin-top: 5px;">Separate backgrounds with semicolon.</p>
+                                    <input id="btnEditBackgroundID" type="button" value="Edit" class="sfEditButton" />
+                                    <div id="previewID"></div>
+                                    <h3>@Html.Raw(ViewBag.Resource.DoctorAwardsLable)</h3>
+                                    <ul class="list-2" id="awardsViewID">
+                                        @{
+                                            var awardsID = Model.AwardsID.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                                            foreach (var aid in awardsID)
+                                            {
+                                            <li>
+                                                @aid
+                                            </li>
+                                            }
+                                        }
+                                    </ul>
+                                    @Html.TextAreaFor(m => m.AwardsID, new { @id = "awardsIDEdit", @style = "width : 100%;min-height : 85px; height: auto;display: none", @class = "form-control" })
+                                    <p id="awardsTooltipID" style="display: none; margin-top: 5px;">Separate awards with semicolon.</p>
+                                    <input id="btnEditawardsID" type="button" value="Edit" class="sfEditButton" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>
+                            <input name="btnCancel" type="button" value="@Html.Raw(ViewBag.Resource.DoctorButtonCancelLable)" class="btn btn-primary" onclick="ReloadPage();" />
+                            <input id="btnSave" type="button" value="@Html.Raw(ViewBag.Resource.DoctorButtonSaveLable)" class="btn btn-primary" />
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <p>@Html.Raw((string)ViewBag.DPAdminEmail)</p>
+            <ul class="dr-detail">
+                <li>
+                    <h3>@Html.Raw(ViewBag.Resource.Key_Specialties_Interests)</h3>
+                    <ul>
+                        @foreach (var s in Model.Specialties.Where(c => !string.IsNullOrEmpty(c.SpecialtyName)).OrderBy(o => o.SpecialtyName))
+                        {
+                            <li>@s.SpecialtyName</li>
+                        }
+                    </ul>
+                </li>
+                @if (Model.Specialties != null && Model.Specialties.Where(c => !string.IsNullOrEmpty(c.SubSpecialtyName)).Any())
+                {
+                    <li>
+                        <h3>@Html.Raw(ViewBag.Resource.Areas_of_Interest)</h3>
+                        <ul>
+                            @foreach (var s in Model.Specialties.Where(c => !string.IsNullOrEmpty(c.SubSpecialtyName)).OrderBy(o => o.SubSpecialtyName))
+                            {
+                                <li>@s.SubSpecialtyName</li>
+                            }
+                        </ul>
+                    </li>
+                }
+                @if (Model.Qualifications != null && Model.Qualifications != "")
+                { <li>
+                    <h3>@Html.Raw(ViewBag.Resource.Qualifications)</h3>
+                    <ul class="list-2">
+                        @{
+                    var qualifications = Model.Qualifications.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+                    foreach (var qualification in qualifications)
+                    {
+                            <li>
+                                @qualification
+                            </li>
+                    }
+                        }
+                    </ul>
+                </li>
+                }
+            </ul>
+            <h4>@Html.Raw(ViewBag.Resource.DoctorClinicAddressesLable)</h4>
+            @if (Model.Clinics == null || Model.Clinics.Count == 0)
+            {
+                <span>@ViewBag.Resource.NoClinicsFoundMessage</span>
+            }
+            <ul class="list-address">
+                @foreach (var clinicAddress in Model.Clinics)
+                {
+                    <li>
+                        <h2>@clinicAddress.Name</h2>
+                        <p>
+                            <strong>Address</strong><br>
+                            @Html.Raw(clinicAddress.Address)<br>
+                        </p>
+                        <p>
+                            <strong>
+                                @Html.Raw(ViewBag.Resource.DoctorClinicAddressesTelLable)
+                            </strong>
+                            <span>
+                                @clinicAddress.ContactNumber
+                            </span>
+                            <br>
+                            <strong>
+                                @Html.Raw(ViewBag.Resource.DoctorClinicAddressesFaxLable)
+                            </strong>
+                            <span>@clinicAddress.ContactFax</span>
+                        </p>
+                    </li>
+                }
+            </ul>
+
+        </div>
+    </div>
+    @Html.Partial("~/Mvc/Views/DoctorProfile/PopupPartial.cshtml")
+</div>
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script>
+    var pendingChangesMessage = '@Html.Raw(ViewBag.Resource.DoctorPendingChangesMessage)';
+
+    // Disable all inputs if the profile has changes waiting to be approved
+    @if (Model.HasPendingChanges)
+    {
+        <text>
+    $('#contentDiv :input').attr('disabled', true);
+    $('#contentDiv :input[type=button]').remove();
+    $('#uploadAvartaNonIE').remove();
+    $('#uploadAvartaOnIE').remove();
+    $('#chooseLanguagesLink').remove();
+    </text>
+    }
+</script>

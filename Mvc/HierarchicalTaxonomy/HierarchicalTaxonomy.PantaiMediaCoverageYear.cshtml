@@ -1,0 +1,23 @@
+﻿@model Telerik.Sitefinity.Frontend.Taxonomies.Mvc.Models.TaxonomyViewModel
+
+<div class="btn-group @Model.CssClass">
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <span class="selected-dropdown-menu-label">Select Year</span>
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+      @foreach (var taxon in Model.Taxa)
+        {
+        <li>
+            <a href="@taxon.Url">@taxon.Title</a>
+
+            @if (Model.ShowItemCount)
+            {
+                
+                <span class="text-muted">@Html.Raw(string.Format("({0})", taxon.Count))</span>
+                
+            }
+        </li>
+        }
+  </ul>
+</div>

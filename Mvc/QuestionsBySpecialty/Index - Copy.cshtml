@@ -1,0 +1,100 @@
+﻿@using System.Web.Optimization
+@using Parkway.Core.Utilities
+<h1 class="title">@Html.Raw(ViewBag.Resource.AskDoctorTitle)</h1>
+<div class="form-group">
+    <select id="ddpPublishDate" onchange="FilterPublishDate();" class="form-control style-3" name="">
+        <option value="0">@Html.Raw(ViewBag.ResourceCommon.AlldaysLabel)</option>
+        @if (ViewBag.Recents != null)
+        {
+            foreach (var recent in ViewBag.Recents)
+            {
+                <option value="@recent.Name">@recent.Title</option>
+            }
+        }
+    </select>
+    @if (!string.IsNullOrEmpty(ViewBag.SpecialtyPageUrl))
+    {
+        <a href="@ViewBag.SpecialtyPageUrl" title="@Html.Raw(ViewBag.Resource.AskDoctorLabel)" class="btn btn-primary">@Html.Raw(ViewBag.Resource.AskDoctorLabel)</a>
+    }
+    else
+    {
+        <a href="javascript:void(0);" title="@Html.Raw(ViewBag.Resource.AskDoctorLabel)" class="btn btn-primary">@Html.Raw(ViewBag.Resource.AskDoctorLabel)</a>
+    }
+</div>
+
+<div class="row">
+    <div class="col-md-12"><span id="AreaAllQuestionMessage" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorNoQuestionsFoundMessage)</span></div>
+    <div id="AreaQuestionBySpecialty" class="col-md-12 margin-1">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="paging" style="display: none">
+                <li id="page-first"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel)">|&lt;&lt;</a></li>
+                <li id="page-previous"><a href="#" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                <li id="page-next"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                <li id="page-last"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script id="question" type="text/x-jquery-tmpl">
+    <div class='post-main'>
+        <div class='post-content'>
+            <h4>${Content}</h4>
+            <p><strong>@Html.Raw(ViewBag.Resource.AskedByLabel)</strong> <span class="style-2">${AskedBy} </span><span>${PostedDate}</span></p>
+            <ul id='detailSpecialty' class='style-2'>
+                <li><a id="pageTitleUrl" href='${ConditionPageLink}' title='${PageTitle}'>${PageTitle}</a></li>
+            </ul>
+            <p class="style-2"><a href="#" title="@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)">@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)</a></p>
+            <div class="fck">
+                @Html.Raw(ViewBag.Disclaimer)
+            </div>
+        </div>
+        <div class='post-answers' questionid="${Id}">
+        </div>
+    </div>
+</script>
+
+<script id="answer" type="text/x-jquery-tmpl">
+    <div class='post-sub'>
+        <div class='post-sub-content'>
+            <div class='thumb'>
+                <a href="${DoctorUrl}" title="${DoctorName}">
+                    <img src='${Photo}' alt="Dr ${DoctorName}">
+                </a>
+            </div>
+            <div class='detail'>
+                <h6>
+                    <a href='${DoctorUrl}' style='text-decoration: none;'>${DoctorName}</a>
+                    <div class="specialties" answertid="${AnswerId}" doctorid="${DoctorId}">
+                    </div>
+                </h6>
+                <p class='style-3'>${RepliedDate}</p>
+                <p>${Content}</p>
+            </div>
+        </div>
+        <p class="style-2"><a href="#" title="@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)">@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)</a></p>
+        <div class="fck">
+            @Html.Raw(ViewBag.Disclaimer)
+        </div>
+    </div>
+</script>
+
+<script id="specialtiesList" type="text/x-jquery-tmpl">
+    {{if Link}}
+    <a href="${Link}"><span>${Title}</span></a>
+    {{else}}
+    <span>${Title}</span>
+    {{/if}}
+</script>
+
+<span id="askedBy" style="display: none;">@Html.Raw(ViewBag.Resource.AskedByLabel)</span>
+<span id="askDoctorDisclaimerLabel" style="display: none;">@Html.Raw(ViewBag.Resource.AskDoctorDisclaimerLabel)</span>
+@Html.Hidden("hidPageTitleLink", (string)ViewBag.PageTitleLink)
+
+@Scripts.Render("~/bundlescript/questionbyspecialty")
+<script type="text/javascript">
+    var specialtyPageId = "@ViewBag.SpecialtyPageId";
+</script>

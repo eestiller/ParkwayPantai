@@ -1,0 +1,82 @@
+@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.InnerQuestionsViewModel
+
+<script>
+        var editKey = "@Html.Raw(Model.SitefinityUrlEditKey)";
+        var templateKey = "@Html.Raw(Model.SitefinityUrlTemplateKey)";
+        var questionAPI = "@Html.Raw(Model.ListAPI)";
+
+        $(window).load(function () {
+            //Skip getting data in case edit mode in back-end
+            if (window.location.toString().indexOf(editKey) != -1 || window.location.toString().indexOf(templateKey) != -1) {
+                $("#divInforQuestion").hide();
+                $("#listQuestion").hide();
+            }
+            else {
+                $("#btnViewAllQuestion").hide();
+                $("#loadingQuestion").show();
+
+                $.get(questionAPI, function (data) {
+                    if (data.DataList.length <= 0) {
+                        $("#btnViewAllQuestion").hide();
+                        $("#divEmpty").prepend(emptyQuestionLabel);
+                        $("#loadingQuestion").hide();
+                    } else {
+                        $("#btnViewAllQuestion").attr('href', data.ViewAllUrl);
+                        $("#btnViewAllQuestion").show();
+
+                        $("#listQuestion").empty();
+                        $("#questions").tmpl(data.DataList).appendTo("#listQuestion");
+                        $("#loadingQuestion").hide();
+
+                    }
+                }, 'json');
+                return true;
+            }
+        });
+</script>
+
+<script id="questions" type="text/x-jquery-tmpl">
+    <li>
+        <h3>
+            <a href="${QuestionUrl}" title=''>${PostedDate}</a>
+        </h3>
+        <p>${Content}</p>
+    </li>
+</script>
+
+@if (Model.IsShow)
+{
+    <article class="box-aside">
+        <ul>
+            <li><a href="@Model.FindDoctorUrl" title="@Html.Raw(Model.Resource.FindADoctor)"><img src="@Model.FindDoctorImg" alt="@Html.Raw(Model.Resource.FindADoctor)"></a></li>
+            <li><a href="@Model.MakeAppointmentUrl" title="@Html.Raw(Model.Resource.MakeAppointmentButton)"><img src="@Model.MakeAppointmentImg" alt="@Html.Raw(Model.Resource.MakeAppointmentButton)"></a></li>
+        </ul>
+    </article>
+}
+else
+{
+    <article class="box-news" id="divInnerQuestion">
+        <div class="intro">
+            <h2>
+                @Html.Raw(Model.Resource.AskaDoctor)
+            </h2>
+            <p>
+                @Html.Raw(Model.Resource.SubmitQuestion)
+            </p>
+            <img src="/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/bg-3.png" alt="@Model.Resource.AskaDoctor">
+        </div>
+        <ul id="listQuestion"></ul>
+        <p class="btn-all" id="divInforQuestion">
+            <img src="~/Mvc/Content/loading/loading.gif" id="loadingQuestion" alt="Loading" />
+            <a id="btnViewAllQuestion" href="javascript:void(0);" title="@Html.Raw(Model.Resource.ViewAllButton)" style="display:none">@Html.Raw(Model.Resource.ViewAllButton)</a>
+        </p>
+        <p id="divEmpty">
+            <a href="@Model.AskDoctorUrl" title="@Model.Resource.AskaDoctor" class="btn btn-primary">@Model.Resource.AskaDoctor</a>
+        </p>
+    </article>
+}
+<script type="text/javascript">
+        var emptyQuestionLabel = "@Html.Raw(Model.Resource.EmptyQuestion)";
+</script>
+@Scripts.Render("~/bundlescript/innerquestions")

@@ -1,0 +1,128 @@
+﻿@if (Model != null)
+{
+    <section class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ol class="breadcrumb">
+                    <li><a href="@Html.Raw(ViewBag.HomeUrl)" title="@Html.Raw(ViewBag.HomeLabel)">@Html.Raw(ViewBag.HomeLabel)</a></li>
+                    <li><a href="@Html.Raw(ViewBag.ListingUrl)" title="@Html.Raw(ViewBag.ListingTitle)">@Html.Raw(ViewBag.ListingTitle)</a></li>
+                    <li class="active">@Model.DoctorQA.Name</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+    
+    <section class="container dr-qa">
+        <div class="row">
+            <div class="pull-right col-md-9 col-xs-12 right-box">
+                <h1 class="title">@Model.DoctorQA.Name</h1>
+                <div class="list-philosophy">
+                    <div class="philosophy">"@Html.Raw(@Model.DoctorQA.Philosophy)"</div>
+                    <div class="introduction">@Html.Raw(@Model.DoctorQA.Introduction)</div>
+                </div>
+            </div>
+            <div class="col-md-3  col-xs-12 left-box">
+                <div class="thumb">
+                    <span class="img-box"><img class="profile" src="@Model.DoctorQA.Photo" alt="@Model.DoctorQA.Name"></span>
+                    <p class="view-profile-div"><a href="@Model.DoctorQA.DoctorUrl" class="view-profile btn-primary">@Html.Raw(ViewBag.Resource.ViewProfileButton)</a></p>
+                    <p class="appointment-div-desktop"><a href="@Model.DoctorQA.AppointmentUrl" class="btn-book-appointment btn-primary" title="@Html.Raw(ViewBag.Resource.MakeAppointmentButton)">@Html.Raw(ViewBag.Resource.MakeAppointmentButton)</a></p>
+                </div>
+                <ul class="dr-detail">
+                    @if (@Model.Specialties != null && @Model.Specialties.Count > 0)
+                    {
+                        <li>
+                            <h3>@Html.Raw(ViewBag.Resource.SpecialtyLabel)</h3>
+                            <ul>
+                                @foreach (var spec in @Model.Specialties)
+                                {                                    
+                                    if (!string.IsNullOrEmpty(spec.Link))
+                                    {
+                                        <li><a href="@spec.Link">@spec.Title</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li>@spec.Title</li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (@Model.Qualifications != null && @Model.Qualifications.Count > 0)
+                    {
+                        <li>
+                            <h3>@Html.Raw(ViewBag.Qualifications)</h3>
+                            <ul class="style-2">
+                                @foreach (var item in @Model.Qualifications)
+                                {
+                                    if (!string.IsNullOrEmpty(item))
+                                    {
+                                        <li>@item</li>
+                                    }
+
+                                }
+                            </ul>
+                        </li>
+                    }
+                    @if (@Model.Languages != null && @Model.Languages.Count > 0)
+                    {
+                        <li>
+                            <h3>@Html.Raw(ViewBag.Languages_Spoken)</h3>
+                            <ul>
+                                @foreach (var l in @Model.Languages)
+                                {
+                                    <li>@l</li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="col-md-9 col-xs-12 right-box right-side">
+                <div class="answer-block">
+                    <p class="getting-know-desktop">@Html.Raw(ViewBag.Resource.GettingToKnow) @Model.DoctorQA.Name</p>
+                    <p class="heading-qa"><a class="getting-know" data-toggle="collapse" href="#collapseOne">Getting to Know @Model.DoctorQA.Name</a></p>
+                    <div id="collapseOne" class="list-qa in">
+                        @foreach (var item in @Model.QA)
+                        {
+                            <div class="qa-item">
+                                <h2 class="title-qa">Q: @Html.Raw(@item.Question)</h2>
+                                <div class="fck">@Html.Raw(@item.Answer)</div>
+                                <p class="action-toggle">
+                                    <a href="javascript:void(0)" class="more" title="@Html.Raw(ViewBag.Resource.ReadMoreLabel)">@Html.Raw(ViewBag.Resource.ReadMoreLabel) &gt;</a>
+                                    <a href="javascript:void(0)" class="less" title="Less">Less</a>
+                                </p>
+
+                            </div>
+                        }
+                    </div>
+                </div>                
+                @if (@Model.DoctorQA.Videos != null && @Model.DoctorQA.Videos.Count > 0)
+                {
+                    <h2 class="related-video"><a class="action" data-toggle="collapse" href="#videoBlock">@ViewBag.Resource.RelatedVideos</a></h2>
+                    <div id="videoBlock" class="video-block in">
+                        <h2 class="related-video-desktop">@ViewBag.Resource.RelatedVideos</h2>
+                        <div class="row">
+                            @foreach (var item in @Model.DoctorQA.Videos)
+                            {
+                                <div class="col-md-6 col-xs-12">
+                                    <div class="video-item">
+                                        <div class="video-bg">
+                                            <img class="video-bg" src="https://img.youtube.com/vi/@item.Id/hqdefault.jpg" alt="Video">
+                                            <a href="https://www.youtube.com/embed/@item.Id?autoplay=1&rel=0" class="btn-play various fancybox.iframe" title="">
+                                                <img src="/Custom/Asserts/Images/btn-play.png" alt="Play">
+                                            </a>
+                                        </div>
+                                        <p>@Html.Raw(@item.Title)</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+                <div class="back-div"><a class="back" href="@ViewBag.ViewAllUrl">@Html.Raw(ViewBag.Resource.BackQAList)</a></div>
+            </div>
+        </div>
+
+    </section>
+}

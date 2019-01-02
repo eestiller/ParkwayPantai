@@ -1,0 +1,82 @@
+@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.EnhancedAppointmentFormModel
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    <style type="text/css">
+        .p-title2 {
+            font-size: 1.5em; color: #000000; font-weight: 400; font-family: 'Lato',sans-serif;
+            line-height: 1.125em; margin: 10px 0 20px 0; padding: 0;
+        }
+    </style>
+
+    <section id="formEService" class="form-3">
+        <h1 class="title" style="margin-bottom: 10px;">@Html.Raw(Model.Resources.TitleLabel_Appointment)</h1>
+
+        <div id="formContainer" style="width: 100%; overflow: hidden;">
+            @Html.Partial("~/Mvc/Views/Shared/eServiceAppointment.cshtml", Model)
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="panel-collapse" style="margin-top:30px;">
+                    <p class="p-title2">@Html.Raw(Model.Resources.ThingsToNote_Title)</p>
+                    @if (Model.ThingsToNote1 != "")
+                    {
+                        <span style="font-weight: normal">@Html.Raw(Model.ThingsToNote1)</span>
+                    }
+                    @if (Model.ThingsToNote2 != "" && Model.ThingsToNote2 != "&nbsp;")
+                    {
+                        if (Model.ThingsToNote1 != "" && Model.ThingsToNote1 != "&nbsp;")
+                        {
+                            <br /><br />
+                        }
+                        <span style="font-weight: normal">@Html.Raw(Model.ThingsToNote2)</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div id="btnSubmitContainer" class="row">
+            <div class="col-md-12 col-xs-12">
+                <div class="text-center">
+                    <p>
+                        <button type="button" class="btn btn-primary" id="btnSubmit" commontext="@Html.Raw(Model.Resources.SubmitButtonText)" loading="@Html.Raw(Model.Resources.SubmitButtonLoadingText)">@Html.Raw(Model.Resources.SubmitButtonText)</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @Html.Hidden("hid_HospitalID", Model.HospitalID)
+    @Html.Hidden("hid_AckEmailTemplateID_Appointment", Model.AcknowledgeEmailTemplateID)
+    @Html.Hidden("hid_AcknowledgeEmailSender_Appointment", Model.AcknowledgeEmailSender)
+    @Html.Hidden("hid_AdminEmailTemplateID_Appointment", Model.AdminEmailTemplateID)
+    @Html.Hidden("hid_AdminEmailRecipients_Appointment", Model.AdminEmailRecipients)
+    @Html.Hidden("hid_ConfirmationURL", Model.ConfirmationURL)
+    @Html.Hidden("hid_ReturnMessage", "")
+    @Html.Hidden("hid_CampaignCode", Model.CampaignCode)
+    @Html.Hidden("hid_BasicErrorMessageLong", Model.Resources.Validator_BasicErrorMessageLong)
+    @Html.Hidden("hid_BasicErrorMessageShort", Model.Resources.Validator_BasicErrorMessageShort)
+    @Html.Hidden("hid_HasOtherPersonFields", Model.DisplayOtherPersonFields.ToString().ToLower())
+    @Html.Hidden("hid_ShowOtherPersonFields", Model.DisplayOtherPersonFields.ToString().ToLower())
+    @Html.Hidden("hid_BasicErrorMessageRadio", Model.Resources.Validator_DefaultNoSelectionRadio)
+    @Html.Hidden("hid_BasicErrorMessageDate", Model.Resources.Validator_DefaultInvalidDate)
+    @Html.Hidden("hid_DateFormat", Model.CommonDateFormat)
+    @Html.Hidden("hid_GenDetails", Model.UserDetails)
+    @Html.Hidden("hid_DefaultDoctorID", Model.DefaultDoctorID)
+    @Html.Hidden("hid_CurrentSite", Model.CurrentSite)
+    @Html.Hidden("hid_CurrentCulture", Model.CurrentCulture)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('body').addClass('formMEP');
+            $('#form1').attr("novalidate", "novalidate");
+            ReloadAppointmentFunctions_Standalone();
+        });
+    </script>
+}
+else
+{
+    <p>eService Appointment Form (Standalone)</p>
+}

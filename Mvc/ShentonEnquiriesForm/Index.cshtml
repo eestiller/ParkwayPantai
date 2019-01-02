@@ -1,0 +1,158 @@
+@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.ShentonEnquiriesFormModel
+
+<div id="formEnquiry" class="enquiry_form">
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="fieldWrap">
+                <label for="ddl_Subject">Subject</label>
+                @(Html.Kendo().DropDownList()
+                    .Name("ddl_Subject")
+                    .DataTextField("Value")
+                    .DataValueField("Key")
+                    .BindTo(ViewBag.Subjects as List<KeyValuePair<string, string>>)
+                    .OptionLabel("- Select -")
+                    .HtmlAttributes(new
+                    {
+                        required = "required",
+                        validmsg = "This field is required"
+                    })
+                    .Deferred()
+                )
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="fieldWrap">
+                <label for="ddl_Salutation">Salutation</label>
+                @(Html.Kendo().DropDownList()
+                    .Name("ddl_Salutation")
+                    .DataTextField("Value")
+                    .DataValueField("Key")
+                    .BindTo(ViewBag.Salutations as List<KeyValuePair<string, string>>)
+                    .OptionLabel("- Select -")
+                    .HtmlAttributes(new
+                    {
+                        required = "required",
+                        validmsg = "This field is required"
+                    })
+                    .Deferred()
+                )
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="fieldWrap">
+                <label for="txt_Name">Name</label>
+                @(Html.Kendo().TextBox()
+                    .Name("txt_Name")
+                    .HtmlAttributes(new
+                    {
+                        required = "required",
+                        validmsg = "This field is required",
+                        @maxlength = "50"
+                    })
+                    .Deferred()
+                )
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="fieldWrap">
+                <label for="txt_ContactNo">Contact No.</label>
+                @(Html.Kendo().TextBox()
+                    .Name("txt_ContactNo")
+                    .HtmlAttributes(new
+                    {
+                        type = "number",
+                        required = "required",
+                        validmsg = "This field is required",
+                        @maxlength = "8"
+                    })
+                    .Deferred()
+                )
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="fieldWrap">
+                <label for="txt_EmailAddress">Email</label>
+                @(Html.Kendo().TextBox()
+                    .Name("txt_EmailAddress")
+                    .HtmlAttributes(new
+                    {
+                        required = "required",
+                        validmsg = "This field is required",
+                        @maxlength = "100"
+                    })
+                    .Deferred()
+                )
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="fieldWrap">
+                <label for="txt_Comments">Comments</label>
+                @Html.TextArea("txt_Comments", "", new { @class = "k-textbox", style = "", required = "required", validmsg = "This field is required" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            I agree to the <a href="/terms-conditions" target="_blank">terms of use</a> and Parkway's 
+            <a href="/pdpa" target="_blank">Personal Data Protection Policy</a> and consent to the use 
+            of my personal data given above to process follow-up actions to provide a seamless patient experience.
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="fieldWrap">
+                <label for="chk_SubscribeUpdates">Subscribe for Updates</label>
+                @(Html.Kendo().CheckBox()
+                    .Name("chk_SubscribeUpdates")
+                    .Label("I would like to receive information and updates about your services and facilities from time to time.")
+                    .Deferred()
+                )
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+			<div class="fieldWrap">
+            <label for="txt_CaptchaAnswer"><b>Answer this math equation:</b> <b id="ebcaptchatext"></b></label>
+            @(Html.Kendo().TextBox()
+                .Name("txt_CaptchaAnswer")
+                .HtmlAttributes(new
+                {
+                    required = "required",
+                    validmsg = "This field is required",
+                    @maxlength = "20"
+                })
+                .Deferred()
+            )
+			</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" id="btnSubmit" class="btnSubmit">Submit</button>
+            <p id="btnPlaceholder" style="display: none; text-align: center;">Please wait...</p>
+        </div>
+    </div>
+</div>
+<div id="thankyouMessage">
+    <p style="text-align: center;">Thank you for your enquiry.</p>
+    <p style="text-align: center;"> Our staff will contact you soon to follow up on your enquiry. </p>
+</div>

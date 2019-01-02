@@ -1,0 +1,141 @@
+@using Telerik.Sitefinity.UI.MVC
+@model List<SitefinityWebApp.Mvc.Models.TourSessionsModel>
+<style>
+    .exHeader {
+        padding: 5px 4px 10px;
+        white-space: nowrap;
+        font-size: 9px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #eee;
+        font-weight: normal;
+        color: #777;
+    }
+
+    .item {
+        padding: 5px 15px 10px;
+    }
+
+    .text-message {
+        color: red;
+    }
+</style>
+<div style="">
+    <h1 id="sfToMainContent" class="sfBreadCrumb"><span id="ctl04_clinicBackendList_ctl00_ctl00_ViewTitle">Maternity Session Summary</span></h1>
+    <div class="sfMain sfClearfix" style="width: 100%;">
+        <div class="sfContent" style="width: 100%;">
+            <div class="sfAllToolsWrapper">
+                <div class="sfAllTools">
+                    <div class="sfActions">
+                        <div id="ctl04_marernitySessionSummaryBackendList_ctl00_ctl00_toolbarPanel">
+                            <div id="ctl04_marernitySessionSummaryBackendList_ctl00_ctl00_toolbar" tabindex="-1">
+                                <div>
+                                    <div>
+                                        <ul id="ctl04_marernitySessionSummaryBackendList_ctl00_ctl00_toolbar_toolbar">
+                                            <li>
+                                                Filter:
+                                                @Html.DropDownList("yearFilter", null, new { @id = "yearFilter", @style = "padding: 3px 2px;font-size: 11px;" })
+                                                @Html.DropDownList("monthFilter", null, new { @id = "monthFilter", @style = "padding: 3px 2px;font-size: 11px;" })
+                                                <input name="submitButton" type="submit" class="btn btn-success" value="Filter" style="width:60px; height:22px;" />
+                                            </li>
+                                            <li>
+                                                <input name="submitButton" type="submit" class="btn btn-success" value="Update" style="width:60px; height:22px;" />
+                                            </li>
+                                            <li>
+                                                <input name="submitButton" type="submit" class="btn btn-success" value="Export" style="width:60px; height:22px;" />
+                                            </li>
+                                            <li>@Html.ValidationSummary(false, "", new { @class = "text-message" })</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sfWorkArea">
+                <div style="padding-top: 27px;">
+                    <table id="OptimizedImageList" style="width:100%;table-layout:auto;empty-cells:show;">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="exHeader" style="width: 5px; text-align: center;">#</th>
+                                <th scope="col" class="exHeader" style="width: 10px; text-align: center;">Tour Date(dd/MM/yyyy)</th>
+                                <th scope="col" class="exHeader" style="width: 20px; text-align: left;">Tour Day</th>
+                                <th scope="col" class="exHeader" style="width: 20px; text-align: left;">Session Time</th>
+                                <th scope="col" class="exHeader" style="width: 20px; text-align: right;">Total Slots</th>
+                                <th scope="col" class="exHeader" style="width: 50px; text-align: right;">Reserved Slots</th>
+                                <th scope="col" class="exHeader" style="width: 50px; text-align: right;">Balance Slots</th>
+                                <th scope="col" class="exHeader" style="width: 20px; text-align: center;">Is Available</th>
+                                <th scope="col" class="exHeader" style="width: 20px; text-align: center;">Is Blocked</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                for (int i = 0; i < Model.Count(); i++)
+                                {
+                                    @Html.HiddenFor(m => m[i].SessionID)
+
+                                    var no = i + 1;
+                                    <tr class="rgRow" style="visibility: visible; height: 30px; display: table-row; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #eee;">
+                                        <td style="text-align:center;">
+                                            <strong class="sfItemTitle item">@no</strong>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <strong class="sfItemTitle item">@Html.HiddenFor(m => m[i].TourDate)@Html.HiddenFor(m => m[i].TourDateForFilter)@Html.DisplayFor(m => m[i].TourDate)</strong>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <strong class="sfItemTitle item">@Html.HiddenFor(m => m[i].TourDay)@Html.DisplayFor(m => m[i].TourDay)</strong>
+                                        </td>
+                                        <td style="text-align: left;">
+                                            <strong class="sfItemTitle item">@Html.HiddenFor(m => m[i].SessionTime)@Html.DisplayFor(m => m[i].SessionTime)</strong>
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <strong class="sfItemTitle  item">@Html.TextBoxFor(m => m[i].TotalSlots, new { @onkeypress = "return onlyNos(event,this);", @style = "text-align:right" })</strong>
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <strong class="sfItemTitle  item">@Html.HiddenFor(m => m[i].ReservedSlots)@Html.DisplayFor(m => m[i].ReservedSlots)</strong>
+                                        </td>
+                                        <td style="text-align:right;">
+                                            <strong class="sfItemTitle  item">@Html.HiddenFor(m => m[i].BalanceSlots) @Html.DisplayFor(m => m[i].BalanceSlots)</strong>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <strong class="sfItemTitle  item">@Html.HiddenFor(m => m[i].IsAvailable)@Html.DisplayFor(m => m[i].IsAvailable)</strong>
+                                        </td>
+                                        <td style="text-align:center;">
+                                            <strong class="sfItemTitle  item">@Html.HiddenFor(m => m[i].ID)@Html.CheckBoxFor(m => m[i].IsBlocked)</strong>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var msg = '@ViewBag.Message'
+        if (msg != undefined && msg !== "") {
+            alert(msg);
+        }
+    });
+    function onlyNos(e, t) {
+
+        if (window.event) {
+            var charCode = window.event.keyCode;
+        }
+        else if (e) {
+            var charCode = e.which;
+        }
+        else { return true; }
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    }
+</script>

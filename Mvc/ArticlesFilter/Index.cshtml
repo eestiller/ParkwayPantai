@@ -1,0 +1,73 @@
+@using SitefinityWebApp.Custom.Code;
+
+@model SitefinityWebApp.Mvc.Models.ArticlesFilterViewModel
+
+<div class="sort-header clearfix">
+    <h5>@Html.Resource("FilterArticlesBy", resourcesCulture: Model.CurrentCulture)</h5>
+    <div class="articles-nav clearfix">
+        <div class="owl-carousel" style="display:none;">
+            @for (int i = 0; i < Model.FixedList.Count; i++)
+            {
+                var item = Model.FixedList[i];
+                var cssClass = item.Key.Equals(Model.SelectedTab, StringComparison.OrdinalIgnoreCase) ? "selected" : "";
+
+                <div class="items">
+                    <a href="" onclick="filterArticlesBy(this, '@item.Key', event)" class="@cssClass" data-index="@i">@item.Value</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.owl-carousel').show().owlCarousel({
+            loop: true,
+            margin: 0,
+            items: 4,
+            nav: true,
+            autoWidth: true,
+            slideBy: 1,
+            dots: false,
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 1,
+                },
+                600: {
+                    items: 3,
+                    slideBy: 3,
+                },
+                768: {
+                    items: 4,
+                    slideBy: 4,
+                }
+            }
+        })
+        //Owl Arrows
+        $('.owl-nav .owl-prev').append('<i class="fa fa-angle-left" aria-hidden="true"></i>');
+        $('.owl-nav .owl-next').append('<i class="fa fa-angle-right" aria-hidden="true"></i>');
+
+        var indexOfSelectedTab = $("a.selected").attr("data-index");
+
+        if (indexOfSelectedTab > 3) {
+            $('.owl-carousel').data('owlCarousel').to(indexOfSelectedTab, 400, true);
+        }       
+    });
+
+    function filterArticlesBy(sender, tag, e) {
+        e.preventDefault();
+
+        $("a.selected").removeClass("selected");
+
+        $(sender).addClass("selected");
+        if (tag == "All") {
+            //change the seed to randomise all articles results
+            randomSeed = (new Date()).getMilliseconds();
+        }
+        //call the function from articles view
+        emptyGridAndLoadItems(e, tag);
+
+        return false;
+    }
+</script>

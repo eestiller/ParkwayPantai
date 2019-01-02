@@ -1,0 +1,115 @@
+@model SitefinityWebApp.Mvc.Models.InnerSpecialistsViewModel
+@if ((Model.OurSpecialists == null || Model.OurSpecialists.Count == 0) && !Model.IsDesignMode)
+{
+    <script>
+        $(window).load(function () {
+            $("#collapseOurSpecialists").parent().hide();
+        });
+    </script>
+    <p class="text-right divInfor">
+        <span class="message">@Model.Message</span>
+    </p>
+}
+else
+{
+    if (Model.ViewAllUrl != "")
+    {
+        <p class="text-right divInfor">
+            <span class="message">@Model.Message</span><a href="@Model.ViewAllUrl" title="@Html.Raw(Model.Resource.ViewAllButton)" class="btn btn-primary btnViewAll">@Html.Raw(Model.Resource.ViewAllButton)</a>
+        </p>
+    }
+    <ul class="list-12 style-2">
+        @foreach (var specialist in Model.OurSpecialists)
+        {
+            <li>
+                <div class='thumb'>
+                    <a href="@specialist.DoctorUrl" title=''>
+                        <img src='@specialist.Photo' alt='@specialist.DoctorName' />
+                    </a>
+                </div>
+                <div class='desc-2'>
+                    <div class='style-1'>
+                        <h3 title='@specialist.DoctorName'><a href="@specialist.DoctorUrl" style='text-decoration: none;'>@specialist.DoctorName</a></h3>
+                        <dl>
+                            <dt>@Html.Raw(Model.Resource.SpecialtyLabel)</dt>
+                            <dd class='specialties'>
+                                @if (@specialist.Specialties != null)
+                                {
+                                    foreach (var specialty in specialist.Specialties)
+                                    {
+                                        if (!string.IsNullOrEmpty(specialty.Link))
+                                        {
+                                            <a href="@specialty.Link">@Html.Raw(specialty.Title)</a><br />
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(specialty.Title)<br />
+                                        }
+                                    }
+                                }
+                            </dd>
+
+                            <!-- Subspecialty -->
+                            @if (specialist.SubSpecialties != null && specialist.SubSpecialties.Count > 0)
+                            {
+                                <dt>@Html.Raw(Model.Resource.SubspecialtyLabel)</dt>
+                                <dd class='subspecialties'>
+                                    @foreach (var subspecialty in specialist.SubSpecialties)
+                                    {
+                                        if (!string.IsNullOrEmpty(subspecialty.Link))
+                                        {
+                                            <a href="@subspecialty.Link">@Html.Raw(subspecialty.Title)</a><br />
+                                        }
+                                        else
+                                        {
+                                            @Html.Raw(subspecialty.Title)<br />
+                                        }
+                                    }
+                                </dd>
+                            }
+                        </dl>
+                        <p><a href='@specialist.DoctorUrl' class='btn btn-primary' title='@Html.Raw(Model.Resource.ViewProfileButton)'>@Html.Raw(Model.Resource.ViewProfileButton)</a></p>
+                    </div>
+                    <div class="listClinics">
+                        @if (@specialist.Clinics != null)
+                        {
+                            foreach (var clinic in specialist.Clinics)
+                            {
+                                <div class='style-2'>
+                                    <dl>
+                                        <dt>@Html.Raw(Model.Resource.ClinicLabel)</dt>
+                                        <dd>@clinic.ClinicName</dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>@Html.Raw(Model.Resource.LocationLabel)</dt>
+                                        <dd>@Html.Raw(clinic.ClinicLocation)</dd>
+                                    </dl>
+                                    <dl>
+                                        <dt>@Html.Raw(Model.Resource.ContactNoLabel)</dt>
+                                        <dd><a href="@Html.Raw(clinic.ClinicContactNumberLink)" class="specialist-telNum specialistDoc-page" data-finddoctor="@Html.Raw(specialist.DoctorName)">@Html.Raw(clinic.ClinicContactNumber)</a></dd>
+                                    </dl>
+                                </div>
+                                <div class='form-group bt-group'>
+                                    @if (clinic.IsOnline)
+                                    {
+                                        <a href='@clinic.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(Model.Resource.BookAppointmentButton)' target='_blank'>@Html.Raw(Model.Resource.BookAppointmentButton)</a>
+                                    }
+                                    else
+                                    {
+                                        <a href='@clinic.AppointmentUrl' class='btn btn-primary' title='@Html.Raw(Model.Resource.MakeAppointmentButton)'>@Html.Raw(Model.Resource.MakeAppointmentButton)</a>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+    if (Model.ViewAllUrl != "")
+    {
+        <p class="text-right divInfor">
+            <span class="message">@Model.Message</span><a href="@Model.ViewAllUrl" title="@Html.Raw(Model.Resource.ViewAllButton)" class="btn btn-primary btnViewAll">@Html.Raw(Model.Resource.ViewAllButton)</a>
+        </p>
+    }
+}

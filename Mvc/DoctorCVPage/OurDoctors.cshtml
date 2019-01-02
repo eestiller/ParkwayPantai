@@ -1,0 +1,20 @@
+@model SitefinityWebApp.Mvc.Models.OurDoctorsModel
+
+@if (Model.Doctors != null)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <section class="list-9" style="background-color:white">
+                <h3>Our Doctors</h3>
+                <ul>
+                    @foreach (var doctor in Model.Doctors)
+                    {
+                        <li>
+                            <a href="@doctor.Url" title="@doctor.Name">@doctor.Name</a>
+                        </li>
+                    }
+                    </ul>
+            </section>
+        </div>
+    </div>
+}

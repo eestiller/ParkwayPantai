@@ -1,0 +1,130 @@
+@using System.Web.Optimization
+@model SitefinityWebApp.Mvc.Models.SharedArticleModel
+
+@{
+    int index = 0;    
+}
+<h1 class="title">@Html.Raw(ViewBag.Resource.ShareArticleLabel)</h1>
+<div class="row">
+    <div class="padd-devices">
+        <div class="col-md-2">
+            @Html.LabelFor(c => c.ArticleUrl)
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(c => c.ArticleUrl, new { @class = "form-control", @id="ArticleUrl" })
+        </div>
+        <div class="col-md-4">
+            <p id="errArticleUrl" class="error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="padd-devices">
+        <div class="col-md-2">
+            @Html.LabelFor(c => c.ArticleComments)
+        </div>
+        <div class="col-md-6">
+            @Html.TextAreaFor(c => c.ArticleComments, new { @maxlength = 300, @id="ArticleComments" })
+            <p id="errArticleComments" class="error" style="display: none">@Html.Raw(ViewBag.Resource.ArticleCommentMaxLengthLabel)</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="padd-devices">
+        <div class="col-md-12">
+            <h3>@Html.DisplayNameFor(c => c.Hospitals)</h3>
+            <div class="col-md-4" style="margin-bottom: 15px">
+                <p id="errHospitals" class="error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+        </div>
+        @foreach (var h in ViewBag.Hospitals)
+        {
+            string hospitalId = "hospital" + (index++).ToString();
+            var isChecked = false || Model != null && Model.Hospitals != null && Model.Hospitals.Contains(h.Id.ToString());
+            <div class="col-md-4">
+                <label for="@hospitalId">
+                    <input type="checkbox" name="Hospitals" checked="@isChecked" id="@hospitalId" value="@h.Id" site="@h.SiteName" class="hospitals_Child">
+                    @h.Title
+                </label>
+            </div>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="padd-devices">
+        <div class="col-md-6">
+            <h3>@Html.DisplayNameFor(c => c.SharedCategory)</h3>
+            @Html.DropDownList("SharedCategory", new SelectList(ViewBag.SharedArticalsCategories, "Id", "Title"), new { @class = "form-control", @id="SharedCategory" })
+        </div>
+        <div class="col-md-6">
+            <h3>@Html.DisplayNameFor(c => c.SharedLanguage)</h3>
+            <select class="form-control" id="SharedLanguage" name="SharedLanguage">
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="padd-devices">
+        <div class="col-md-8">
+            <h3>@Html.DisplayNameFor(c => c.SharetoPages)</h3>
+            <div class="col-md-4" style="margin-bottom: 15px">
+                <p id="errSharetoPages" class="error" style="display: none">@Html.Raw(ViewBag.ValidateResource.RequiredLabel)</p>
+            </div>
+            <select class="form-control" id="pages1" name="SharetoPages" onchange="ChangePage('pages1');">
+                <option value="">@Html.Raw(ViewBag.Resource.SelectPageLabel)</option>
+            </select>
+            <select class="form-control" id="pages2" name="SharetoPages" onchange="ChangePage('pages2');">
+                <option value="">@Html.Raw(ViewBag.Resource.SelectPageLabel)</option>
+            </select>
+            <select class="form-control" id="pages3" name="SharetoPages" onchange="ChangePage('pages3');">
+                <option value="">@Html.Raw(ViewBag.Resource.SelectPageLabel)</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="padd-devices">
+        <div class="col-md-12">
+            <p class="text-center">
+                <a href="javascript:void(0);" title="Cancel" class="btn btn-primary" onclick="window.location.href='@ViewBag.ReturnUrl'">@Html.Raw(ViewBag.Resource.CancelLabel)</a>
+                <input id="btnSave" type="button" title="Submit" class="btn btn-primary" value="@Html.Raw(ViewBag.Resource.SubmitLabel)" />
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="popup-success" class="popup style-1" style="display: none;">
+    <h4>@Html.Raw(ViewBag.Resource.SharedArticleSuccessLabel)</h4>
+    <p class="style-2">@Html.Raw(ViewBag.Resource.SharedArticleSuccessDescriptionLabel)</p>
+</div>
+<a href="#popup-success" id="show_popup" title="Popup" style="display: none">a</a>
+
+@Html.Partial("~/Mvc/Views/Shared/LoadingPartial.cshtml")
+
+<script type="text/javascript">
+    var resourceHospitals = @Html.Raw(Json.Encode(ViewBag.Hospitals));
+    var resourcePages = @Html.Raw(Json.Encode(ViewBag.Pages));
+    var selectPageLabel = "@Html.Raw(ViewBag.Resource.SelectPageLabel)";
+    var pageSelected = "";
+    var isSuccess = false;
+    var returnUrl = "@ViewBag.ReturnUrl";
+    var dupplicatedMessage = "@ViewBag.DupplicatedMessage";
+    var requiredLabel = "@Html.Raw(ViewBag.ValidateResource.RequiredLabel)";
+    var maxlengthLabel = "@Html.Raw(ViewBag.Resource.ArticleCommentMaxLengthLabel)";
+    var articleUrlInvalidLabel = "@Html.Raw(ViewBag.Resource.ArticleUrlInvalidLabel)";
+</script>
+@if (Model != null && Model.SharetoPages != null)
+{
+    <script type="text/javascript">
+        pageSelected = @Html.Raw(Json.Encode(Model.SharetoPages));
+    </script>
+}
+@if (Model != null)
+{
+    <script type="text/javascript">
+        isSuccess = @Html.Raw(Json.Encode(Model.IsSuccess));
+    </script>
+}
+@Scripts.Render("~/bundlescript/sharedarticles")
+

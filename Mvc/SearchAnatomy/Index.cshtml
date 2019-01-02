@@ -1,0 +1,220 @@
+@using System.Web.Optimization
+<section class="container">
+    <h1 class="title">@Html.Raw(ViewBag.Resource.TitleSearchLabel)</h1>
+    <div class="row">
+        <section class="col-md-12">
+            <div class="search-anatomy padd-devices">
+                <div class="title-anatomy">
+                    <h4>@Html.Raw(ViewBag.Resource.SearchAnatomy)</h4>
+                    <h5 class="col-md-offset-1">@Html.Raw(ViewBag.Resource.Gender)</h5>
+                    <div class="pull-left col-md-2">
+                        <select class="form-control" id="changeGender" name="">
+                            <option value='Male'>@Html.Raw(ViewBag.Resource.Male)</option>
+                            <option value='Female'>@Html.Raw(ViewBag.Resource.Female)</option>
+                        </select>
+                    </div>
+                </div>
+                <ul class="content-anatomy clearfix">
+                    <li class="active">
+                        <div class="wrapper-portrait">
+                            <div class="anatomy col-md-7">
+                                <img src="/Sitefinity/WebsiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/en/anatomy/male-anatomy.jpg" alt="Male">
+                                <div>
+                                    <span class="dot-ana pos-1"><span class="tip">Brain</span></span>
+                                    <span class="dot-ana pos-2"><span class="tip">Brain</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-3"><span class="tip">Ear</span></span>
+                                    <span class="dot-ana pos-4"><span class="tip">Ear</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-5"><span class="tip">Eye</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-6"><span class="tip">Nose</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-7"><span class="tip">Neck</span></span>
+                                    <span class="dot-ana pos-8"><span class="tip">Neck</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-9"><span class="tip">Shoulder</span></span>
+                                    <span class="dot-ana pos-10"><span class="tip">Shoulder</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-11"><span class="tip">Lung</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-12"><span class="tip">Heart</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-13"><span class="tip">Liver</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-14"><span class="tip">Back</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-15"><span class="tip">Kidney</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-16"><span class="tip">Pelvis</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-17"><span class="tip">Hip</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-18"><span class="tip">Elbow</span></span>
+                                    <span class="dot-ana pos-19"><span class="tip">Elbow</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-20"><span class="tip">Wrist</span></span>
+                                    <span class="dot-ana pos-21"><span class="tip">Wrist</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-22"><span class="tip">Hand</span></span>
+                                    <span class="dot-ana pos-23"><span class="tip">Hand</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-24"><span class="tip">Upper Abdomen</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-25"><span class="tip">Lower Abdomen</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-26"><span class="tip">Knee</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-27"><span class="tip">Ankle</span></span>
+                                    <span class="dot-ana pos-28"><span class="tip">Ankle</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-29"><span class="tip">Feet</span></span>
+                                    <span class="dot-ana pos-30"><span class="tip">Feet</span></span>
+                                </div>
+                            </div>
+                            <img src="/Sitefinity/WebsiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/icon_flip.jpg" alt="Flip" class="switch">
+                        </div>
+                        <div class="result-anatomy fck col-md-5" id="male">
+                            <ul class="result"></ul>
+                            <ul class="paging-2" style="display: none">
+                                <li class="page-first"><a href="#" title="|&lt;&lt;">|&lt;&lt;</a></li>
+                                <li class="page-previous"><a href="#" title="&lt;">&lt;</a></li>
+                                <li class="page-next"><a href="#" title=">">&gt;</a></li>
+                                <li class="page-last"><a href="#" title="&gt;&gt;|">&gt;&gt;|</a></li>
+                            </ul>
+                            <img src="/Sitefinity/WebsiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/icon-gotop.png" alt="Top" class="gotop">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="wrapper-portrait">
+                            <div class="anatomy col-md-7">
+                                <img src="/Sitefinity/WebsiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/en/anatomy/female-anatomy.jpg" alt="Female">
+                                <div>
+                                    <span class="dot-ana pos-31"><span class="tip">Brain</span></span>
+                                    <span class="dot-ana pos-32"><span class="tip">Brain</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-33"><span class="tip">Ear</span></span>
+                                    <span class="dot-ana pos-34"><span class="tip">Ear</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-35"><span class="tip">Neck</span></span>
+                                    <span class="dot-ana pos-36"><span class="tip">Neck</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-37"><span class="tip">Eye</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-38"><span class="tip">Nose</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-39"><span class="tip">Breast</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-40"><span class="tip">Heart</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-41"><span class="tip">Lung</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-42"><span class="tip">Liver</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-43"><span class="tip">Back</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-44"><span class="tip">Kidney</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-45"><span class="tip">Elbow</span></span>
+                                    <span class="dot-ana pos-46"><span class="tip">Elbow</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-47"><span class="tip">Upper Abdomen</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-48"><span class="tip">Lower Abdomen</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-49"><span class="tip">Hip</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-50"><span class="tip">Wrist</span></span>
+                                    <span class="dot-ana pos-51"><span class="tip">Wrist</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-52"><span class="tip">Hand</span></span>
+                                    <span class="dot-ana pos-53"><span class="tip">Hand</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-54"><span class="tip">Knee</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-55"><span class="tip">Ankle</span></span>
+                                    <span class="dot-ana pos-56"><span class="tip">Ankle</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-57"><span class="tip">Feet</span></span>
+                                    <span class="dot-ana pos-58"><span class="tip">Feet</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-59"><span class="tip">Shoulder</span></span>
+                                    <span class="dot-ana pos-60"><span class="tip">Shoulder</span></span>
+                                </div>
+                                <div>
+                                    <span class="dot-ana pos-61"><span class="tip">Pelvis</span></span>
+                                </div>
+                            </div>
+                            <img src="/Sitefinity/WebsiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/icon_flip.jpg" alt="Flip" class="switch">
+                        </div>
+                        <div class="result-anatomy fck col-md-5" id="female">
+                            <ul class="result"></ul>
+                            <ul class="paging-2" style="display: none">
+                                <li class="page-first"><a href="#" title="|&lt;&lt;">|&lt;&lt;</a></li>
+                                <li class="page-previous"><a href="#" title="&lt;">&lt;</a></li>
+                                <li class="page-next"><a href="#" title=">"> &gt;</a></li>
+                                <li class="page-last"><a href="#" title="&gt;&gt;|">&gt;&gt;|</a></li>
+                            </ul>
+                            <img src="/Sitefinity/WebsiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/icon-gotop.png" alt="Top" class="gotop">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</section>
+
+<script id="resultAnatomy_header" type="text/x-jquery-tmpl">
+    <h4>@Html.Raw(ViewBag.Resource.ResultAnatomyHeader)</h4>
+</script>
+<script id="resultAnatomy_child" type="text/x-jquery-tmpl">
+    <li><a href="${UrlPage}">${Title}</a></li>
+</script>
+<script type="text/javascript">
+    var resourceBodyParts = @Html.Raw(Json.Encode(ViewBag.BodyParts));
+    var resourceCTPages = @Html.Raw(Json.Encode(ViewBag.CTPages));
+    var noresultfound = "<span style='color:red'>@Html.Raw(ViewBag.Resource.NoContentFound)</span>";
+</script>
+@Scripts.Render("~/bundlescript/searchanatomy")
+
+

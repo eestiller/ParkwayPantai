@@ -1,0 +1,19 @@
+@if (ViewBag.IsBackEnd)
+{
+    <h2>Not excute in design mode!</h2>    
+}
+else
+{
+    <div style="">
+        <span></span>
+        <h1 class="sfBreadCrumb"><span>Export @ViewBag.Title</span></h1>
+
+        <div class="sfMain sfClearfix" style="width: 100%;">
+            <div class="sfContent" style="width: 100%;">
+            </div>
+        </div>
+        <div class="sfWorkArea">
+            <h2>No records to export! <a href="@ViewBag.BackPageUrl" title="Back to @ViewBag.Title">Back to @ViewBag.Title</a></h2>
+        </div>
+    </div>
+}

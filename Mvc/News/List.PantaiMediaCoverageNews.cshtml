@@ -1,0 +1,35 @@
+@model Telerik.Sitefinity.Frontend.Mvc.Models.ContentListViewModel
+
+@using Telerik.Sitefinity.Frontend.Mvc.Helpers;
+@using Telerik.Sitefinity.Modules.Pages;
+@using Telerik.Sitefinity.Web.DataResolving;
+
+<div class="@Model.CssClass">
+
+    @foreach (var item in Model.Items)
+    {
+        var navigateUrl = HyperLinkHelpers.GetDetailPageUrl(item, ViewBag.DetailsPageId, ViewBag.OpenInSamePage, Model.UrlKeyPrefix);
+        <div class="article-list" @Html.InlineEditingAttributes(Model.ProviderName, Model.ContentType.FullName, (Guid)item.Fields.Id)>
+            <div class="date">
+                <div class="day">@item.GetDateTime("PublicationDate", "d")</div>
+                <div class="month">@item.GetDateTime("PublicationDate", "MMM")</div>
+                <div class="year">@item.GetDateTime("PublicationDate", "yyyy")</div>
+            </div>
+            <div class="article-list-body">
+                <div class="title">
+                    <a @Html.InlineEditingFieldAttributes("Title", "ShortText") href="@navigateUrl" target="_blank">@item.Fields.Title</a>
+                </div>
+                <div class="source" @Html.InlineEditingFieldAttributes("Summary", "ShortText")>@Html.Raw(item.Fields.Summary) / @DataResolver.Resolve(item.DataItem, "Author", null)</div>
+            </div>
+        </div>
+    }
+    
+
+    @if (Model.ShowPager)
+    {
+        @Html.Action("Index", "ContentPager", new { currentPage = Model.CurrentPage,
+                        totalPagesCount = Model.TotalPagesCount.Value,
+                        redirectUrlTemplate = ViewBag.RedirectPageUrlTemplate })
+    }
+
+</div>

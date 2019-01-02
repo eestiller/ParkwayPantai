@@ -1,0 +1,22 @@
+﻿<div class="row box-newsevent box-blue">
+    <h2 class="title white">@Html.Raw(ViewBag.Resource.NewsAndEventsLabel)</h2>
+    <div class="col-xs-12 col-md-6 block-first">
+        @foreach (var item in Model)
+        {
+            <a href="@item.DetailUrl" title="@item.Tooltip">
+                <img class="lazy" src="@item.Photos" alt="@item.Title">
+            </a>
+            <br>
+        }
+    </div>
+    <div class="col-xs-12 col-md-6">
+        <ul>
+            @foreach (var item in Model)
+            {
+                <li>@item.Title
+                    <a href="@item.DetailUrl" title="@item.Tooltip">@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

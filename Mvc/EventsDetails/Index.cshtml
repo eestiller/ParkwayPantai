@@ -1,0 +1,50 @@
+﻿@using Parkway.Core.Utilities
+@model SitefinityWebApp.Mvc.Models.EventModel
+@if (Model.Title != null)
+{
+<h1 class="title">@Html.Raw(Model.Title)</h1>
+<img src="@Html.Raw(Model.Photos)" alt="">
+<div class="article-1">
+    <ul class="list-18">
+        <li><span>@Html.Raw(ViewBag.Resource.EventDateLabel)</span><span>@Html.Raw(Model.EventDate)</span></li>
+        <li><span>@Html.Raw(ViewBag.Resource.VenueLabel)</span><span>@Html.Raw(Model.Venue)</span></li>
+        <li><span>@Html.Raw(ViewBag.Resource.PriceLabel)</span><span>@Html.Raw(Model.Price)</span></li>
+    </ul>
+    <p>@Html.Raw(Model.Content)</p>
+    <h4>@Html.Raw(ViewBag.Resource.AgendaLabel)</h4>
+    <div class="block-6">
+        @Html.Raw(Model.Agenda)
+    </div>
+    <h4>@Html.Raw(ViewBag.Resource.SpeakersLabel)</h4>
+    <ul class="list-19">
+        @if (Model.DoctorsSpeakers != null)
+        {
+            foreach (var item in Model.DoctorsSpeakers)
+            {
+            <li>
+                <div>
+                    <img src="@item.Photo" alt="">
+                </div>
+                <div style="float: left;">
+                    <h5>@item.DoctorName</h5>
+                    <div class="specialties">
+                        @foreach (var spec in item.Specialties)
+                        {
+                            @spec.Title <br />
+                        }
+                    </div>
+                </div>
+            </li>
+            }
+        }
+    </ul>
+    <h4>@Html.Raw(ViewBag.Resource.EnquiriesContactLabel)</h4>
+    <h5>@Html.Raw(Model.ContactHopital)</h5>
+    <p><strong>@Html.Raw(ViewBag.Resource.NameLabel):</strong>@Html.Raw(Model.ContactName)</p>
+    <p><strong>@Html.Raw(ViewBag.Resource.EmailLabel):</strong>@Html.Raw(Model.ContactEmail)</p>
+    <p><strong>@Html.Raw(ViewBag.Resource.ContactLabel):</strong>@Html.Raw(Model.ContactPhone)</p>
+    @*<p><a href="/@ApplicationConfig.Instance.CurrentCulture/news-events/event-register?id=@Model.Id" title="Register" class="btn btn-primary">Register</a></p>
+    <p>&nbsp;</p>
+    <p><a href="#" title="Terms &amp; Conditions apply">@Html.Raw(ViewBag.Resource.TermsConditionsLabel)</a></p>*@
+</div>
+}

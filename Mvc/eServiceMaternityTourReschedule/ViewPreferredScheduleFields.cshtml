@@ -1,0 +1,156 @@
+﻿@using Kendo.Mvc.UI
+@model SitefinityWebApp.Mvc.Models.DataModels.MaternityRescheduleFieldsViewModel
+
+@if (Model.IsValid)
+{
+    <div class="sectionShaded">
+        <div class="formWrap m35 clearfix">
+            <div class="row field">
+                <div class="col-md-4"><label>@Html.Raw(Model.Resources.IsBringingPartnerLabel)</label></div>
+                <div class="col-md-8">
+                    <div class="rel">
+                        <div class="list-6 radioWrap" id="ddl_BringPartner">
+                            @{
+                                List<KeyValuePair<int, string>> itemsBP = new List<KeyValuePair<int, string>>();
+                                itemsBP.Add(new KeyValuePair<int, string>(2, Model.Resources.IsBringingPartnerOption_Yes));
+                                itemsBP.Add(new KeyValuePair<int, string>(1, Model.Resources.IsBringingPartnerOption_No));
+                                foreach (KeyValuePair<int, string> item in itemsBP)
+                                {
+                                    string btnID = "rad_BringPartner" + item.Key.ToString();
+                                    if (item.Key == 1)
+                                    {
+                                        @Html.Raw("&nbsp;&nbsp;");
+                                    }
+
+                                    bool isChecked = false;
+                                    if (Model.IsBringingPartner)
+                                    {
+                                        isChecked = item.Key == 2 ? true : false;
+                                    }
+                                    else
+                                    {
+                                        isChecked = item.Key == 1 ? true : false;
+                                    }
+
+                                    <label>@Html.RadioButton("BringPartner", item.Key.ToString(), isChecked, new { @id = btnID, @class = "enquiryType", required = "required", textreturn = item.Key.ToString() }) @Html.Raw(item.Value)</label>
+                                }
+                            }
+                        </div>
+                        <span class="k-invalid-msg" data-for="BringPartner" data-valmsg-for="BringPartner"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="formWrap m35 clearfix">
+            <div class="row field">
+                <div class="col-md-4"><label>@Html.Raw(Model.Resources.PreferredHospitalLabel_MaternityTour)</label></div>
+                <div class="col-md-8">
+                    <div class="rel">
+                        <div id="con_PreferredHospital" class="dropdownKendo">
+                            @(Html.Kendo().DropDownList()
+                                .Name("ddl_PreferredHospital_MFR")
+                                .DataTextField("Value")
+                                .DataValueField("Key")
+                                .BindTo(Model.HospitalList)
+                                .Value(Model.PreferredHospitalCode)
+                                .Enable(Model.HospitalList.Count <= 1 ? false : true)
+                                .OptionLabel(Model.Resources.PreferredHospitalOptionLabel_MaternityTour)
+                                .Events(e => e.Change("CheckMaternityReschedule_OnChangeFields"))
+                                .HtmlAttributes(new
+                                {
+                                    validmsg = Model.Resources.CommonRequiredFieldText
+                                })
+                            )
+                            <span class="k-invalid-msg" data-for="ddl_PreferredHospital_MFR"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="formWrap m35 nbm clearfix" id="view_SelectionPrefTourDate" style="display: none">
+            <div class="row field">
+                <div class="col-md-4">
+                    <label>@Html.Raw(Model.Resources.PreferredTourDateLabel)</label>
+                    @Html.Raw(Model.Resources.LabelNote_MaternityBooking_GetCalendar)
+                </div>
+                <div id="content_SelectionPrefTourDate" class="col-md-8">
+                    <div class="rel clearfix">
+                        <div class="list-6 radioWrap" id="ddl_PrefTourTime">
+                            @{
+                                List<KeyValuePair<string, string>> itemsPTT = new List<KeyValuePair<string, string>>();
+                                itemsPTT.Add(new KeyValuePair<string, string>("AM", Model.Resources.MaternityPreferredBookTimeAM));
+                                itemsPTT.Add(new KeyValuePair<string, string>("PM", Model.Resources.MaternityPreferredBookTimePM));
+
+                                foreach (KeyValuePair<string, string> item in itemsPTT)
+                                {
+                                    string btnID = "chk_PrefTourTime_" + item.Key;
+                                    if (item.Key == "PM")
+                                    {
+                                        @Html.Raw("&nbsp;&nbsp;");
+                                    }
+
+                                    <label>@Html.CheckBox("PrefTourTime", false, new { @id = btnID, @class = "enquiryType", textreturn = item.Key }) @Html.Raw(item.Value)</label>
+                                }
+                            }
+                        </div>
+                        <span class="k-invalid-msg" data-for="PrefTourTime" data-valmsg-for="PrefTourTime"></span>
+                    </div>
+
+                    <!-- Datepicker -->
+                    <div class="calendarFluid">
+                        <div id="view_SelectionCalendar" class="field" style="display: none">
+                            <div id="view_CalendarItem" class="rel" style="display: none">
+                                @{
+                                    DateTime maxDate = DateTime.Now.AddMonths(Model.NumberOfMonthsLimit + 1);
+                                    maxDate = maxDate.AddDays(maxDate.Day * -1);
+                                }
+                                @(Html.Kendo().Calendar()
+                                    .Name("cal_PreferredBookDate")
+                                    .Min(DateTime.Now)
+                                    .Max(maxDate)
+                                    .Footer(false)
+                                    .Culture(Model.CurrentKendoCulture)
+                                    .Events(e => e.Change("CheckMaternityReschedule_OnChangeCalendar"))
+                                )
+                                @Html.Hidden("hid_CalPreferredBookDate", "", new
+                                {
+                                    validmsg = Model.Resources.Validator_DefaultNoSelectionCalendar,
+                                    nobookingslots = Model.Resources.Validator_MaternityBooking_UnselectedTimeslots
+                                })
+                                <span class="k-invalid-msg" data-for="hid_CalPreferredBookDate" data-valmsg-for="hid_CalPreferredBookDate"></span>
+                            </div>
+                            <div id="view_CalendarItemLoading" class="rel" style="display: none">
+                                @Html.Raw(Model.Resources.Loading_MaternityBooking_GetCalendar)
+                            </div>
+                            <div id="view_PrefBookingSlots" class="rel" style="display: none; margin-top: 20px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.Hidden("hid_SelectedMaternityBooking", Html.Raw(Model.SelectedMaternityBooking))
+    @Html.Hidden("hid_MaternityLoadingHTML", Html.Raw(Model.Resources.Loading_MaternityBooking_GetTimeslots))
+    @Html.Hidden("hid_MaternityExpiredSessionMsg", Model.Resources.Validation_MaternityBooking_ExpiredSession)
+    @Html.Hidden("hid_BasicErrorMessageRadio_MTB", Model.Resources.Validator_DefaultNoSelection_MaternityTourBookingTimeslot)
+}
+else
+{
+    <div class="sectionShaded">
+        <div class="formWrap m35 clearfix">
+            <div class="rel">
+                <p style="display: inline-block; word-break: break-word; white-space: normal;">
+                    @Html.Raw(Model.Resources.Display_InvalidBookingSelection_Reschedule)
+                </p>
+                @Html.Hidden("hid_NoFields_Reschedule", "", new
+                {
+                    validmsg = Model.Resources.Validator_InvalidBookingSelection_Reschedule
+                })
+                <span class="k-invalid-msg" data-for="hid_NoSelectedItems_Reschedule" data-valmsg-for="hid_NoSelectedItems_Reschedule"></span>
+            </div>
+        </div>
+    </div>
+}

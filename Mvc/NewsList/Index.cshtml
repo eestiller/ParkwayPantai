@@ -1,0 +1,59 @@
+﻿@using System.Web.Optimization
+@using Parkway.Core.Utilities
+
+<section class="container head-style-2">
+    <h1 class="title">@Html.Raw(ViewBag.Resource.NewsAndEventsLabel)</h1>
+    <div class="form-group">
+        <select name="" id="newsyearCombobox" class="form-control">
+            <option>@Html.Raw(ViewBag.Resource.ViewAllEventsLabel)</option>
+            @for (int i = DateTime.Now.Year; i >= ViewBag.YearMin; i--)
+            {
+                <option>@i</option>
+            }
+        </select>
+        <input type="text" value="" name="SearchNews" class="form-control" id="SearchNews">
+        <a class="btn btn-primary" id="btnSearchNews" title="@Html.Raw(ViewBag.Resource.SearchLabel)">@Html.Raw(ViewBag.Resource.SearchLabel)</a>
+    </div>
+    <div class="row">
+        <section class="col-md-12">
+            <ul class="list-11">
+                <li>
+                    <h3 id="newsLabel"></h3>
+                    <ul class="lstNews"></ul>
+                </li>
+            </ul>
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="paging" style="display: none" id="pagingNews">
+                        <li id="page-first"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingFirstLabel)">|&lt;&lt;</a></li>
+                        <li id="page-previous"><a href="#" title="&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)">&lt; @Html.Raw(ViewBag.ResourceCommon.PagingPreviousLabel)</a></li>
+                        <li id="page-next"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) >">@Html.Raw(ViewBag.ResourceCommon.PagingNextLabel) &gt;</a></li>
+                        <li id="page-last"><a href="#" title="@Html.Raw(ViewBag.ResourceCommon.PagingLastLabel)">&gt;&gt;|</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+<script id="itemnews" type="text/x-jquery-tmpl">
+    <li>${Title}
+        <p>@Html.Raw(ViewBag.Resource.PublishDateLabel) ${FormatPublishDate(PastPublicationDate)}</p>&nbsp;<p><a class='link-href' title='@Html.Raw(ViewBag.Resource.ReadMoreLabel)' href='${DetailUrl}'>@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></p>
+    </li>
+</script>
+<script id="itemevents" type="text/x-jquery-tmpl">
+    <li>${Title}
+        <p><a class='link-href' title='@Html.Raw(ViewBag.Resource.ReadMoreLabel)' href='${DetailUrl}'>@Html.Raw(ViewBag.Resource.ReadMoreLabel)</a></p>
+    </li>
+</script>
+@Html.Hidden("hid_ArticleURLFormat", ViewBag.ArticleURL as string)
+
+<script type="text/javascript">
+    var selectAllTxt = "@Html.Raw(ViewBag.Resource.ViewAllEventsLabel)";
+    var titlenews = "@Html.Raw(ViewBag.Resource.NewsLabel)";
+    var titleevents = "@Html.Raw(ViewBag.Resource.EventLabel)";
+    var prefixLang = "@Html.Raw(ViewBag.PrefixLang)";
+    var currentCulture = "@Html.Raw(ViewBag.CurrentCulture)";
+</script>
+@Scripts.Render("~/bundlescript/newslist")
+
+

@@ -1,0 +1,27 @@
+@model SitefinityWebApp.Mvc.Models.VieweCardModel
+
+<div class="container" id="viewecard">
+    <div class="row">
+        <div class="cd-md-12">
+            @Html.Raw(Model.EmailBody)
+        </div>
+    </div>
+</div>
+<style>
+    #viewecard iframe, #viewecard video,
+    #viewecard #divCoverPhoto img {
+        max-width: 100% !important;
+        position: unset;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 480px;
+        padding: 0;
+        margin: 30px 0;
+    }
+
+    div#viewecard {
+        padding: 30px 15px 45px 15px !important;
+    }
+</style>

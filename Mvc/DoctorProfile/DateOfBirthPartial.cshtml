@@ -1,0 +1,49 @@
+﻿@using System.Globalization
+@using SitefinityWebApp.Mvc.Models
+@model DoctorProfileModel
+
+<div class="col-sm-2">
+    <label for="">@Html.Raw(ViewBag.Resource.DoctorDateofBirthLable)<span>*</span></label>
+</div>
+<div class="col-sm-2">
+    @{
+        <select class="form-control" id="Day" required="required">
+            <option value="0">@Html.Raw(ViewBag.Resource.DoctorDayLabel)</option>
+            @for (var i = 1; i < 32; i++)
+            {
+                <option value= "@i">@i</option>
+            }
+        </select>
+    }
+    @Html.HiddenFor(m => m.Day, new { @id = "hidDay" })
+</div>
+<div class="col-sm-2">
+    @{
+        <select class="form-control" id="Month" required="required">
+            <option value="0">@Html.Raw(ViewBag.Resource.DoctorMonthLabel)</option>
+            @for (var i = 1; i < 13; i++)
+            {
+                <option value= "@i" >@if (DateTimeFormatInfo.CurrentInfo != null)
+                                     {
+                    @DateTimeFormatInfo.CurrentInfo.GetMonthName(i)
+                                     }
+                </option>
+            }
+        </select>
+    }
+    @Html.HiddenFor(m => m.Month, new { @id = "hidMonth" })
+</div>
+<div class="col-sm-2">
+    @{
+        var currentYear = DateTime.Now.Year;
+        <select class="form-control" id="Year" required="required">
+            <option value="0">@Html.Raw(ViewBag.Resource.DoctorYearLabel)</option>
+            @for (var i = currentYear; i >= (currentYear - 130); i--)
+            {
+                <option value= "@i">@i</option>
+            }
+        </select>
+    }
+    @Html.HiddenFor(m => m.Year, new { @id = "hidYear" })
+</div>
+

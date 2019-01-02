@@ -1,0 +1,55 @@
+@using SitefinityWebApp.Custom.Code;
+
+@model SitefinityWebApp.Mvc.Models.SubscribeFormViewModel
+
+<section class="mailing-section">
+    <h5><i class="fa fa-envelope" aria-hidden="true"></i>@Html.Resource("SubscribeToOurMailingList", resourcesCulture: Model.CurrentCulture)</h5>
+    <div class="mailing-details">
+        <input class="field" type="email" value="@Html.Resource("EnterYourEmailAddress", resourcesCulture: Model.CurrentCulture)"
+               onkeyup="subscribeOnEnter(event)"
+               onclick="if(this.value=='@Html.Resource("EnterYourEmailAddress", resourcesCulture: Model.CurrentCulture)'){this.value=''}"
+               onblur="if(this.value==''){this.value='@Html.Resource("EnterYourEmailAddress", resourcesCulture: Model.CurrentCulture)'}">
+        <span class="validation-error hidden">@Html.Resource("SubscribeErrorMessage", resourcesCulture: Model.CurrentCulture)</span>
+        <input value="@Html.Resource("HealthPlusSubscribeFormLabel_SubmitButton", resourcesCulture: Model.CurrentCulture)" type="button" class="sub-but" onclick="subscribe(event)">
+        <p>@Html.Raw(Html.Resource("SubscribeTerm", resourcesCulture: Model.CurrentCulture))</p>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var thanks = '@HttpUtility.JavaScriptStringEncode(Html.Resource("SubscribeThankyouMessage", resourcesCulture: Model.CurrentCulture))';
+
+    function subscribe(e)
+    {
+        e.preventDefault();
+
+        var email = $("div.mailing-details input.field").val();
+        $(".validation-error").addClass("hidden");
+        if (isEmail(email)) {
+            saveValueToCookie('Em', email); //store in cookie
+            $(".mailing-details").html(thanks);
+
+            var data = { Email: email, SendConfirmation: @Model.SendConfirmationMessage.ToString().ToLower(), MailTemplateName: '@Model.MailMessageTemplateName' };
+            $.ajax({
+                url: "/api/visitordata/subscribevisitor",
+                type: "POST",
+                data: data
+            });
+        }
+        else {
+            $(".validation-error").removeClass("hidden");
+        }
+
+        return false;
+    }
+
+    function isEmail(email) {
+        var regex = /^([a-zA-Z0-9_.+-])+\@@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        return regex.test(email);
+    }
+
+    function subscribeOnEnter(e) {
+        if (e.keyCode == 13) {
+            subscribe(e);
+        }
+    }
+</script>

@@ -1,0 +1,36 @@
+@using SitefinityWebApp.Custom.Code;
+
+@model SitefinityWebApp.Mvc.Models.VideoArticlesViewModel
+
+<div class="videos-section">
+    <a href="@(Model.SearchResultsBaseUrl)?hplusv="><h5><i class="fa fa-video-camera" aria-hidden="true"></i>@Html.Resource("VideosLatestHeader", resourcesCulture: Model.CurrentCulture) <i class="fa fa-angle-right" aria-hidden="true"></i></h5></a>
+    <div class="videos-details">
+        @if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+        {
+            if (Model.ArticlesList.Any())
+            {
+                foreach (var item in Model.ArticlesList)
+                {
+                    <div class="articles-block" onclick="">
+                        <figure><img src="@item.ThumbnailUrl" alt="@item.ThumbnailAlt"><a href="@item.VideoUrl" class="fancybox-media">@Html.Resource("VideosWatch", resourcesCulture: Model.CurrentCulture)</a></figure>
+                        <div class="articles-tag"><i class="fa fa-video-camera" aria-hidden="true"></i>@Html.Resource("HealthPlusArticleTypeLabel_Video", resourcesCulture: Model.CurrentCulture)</div>
+                        <section class="articles-con">
+                            <a href="@item.FullUrl">
+                                <h4>@item.ArticleTitle</h4>
+                                <p>@Html.Raw(item.Intro)</p>
+                            </a>
+                        </section>
+                    </div>
+                }
+            }
+            else
+            {
+                <span>@Html.Resource("HealthPlusArticleVideoLabel_NoVideo", resourcesCulture: Model.CurrentCulture)</span>
+            }
+        }
+        else
+        {
+            <span>Latest videos will be visible from the public site</span>
+        }
+    </div>
+</div>

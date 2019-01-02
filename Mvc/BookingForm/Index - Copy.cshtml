@@ -1,0 +1,186 @@
+﻿<div class="sfContentBlock">
+    <h1 class="title">Book a Maternity Tour </h1>
+    <div class="booking-frm">
+        <div class="panel-group heading">
+            <div class="fck">
+                <span class="text-bold">Congratulations on your journey to parenthood!</span>
+                <span>Thank you for considering Parkway East Hospital to deliver your bundle of joy.</span>
+                <span>
+                    We look forward to welcoming your newborn into the world!
+                </span>
+            </div>
+        </div>
+        <!-- end booking form -->
+        <div class="container">
+            <div class="row">
+                <span class="mandatory-field pusher-t-20"> <sup>*</sup> denotes mandatory fields </span>
+                <div id="booking-frm" class="form-horizontal">
+                    <span class="dotted-line"></span>
+                    <div class="form-group">
+                        <!-- start form group -->
+                        <label for="txtName" class="col-xs-12 col-sm-3 control-label">Name of Mom-to-be<sup>*</sup></label>
+                        <div class="col-xs-12 col-sm-6">
+                            <input type="text" class="form-control" id="txtName" name="txtName" required data-error="Required">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div><!-- end form group -->
+                    <div class="form-group">
+                        <!-- start form group -->
+                        <label for="txtNric" class="col-xs-12 col-sm-3 control-label">NRIC / Passport No.<sup>*</sup></label>
+                        <div class="col-xs-12 col-sm-6">
+                            <input type="text" class="form-control" id="txtNric" name="txtNric" required data-error="Required">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div><!-- end form group -->
+                    <div class="form-group">
+                        <!-- start form group -->
+                        <label for="txtDobDate" class="col-sm-3 control-label">Date of birth<sup>*</sup></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control readonly" id="txtDobDate" name="txtDobDate" required data-error="Required">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div> <!-- end form group -->
+                    <div class="form-group">
+                        <!-- start form group -->
+                        <label for="txtEmail" class="col-xs-12 col-sm-3 control-label">Email<sup>*</sup></label>
+                        <div class="col-xs-12 col-sm-6">
+                            <input type="text" class="form-control" id="txtEmail" name="txtEmail" required data-error="Required" pattern="^(?:([^]+[^]+\.[a-zA-Z]{2,6}))$" data-pattern-error="Please enter a valid email address.">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div><!-- end form group -->
+                    <div class="form-group">
+                        <!-- start form group -->
+                        <label for="txtMobile" class="col-sm-3 control-label">Mobile No.<sup>*</sup></label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" data-minlength="7" data-error="Required (7 numerics minimum)" id="txtMobile" name="txtMobile" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div><!-- end form group -->
+
+                    <div class="form-group">
+                        <!-- start form group -->
+                        <label for="txtExpectedDate" class="col-sm-3 control-label">Expected date of delivery<sup>*</sup></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control readonly" id="txtExpectedDate" name="txtExpectedDate" required data-error="Required">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div> <!-- end form group -->
+                   
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Attending Gynaecologist</label>
+                        <div class="col-sm-6">
+                            <select class="selectpicker" id="slDoctor">
+                              @foreach (var item in @Model)
+                               {
+                                    if (item.doctorid == "-1")
+                                    {
+                                        <option value="@item.doctorid">&nbsp;&nbsp;</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.doctorid">@item.attendinggynaecologis</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div> <!-- end form group -->
+                    <div class="form-group pusher-t-53">
+                        <div class="col-sm-12">
+                            <span class="pull-left">Have you had a previous delivery at Parkway East Hospital? <sup>*</sup></span>
+                            <div class="radio pull-left">
+                                <label for="optionsRadios1">
+                                    <input type="radio" name="rdPrevious" id="optionsRadios1" value="true" required data-error="Required">
+                                    Yes
+                                </label>
+                                <label for="optionsRadios2">
+                                    <input type="radio" name="rdPrevious" id="optionsRadios2" value="false" required data-error="Required">
+                                    No
+                                </label>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="dotted-line"></span>
+                    <div class="form-group tour-date-block">
+                        <!-- start form group -->
+                        <div class="col-xs-12 col-sm-3">
+                            <label for="txtPreferredTourDate" class="control-label">Preferred tour date<sup>*</sup></label>
+                            <span class="text-12">
+                                Mon-Fri: 2.30pm
+                            </span>
+                            <span class="text-12">
+                                Sat: 10am
+                            </span>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <input type="text" class="form-control readonly" id="txtPreferredTourDate" name="txtPreferredTourDate" required data-error="Required">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3">
+                            <a title="Check Time slot" href="javascript:void(0)" class="btn-check-slot">Check Time slot</a>
+                        </div>
+                    </div> <!-- end form group -->
+
+                    <span class="dotted-line"></span>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <!-- start form group -->
+                            <label for=ckAgreement>
+                                <input type="checkbox" id="ckAgreement" data-error="Please agree to the above terms of use." required>
+                                I agree to the <a title="Terms of Use" href="https://www.parkwayeast.com.sg/terms-conditions">Terms of Use</a> and Parkway’s <a title="Personal Data Protection Policy" href="https://www.parkwayeast.com.sg/terms-conditions#pdpa">Personal Data Protection Policy</a> and consent to the use of my personal data given above to process follow-up actions.
+                            </label>
+                            <div class="help-block with-errors"></div>
+                        </div><!-- end form group -->
+                    </div>
+                    <div class="form-group receive-block">
+                        <label class="receive-info">I would like to receive information about new services and events from </label>
+                        <div class="checkbox-group">
+                            <div class="checkbox">
+
+                                <label for="ckReceive">
+                                    <input type="checkbox" id="ckReceive" name="receive-chk">
+                                    Parkway East Hospital.
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label for="ckReceivePartner">
+                                    <input type="checkbox" id="ckReceivePartner" name="receive-partner-chk">
+                                    Dumex
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <!-- start form group -->
+                        <div class="col-sm-5 col-md-4">
+                            <label for="ebcaptchainput" class="control-label text-bold">
+                                Answer this math equation
+                                <span id="ebcaptchatext"></span>
+                            </label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="number" class="form-control" id="ebcaptchainput" name="ebcaptchainput">
+                        </div>
+                        <div class="col-sm-5">
+                            <span id="valRecaptcha" class="validation-error" style="">Not match</span>
+                        </div>
+                    </div> <!-- end form group -->
+                    <div class="form-group text-center">
+                        <button id="btnSubmit" type="submit" class="btn-submit">Submit</button>
+                        <input type="hidden" id="hiddSession" />
+                        <input type="hidden" id="hiddTourDate" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#popup-ep1" class="hide popup-ep1"></a>
+    <div class="fancybox-overlay fancybox-overlay-fixed" style="display: none;" id="overlay-popup">
+        <div id="popup-ep1" class="popup style-1">
+            <a id="btnClose" href="javascript:void(0)" class="fancybox-close" style="top: 10px;right: 10px;"></a>
+            <h4 id="messageTitleContent"></h4>
+            <p class="style-2" id="messageContent"></p>
+        </div>
+    </div>
+</div>
+<script src="~/Mvc/Scripts/view/BookingForm.js"></script>

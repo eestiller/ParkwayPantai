@@ -1,0 +1,57 @@
+﻿@using SitefinityWebApp.Custom.Helpers
+@model IEnumerable<SitefinityWebApp.Mvc.Models.DataModels.Clinic>
+
+
+@foreach (var clinic in Model)
+{
+    <div class="result-item">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="js-details-trigger">
+                    <h3>@clinic.Name</h3>
+                    <input type="hidden" value="@clinic.Id||@clinic.Distance||@clinic.DetailsPageUrl" class="clinic-values" name="ClinicValues">
+                </div>
+                @if (!string.IsNullOrEmpty(clinic.Announcements))
+                {
+                    <p class="announcement"><strong>Announcements:</strong> @clinic.Announcements</p>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="details-view-icons">
+
+                        @if (clinic.Distance != null){
+                            <span class="list-distance">@clinic.DistanceDisplay</span>
+                        }
+
+                        @if (ClinicHelper.IsClinicOpen(clinic.Id, clinic.Is24Hrs, DateTime.Now))
+                        {
+                            <span class="is_open true"></span><span>Open</span>
+                        }
+                        else
+                        {
+                            <span class="is_open false"></span><span>Closed</span> <span> @ClinicHelper.ClosingReason(clinic.Id, DateTime.Now)</span> 
+                        }
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+
+            <div class="col-xs-10">
+                <span>@clinic.Address</span><br />
+            </div>
+
+            <div class="col-xs-2 item-nav">
+                @if (!string.IsNullOrEmpty(clinic.DirectionUrl))
+                {
+                    <a href="@clinic.DirectionUrl" target="_blank" class="list-clinic-direction">Directions</a>
+                }
+            </div>
+        </div>
+    </div>
+}

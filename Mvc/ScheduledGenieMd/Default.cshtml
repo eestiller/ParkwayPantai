@@ -1,0 +1,75 @@
+@model SitefinityWebApp.Mvc.Models.ScheduledGenieMdModel
+
+<script type="text/javascript">
+    var currentStatus = "@Model.CurrentStatus";
+    var nextStartDate = "@Model.NextStartDate";
+</script>
+
+<div style="">
+    <h1 class="sfBreadCrumb"><span>Job Schedule Genie MD Export</span></h1>
+    <div class="sfClearfix" style="margin-top: 5px">
+        <fieldset class="sfNewContentForm">
+            <div class="sfClearfix">
+                <div class="sfMainLangVersionWrp">
+                    <div>
+                        <div class="sfForm sfExpandedForm sfFirstForm">
+                            <div class="sfFormIn">
+                                <div class="sfExpandedTarget">
+                                    <h3 class="sfBreadCrumb" style="color: black"><span>Job Schedule Genie MD Export Settings</span></h3>
+                                    <ul>
+                                        <li class="sfFormSeparator"></li>
+                                        <li class="sfFormSeparator">
+                                            <a class="sfLinkBtn sfSave" title="Save"><span class="sfLinkBtnIn Save">Save</span></a>
+                                            <a class="sfLinkBtn sfItemTitle sfGoto Run" title="Run Now"><span class="sfLinkBtnIn">Run Now</span></a>
+                                        </li>
+                                        <li>
+                                            <div id="spnResult" class="sfMessage sfDialogMessage sfMsgPositive sfMsgVisible" style="display: none; background-color: rgb(211, 234, 187);"></div>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Schedule Type:</span>
+                                            <span class="">Recurring - Daily</span>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Start at</span>
+                                            <select name="lstStartTime" id="lstStartTime" class="valid">
+                                                @foreach (var t in Model.TimeRange)
+                                                {
+                                                    if (t.Checked)
+                                                    {
+                                                        <option value="@t.Link" selected="selected">@t.Title</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@t.Link">@t.Title</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <span class="" style="margin-left: 5px; margin-right: 5px" id="spnCurrentStatus"></span>
+                                            <a class="sfLinkBtn" title="Stop" id="btnStop" onclick="javascript:UpdateSchedule('stop')"><span class="sfLinkBtnIn">Stop Schedule</span></a>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Destination Folder:</span>
+                                            <span class="">File generated under FTP folder @Model.FilePath</span>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Filename format:</span>
+                                            <span class="">Filename format @Model.FileFormat (e.g GenieMd_20171131_2259.csv)</span>
+                                        </li>
+                                        <li class="sfFormSeparator">
+                                            <span class="sfTxtLbl">Notification Emails:</span>
+                                            <input id="txtNotificationEmail" class="sfTxt" type="text" value="@Model.NotificationEmail" maxlength="150">
+                                            <div class="sfExample">
+                                                Email(s) to be notified after generation. Email to a comma-separated list
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+

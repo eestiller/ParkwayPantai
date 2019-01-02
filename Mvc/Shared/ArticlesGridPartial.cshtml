@@ -1,0 +1,337 @@
+@using SitefinityWebApp.Custom.Code;
+
+@model SitefinityWebApp.Mvc.Models.ArticlesListViewModel
+@{ string iconClassArticle = "fa-file-text", iconClassInfo = "fa-pie-chart", iconClassVideo = "fa-video-camera"; }
+
+@if (!Telerik.Sitefinity.Services.SystemManager.IsDesignMode)
+{
+    <div class="articles-section">
+        <ul class="item-list clearfix">
+            @for (var i = 0; i < Model.ArticlesList.Count; i++)
+            {
+                var item = Model.ArticlesList[i];
+                <li class="featured" data-article-id="@item.ArticleMasterId" data-sort-order="@i">
+                    <div class="articles-block" onclick=''>
+                        @if (item.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Infographic)
+                        {
+                            <figure><img src="@item.ThumbnailUrl" alt="@item.ThumbnailAlt" /><a href="@item.InfographicImageDesktop" class="fancybox" data-url="@item.FullUrl">@Html.Resource("ReadArticleInfo", resourcesCulture: Model.CurrentCulture)</a></figure>
+                        }
+                        else if (item.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Video)
+                        {
+                            <figure><img src="@item.ThumbnailUrl" alt="@item.ThumbnailAlt" /><a href="@item.VideoUrl" class="fancybox-media">@Html.Resource("VideosWatch", resourcesCulture: Model.CurrentCulture)</a></figure>
+                        }
+                        else
+                        {
+                            <figure><img src="@item.ThumbnailUrl" alt="@item.ThumbnailAlt" /><a href="@item.FullUrl">@Html.Resource("ReadArticle", resourcesCulture: Model.CurrentCulture)</a></figure>
+                        }
+
+                        <div class="articles-tag">
+                            @{ string articleType_resourceLabel = "HealthPlusArticleTypeLabel_Article", iconClass = iconClassArticle; }
+                            @if (item.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Infographic)
+                            {
+                                iconClass = iconClassInfo;
+                                articleType_resourceLabel = "HealthPlusArticleTypeLabel_Infographic";
+                            }
+                            else if (item.ArticleType == SitefinityWebApp.Mvc.Models.ArticleType.Video)
+                            {
+                                iconClass = iconClassVideo;
+                                articleType_resourceLabel = "HealthPlusArticleTypeLabel_Video";
+                            }
+
+                            <i class="fa @iconClass" aria-hidden="true"></i>
+                            @Html.Resource(articleType_resourceLabel, resourcesCulture: Model.CurrentCulture)
+                        </div>
+                        <section class="articles-con">
+                            <a href="@item.FullUrl">
+                                <h4>@item.ArticleTitle</h4>
+                                <p>@Html.Raw(item.Intro)</p>
+                            </a>
+                        </section>
+                    </div>
+                </li>
+            }
+        </ul>
+        @if (Model.ShowLoadMore)
+        {
+            <div class="load-more"><input class="load-more-btn" type="button" value='@Html.Resource("LoadMoreArticles", resourcesCulture: Model.CurrentCulture)'></div>
+        }
+        else
+        {
+            <div class="load-more" style="display:none;"><input class="load-more-btn" type="button" value='@Html.Resource("LoadMoreArticles", resourcesCulture: Model.CurrentCulture)'></div>
+        }
+        
+        <div class="no-results step-buttons clearfix redo-parent" style="display:none;">
+            <p>@Html.Resource("NoResultsFoundWannaRedo", resourcesCulture: Model.CurrentCulture)</p>
+            <a class="butt active" onclick="onRedoClick(event);"><span>@Html.Resource("Redo", resourcesCulture: Model.CurrentCulture)</span></a>
+        </div>
+    </div>
+    <script>
+        var loaded_items = 10;
+        var take_items = 10;
+        var current_filter = '';
+        var searchQuery = ''; //set from search results
+        var randomSeed = (new Date()).getMilliseconds();
+        var hospitalType = $('#hid_HospitalType').length ? $('#hid_HospitalType').val() : '';
+
+        var $loadMore = $("input.load-more-btn");
+        var $container = $(".item-list");
+
+        $(function () {
+            $loadMore.click(loadMoreItems);
+
+            CheckForEmptyGrid();
+        });
+
+        $(window).load(function () {
+            window.onAnimationFinished = function () {
+                $loadMore.addClass('dis-hide');
+            };
+
+            $container = $container.isotope({
+                resizable: true,
+                masonry: {},
+                getSortData: {
+                    sortOrder: function (elem) {
+                        return parseInt(elem.attr("data-sort-order"));
+                    }
+                },
+                sortBy: 'sortOrder'
+            }, onAnimationFinished);
+
+            $(window).smartresize(function () {
+                $container.isotope({
+                    masonry: {},
+                    getSortData: {
+                        sortOrder: function (elem) {
+                            return parseInt(elem.attr("data-sort-order"));
+                        }
+                    },
+                    sortBy: 'sortOrder'
+                });
+            });
+        });
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        function loadMoreItems(e) {
+            if (e) e.preventDefault();
+
+            var url = "/api/Articles/LoadMoreArticles?take=" + take_items + "&skip=" + loaded_items + "&filter=" + current_filter + "&search=" + searchQuery + "&randomSeed=" + randomSeed;
+            if (hospitalType.length > 0) {
+                url += "&hospitalType=" + hospitalType;
+            }
+
+            var qStringVars = getUrlVars();
+            var isMedicalReviewer = qStringVars["isMedicalReviewer"];
+            var medicalReviewerId = qStringVars["id"];
+            console.log('isMedicalReviewer=' + isMedicalReviewer);
+            console.log('medicalReviewerId=' + medicalReviewerId);
+            if (isMedicalReviewer && medicalReviewerId) //if isMedicalReviewer and medicalReviewerId has value
+            {
+                url += "&isMedicalReviewer=" + isMedicalReviewer + "&medicalReviewerId=" + medicalReviewerId;
+            }
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: "GET"
+            })
+            .done(function (data) {
+
+                if (data.Result == "OK") {
+
+                    _.templateSettings = {
+                        interpolate: /\{\{(.+?)\}\}/g
+                    };
+                    var template = _.template("<li class='featured'> \
+                                            <div class='articles-block' onclick=''> \
+                                      <figure><img src='{{ ThumbnailUrl }}' alt='{{ ThumbnailAlt }}'><a href='{{ FullUrl }}'>" + '@Html.Resource("ReadArticle", resourcesCulture: Model.CurrentCulture)' + "</a></figure> \
+                                      <div class='articles-tag'><i class='fa @iconClassArticle' aria-hidden='true'></i> {{ ArticleTypeLabel }}</div> \
+                                      <section class='articles-con'> \
+                                        <a href='{{ FullUrl }}'> \
+                                            <h4>{{ ArticleTitle }}</h4> \
+                                            <p>{{ Intro }}</p> \
+                                        </a> \
+                                  </section></div></li>");
+
+                    var templateInfographic = _.template("<li class='featured'> \
+                                            <div class='articles-block' onclick=''> \
+                                    <figure><img src='{{ ThumbnailUrl }}' alt='{{ ThumbnailAlt }}' /><a href='{{InfographicImageDesktop}}' class='fancybox' data-url='{{ FullUrl }}'>" + '@Html.Resource("ReadArticleInfo", resourcesCulture: Model.CurrentCulture)' + "</a></figure> \
+                                      <div class='articles-tag'><i class='fa @iconClassInfo' aria-hidden='true'></i> {{ ArticleTypeLabel }}</div> \
+                                      <section class='articles-con'> \
+                                        <a href='{{ FullUrl }}'> \
+                                        <h4>{{ ArticleTitle }}</h4> \
+                                        <p>{{ Intro }}</p> \
+                                        </a> \
+                                  </section></div></li>");
+
+                    var templateVideo = _.template("<li class='featured'> \
+                                            <div class='articles-block' onclick=''> \
+                                    <figure><img src='{{ ThumbnailUrl }}' alt='{{ ThumbnailAlt }}' /><a href='{{ VideoUrl }}' class='fancybox-media' data-url='{{ FullUrl }}'>" + '@Html.Resource("VideosWatch", resourcesCulture: Model.CurrentCulture)' + "</a></figure> \
+                                      <div class='articles-tag'><i class='fa @iconClassVideo' aria-hidden='true'></i> {{ ArticleTypeLabel }}</div> \
+                                      <section class='articles-con'> \
+                                        <a href='{{ FullUrl }}'> \
+                                        <h4>{{ ArticleTitle }}</h4> \
+                                        <p>{{ Intro }}</p> \
+                                        </a> \
+                                  </section></div></li>");
+
+                    var articles = data.Articles;
+                    var articlesLenght = articles.length;
+
+                    //remove items only if a tab is selected or a personalisation question is answered.
+                    var itemsToRemove = [];
+                    var refreshGrid = false;
+                    if (loaded_items == 0) {
+                        refreshGrid = true;
+                        itemsToRemove = $container.find("li").filter(function (idx, elem) {
+                            var articleId = $(elem).attr("data-article-id");
+                            var newArticles = $.grep(articles, function (a) { return a.ArticleMasterId == articleId });
+                            return (newArticles.length == 0);
+                        });
+                    }
+                    var sortOrders = [];
+                    $container.find("li").each(function (idx, itm) { sortOrders.push(parseInt($(itm).attr("data-sort-order"))); });
+                    var currentMaxItem =  Math.max.apply(null, sortOrders) + 1;
+                    loaded_items += articlesLenght;
+
+                    if (articlesLenght < take_items) {
+                        $loadMore.parent().hide();
+                    }
+                    else $loadMore.parent().show();
+                    var items = [];
+                    for (var i = 0; i < articlesLenght; i++) {
+                        var article = articles[i];
+                        //check if item already exists if a new tab is being clicked
+                        //if (refreshGrid) {
+                            var existingItem = $container.find("li[data-article-id='" + article.ArticleMasterId + "']");
+                            if (existingItem.length != 0) {
+                                existingItem.attr("data-sort-order", currentMaxItem + i);
+                                continue;
+                            }
+                        //}
+
+                        var item = "";
+                        article.FullUrl = escape(article.FullUrl);
+
+                        //item = article.ArticleType == "Infographic" ? templateInfographic(article) : (article.ArticleType == "Video" ? templateVideo(article) : template(article));
+                        if (article.ArticleType == "Infographic")
+                            item = templateInfographic(article);
+                        else if (article.ArticleType == "Video")
+                            item = templateVideo(article);
+                        else
+                            item = template(article);
+
+                        item = $(item).attr("data-sort-order", currentMaxItem + i)[0].outerHTML;
+                        item = $(item).attr("data-article-id", article.ArticleMasterId)[0].outerHTML;
+                        items.push(item);
+
+                        if ($(window).width() > 480) {
+                            $(".fancybox").fancybox({
+                                beforeShow: function () {
+                                    if (this.inner != null) {
+                                        var alt = this.element.find('img').attr('alt');
+                                        this.inner.find('img').attr('alt', alt);
+                                        this.inner.html('<a href="' + $(this.element).attr("data-url") + '">' + this.inner.html() + "</a>");
+                                    }
+                                }
+                            });
+                        } else {
+                            $(".fancybox").each(function (idx, itm) {
+                                $(itm).attr("href", $(itm).attr("data-url"));
+                            })
+                        }
+                        $('.fancybox-media').fancybox({
+                            openEffect: 'none',
+                            closeEffect: 'none',
+                            autoSize: false,
+                            helpers: {
+                                media: {}
+                            },
+                            height: 600,
+                            width: 800,
+                            type: 'iframe',
+                            iframe: {
+                                scrolling: 'none',
+                                preload: true
+                            }
+                        });
+                    }
+
+                    //load images then show them in the grid..
+                    if (items.length > 0 || itemsToRemove.length > 0) {
+                        //if this is being displayed on search results page, then reset the sticky panel
+                        if ($('.search-results .push').length > 0) {
+                            $(".layout").removeClass('pushed');
+                        }
+
+                        //show them in the grid, then check if images have been loaded and rearrange the grid..
+
+                        //now check if images have been loaded, then relayout the grid..
+                        var $hiddenDiv = $("<div class='hidden' />");
+                        $hiddenDiv.html(items.join(''));
+                        $("body").append($hiddenDiv);
+                        $hiddenDiv.imagesLoaded().always(function (instance) {
+                            //the below timeout is for ipad..
+                            //at times the grid items overlap even after loading the images..
+                            if (itemsToRemove.length > 0) {
+                                $container.isotope('remove', itemsToRemove);
+                            }
+                            var itemsToAdd = $(items.join(''));
+                            $container.append(itemsToAdd).isotope('appended', itemsToAdd);
+                            $container.isotope('updateSortData', $container.find("li"));
+                            setTimeout(function () {
+                                $container.isotope();
+                            }, 1000);
+
+                            $hiddenDiv.remove();
+                            $container.isotope();
+                            CheckForEmptyGrid();
+                            initialiseInnerSidebarAffix();
+                        });
+                    }
+                    else
+                        CheckForEmptyGrid();
+                }
+            });
+
+            return false;
+        }
+
+        function emptyGridAndLoadItems(e, tag) {
+
+            current_filter = tag;
+            loaded_items = 0;
+
+            //$container.isotope('remove', $container.find("li.featured")); //.isotope('layout');
+            //$container.empty();
+
+            loadMoreItems(e);
+        }
+
+        function GridHasNoItems() {
+            return $container.find("li").length == 0;
+        }
+
+        function CheckForEmptyGrid() {
+            if (GridHasNoItems()) $(".redo-parent").show();
+            else $(".redo-parent").hide();
+        }
+
+        function onRedoClick(e) {
+            redo(e);
+        }
+    </script>
+}
+else
+{
+    <span>Article Grid</span>
+}

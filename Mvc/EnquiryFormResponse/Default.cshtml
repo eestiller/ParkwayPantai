@@ -1,0 +1,90 @@
+@model SitefinityWebApp.Mvc.Models.EnquiryFormResponseViewModel
+
+@Html.Hidden("hid_AdminEmailTemplateID", ViewBag.AdminEmailID as string)
+
+<div class="box-news widget-pay0">
+    <div id="successMessage" class="sfSuccess" style="display:none;"><div>@Html.Raw(Model.InstructionalText)</div></div>
+    <div id="formControls">
+        <div>
+            @Html.Raw(Model.InstructionalText)
+        </div>
+        <div class="form-group sfFormBlock sfTxtBlockMedium control-block">
+            <label>@Html.Raw(Model.EnquiryFormResources.SubjectLabel)</label>
+            <div>
+                @Html.DropDownList("subject", new SelectList(ViewBag.SubjectList as List<KeyValuePair<string, string>>, "Key", "Value"),
+                new
+                {
+                    required = "required",
+                    data_error = "Required",
+                    style = "width: 100%"
+                })
+                <div class="error-block"></div>
+            </div>
+        </div>
+        <div class="form-group box-bname sfFormBox sfTxtBoxMedium control-block">
+            <label>@Html.Raw(Model.EnquiryFormResources.FullName)</label>
+            <div>
+                <input type="text" id="name" required data-error="Required">
+                <div class="error-block"></div>
+            </div>
+        </div>
+        <div class="form-group box-bname sfFormBox sfTxtBoxMedium control-block">
+            <label>@Html.Raw(Model.EnquiryFormResources.NRIC)</label>
+            <div>
+                <input type="text" id="nric" required data-error="Required">
+                <div class="error-block"></div>
+            </div>
+        </div>
+        <div class="form-group box-bname sfFormBox sfTxtBoxMedium control-block">
+            <label>@Html.Raw(Model.EnquiryFormResources.DOB)</label>
+            <div>
+                <input type="text" id="dob2" required data-error="Required">
+                <div class="error-block"></div>
+            </div>
+        </div>
+        <div class="form-group box-bname sfFormBox sfTxtBoxMedium control-block">
+            <label>@Html.Raw(Model.EnquiryFormResources.ContactNoLabel)</label>
+            <div>
+                @Html.TextBox("mobile", "", new
+                {
+                    @maxlength = "20",
+                    required = "required",
+                    data_error = "Required",
+                    data_pattern_error = Model.EnquiryFormResources.ContactNoErrorLabel
+                })
+                <div class="error-block"></div>
+            </div>
+        </div>
+        <div class="form-group box-bname sfFormBox sfTxtBoxMedium control-block">
+            <label>@Html.Raw(Model.EnquiryFormResources.Email)</label>
+            <div>
+                <input type="text" id="email" required data-error="Required" pattern="^(?:([^]+[^]+\.[a-zA-Z]{2,6}))$" data-pattern-error="Please enter a valid email address.">
+                <div class="error-block"></div>
+            </div>
+        </div>
+        <div class="form-group sfFormBlock sfTxtBlockMedium control-block">
+            <label>@Html.Raw(Model.EnquiryFormResources.Enquiry)</label>
+            <div>
+                <textarea rows="5" cols="20" id="enquiry" required data-error="Required"></textarea>
+                <div class="error-block"></div>
+            </div>
+        </div>
+        <div class="form-group sfFormBlock sfTxtBlockMedium control-block" style="font-size: 80% !important;">
+            @Html.Raw(Model.EnquiryFormResources.PDPALabel)
+        </div>
+        <div class="sfFormSubmit bills-button form-group sfSubmitBtnSmall">
+            <input type="button" id="btnSubmit" value="@Html.Raw(Model.EnquiryFormResources.SubmitLabel)" class="bills-button form-group" style="display: inline-block;">
+            <img src="/Mvc/Content/loading/loading.gif" id="loadingBtn" style="display: inline-block; position: relative; width: 16px; height: auto; margin: 0px 0px 0px 5px; vertical-align: middle;" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var required = '@Html.Raw(Model.ValidateResource.RequiredLabel)';
+    var validateEmail = '@Html.Raw(Model.ValidateResource.EmailFormatLabel)';
+    var validateMobile = '@Html.Raw(Model.ValidateResource.ContactNoFormatLabel)';
+    var formId = '@Model.FormID';
+    var formName = '@Model.FormName';
+    var instructional = '@Model.Instructional';
+    var lang = '@Model.CurrentLanguage';
+</script>
+<script src="~/Mvc/Scripts/view/EnquiryFormResponse.js?v=1.2"></script>

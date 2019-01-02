@@ -1,0 +1,67 @@
+﻿@using Parkway.Core.Utilities
+@model SitefinityWebApp.Mvc.Models.EventModel
+<h1 class="title">@Html.Raw(ViewBag.Resource.RegisterLabel)</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="process-bar">
+            <span class="">@Html.Raw(ViewBag.Resource.DetailsLabel)</span>
+            <span class="mid active">@Html.Raw(ViewBag.Resource.PaymentLabel)</span>
+            <span class="last">@Html.Raw(ViewBag.Resource.ConfirmationLabel)</span>
+        </div>
+        <div class="reg-event">
+            <h2>@Html.Raw(ViewBag.Resource.PayLabel)</h2>
+            <h4>@Html.Raw(ViewBag.Resource.BookingDetailsLabel)</h4>
+            <div class="row">
+                <div class="col-sm-12 block-grey">
+                    <ul class="list-18">
+                        <li><span>@Html.Raw(ViewBag.Resource.EventPayLabel)</span><span>@Model.Title</span></li>
+                        <li><span>@Html.Raw(ViewBag.Resource.VenueLabel)</span><span>@Model.Venue</span></li>
+                        <li><span>@Html.Raw(ViewBag.Resource.PriceLabel)</span><span>@Model.Price</span></li>
+                        <li><span>@Html.Raw(ViewBag.Resource.EventDateLabel)</span><span>@Model.EventDate</span></li>
+                        <li><span>@Html.Raw(ViewBag.Resource.SessionsPayLabel)</span>
+                            <span>
+                                @if (!string.IsNullOrEmpty(ViewBag.Sessions))
+                                {
+                                    var session = ViewBag.Sessions.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                                    var i = 0;
+                                    foreach (var itemSession in session)
+                                    {
+                                        if (i < session.Length -1)
+                                        {
+                                            @itemSession<br>
+                                            <br>
+                                        }
+                                        else
+                                        {
+                                            @itemSession
+                                        }
+                                        i++;
+                                    }
+                                }
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h4>@Html.Raw(ViewBag.Resource.AmountPayableLabel)</h4>
+            <div class="row">
+                <div class="col-sm-12 block-grey">
+                    <ul class="list-18">
+                        <li><span>@Html.Raw(ViewBag.Resource.QuantityLabel)</span><span>@Html.Raw(ViewBag.PeopleNumber)</span></li>
+                        <li><span>@Html.Raw(ViewBag.Resource.PriceperUnitLabel)</span><span>S$@Model.Price</span></li>
+                        <li><span>@Html.Raw(ViewBag.Resource.TotalPriceLabel)</span><span>S$@Html.Raw(ViewBag.TotalPrice)</span></li>
+                        <li><span>@Html.Raw(ViewBag.Resource.GSTLabel)</span><span>S$@Model.Price</span></li>
+                    </ul>
+                    <div class="total">@Html.Raw(ViewBag.Resource.TotalPayableLabel)S$@Html.Raw(ViewBag.TotalPayment)</div>
+                </div>
+            </div>
+            <p class="text-center">
+                @*<a href="#" title="@Html.Raw(ViewBag.Resource.CheckPayPalLabel)">
+                    <img src="/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/btn-paypal.jpg" alt="@Html.Raw(ViewBag.Resource.CheckPayPalLabel)"></a>*@
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=trongtin1988@gmail.com&item_name=Event1&item_number=10&amount=100">
+                    <img src="/Sitefinity/WebSiteTemplates/ParkwayTemplate/App_Themes/ParkwayTheme/Images/btn-paypal.jpg" alt="@Html.Raw(ViewBag.Resource.CheckPayPalLabel)">
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
