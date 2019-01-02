@@ -19,5 +19,8 @@ $(document).ready(function() {
             location.href = location.protocol + '//' + location.hostname + '/' + $(this).attr('href') + '/-in-category/' + inCategoryCountry;
         }
     });
+	
+	var bgimg = $('[data-role="bodyImage"]').attr('src');
+	$('#wrapper').css('background-image','url('+bgimg+')');
 
 });
