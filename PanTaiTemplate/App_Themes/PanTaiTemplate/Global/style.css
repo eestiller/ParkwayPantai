@@ -1,4 +1,7 @@
-﻿html{
+﻿@import url('https://fonts.googleapis.com/css?family=Nunito+Sans:400,700,800');
+
+
+html{
 	font-size:14px;
 }
 #wrapper{
@@ -9,6 +12,16 @@
 
 .content-subpage {
 	background-color:#FFF;
+	padding-bottom: 5vw;
+}
+.content-subpage h2{
+	font-size:3em;
+	font-weight: 800;
+	margin-top: 2em;
+	margin-bottom:1em;
+}
+.content-subpage p{
+	line-height:1.9em;
 }
 
 .subpage-header{
@@ -59,13 +72,19 @@ img[data-role="bodyImage"] {
 	display:none;
 }
 
+img.center {
+	margin: 0 auto;
+}
 
 
 
 
 
-
-
+@media (min-width: 960px) {
+	.w80 {
+		width:80%;
+	}
+}
 
 
 
