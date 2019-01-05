@@ -13,13 +13,29 @@ html{
 .content-subpage {
 	background-color:#FFF;
 	padding-bottom: 5vw;
+	font-size:1.3rem;
 }
-.content-subpage h2{
-	font-size:3em;
+
+
+.content-subpage h2.sub{
+	font-size:40px;
 	font-weight: 800;
 	margin-top: 2em;
 	margin-bottom:1em;
 }
+
+.content-subpage h3.sub{
+	font-size:32px;
+}
+
+.content-subpage h4.sub{
+	font-size:28px;
+}
+
+.content-subpage h5.sub{
+	font-size:24px;
+}
+
 .content-subpage p{
 	line-height:1.9em;
 }
@@ -68,17 +84,25 @@ html{
 	font-weight:normal;
 }
 
+.content-subpage .subnav-two .sfNavHorizontal {
+	background-color:#EDEDED;
+}
+.content-subpage .subnav-two .sfNavHorizontal li a{ 
+	color:#007BA3;
+}
+.content-subpage .subnav-two .sfNavHorizontal li a:hover, .content-subpage .subnav-two .sfNavHorizontal li a.sfSel,.content-subpage .subnav-two .sfNavHorizontal li a.sfSel:hover{
+	background-color:transparent;
+	background-image:none;
+	font-weight:bold;
+}
+.content-subpage .subnav-two .sfNavHorizontal li a:hover {
+	font-weight:normal;
+	text-decoration:underline
+}
+
 img[data-role="bodyImage"] {
 	display:none;
 }
-
-img.center {
-	margin: 0 auto;
-}
-
-
-
-
 
 @media (min-width: 960px) {
 	.w80 {
@@ -88,7 +112,17 @@ img.center {
 
 
 
+.ppt-accordion {}
+.ppt-accordion .panel-heading {padding:0;border-radius:0;border:0;}
+.ppt-accordion .panel-heading .panel-title a{display:block;height:45px;line-height:45px;padding:0 15px;font-weight:bold;background-color:#007ba3;color:#FFF;}
+.ppt-accordion .panel-heading .panel-title a:hover,.ppt-accordion .panel-heading .panel-title a:focus,.ppt-accordion .panel-heading .panel-title a:active {text-decoration:none;}
+.ppt-accordion .panel-heading .panel-title a.collapsed {background-color:#EDEDED;color:#333;}
+.ppt-accordion .panel {margin-bottom:15px;border:0;box-shadow:none;}
+.ppt-accordion .panel-body {padding:30px 40px;}
 
+/* Utilities */
+.mt0 {margin-top:0 !important;}
+img.center {margin: 0 auto;}
 
 
 
